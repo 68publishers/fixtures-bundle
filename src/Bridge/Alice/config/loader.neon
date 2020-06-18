@@ -1,0 +1,12 @@
+services:
+	nelmio_alice.data_loader:
+		class: Nelmio\Alice\DataLoaderInterface
+		factory: Nelmio\Alice\Loader\SimpleDataLoader(@nelmio_alice.fixture_builder, @nelmio_alice.generator)
+
+	nelmio_alice.file_loader:
+		class: Nelmio\Alice\FileLoaderInterface
+		factory: Nelmio\Alice\Loader\SimpleFileLoader(@nelmio_alice.file_parser, @nelmio_alice.data_loader)
+
+	nelmio_alice.files_loader:
+		class: Nelmio\Alice\FilesLoaderInterface
+		factory: Nelmio\Alice\Loader\SimpleFilesLoader(@nelmio_alice.file_parser, @nelmio_alice.data_loader)

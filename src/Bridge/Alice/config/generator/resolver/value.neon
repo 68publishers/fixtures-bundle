@@ -1,0 +1,139 @@
+services:
+	nelmio_alice.generator.resolver.value:
+		autowired: no
+		class: Nelmio\Alice\Generator\ValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
+		# arguments are into registry injected by tag "nelmio_alice.generator.resolver.value.chainable_resolver"
+
+	nelmio_alice.generator.resolver.value.unique_values_pool:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\UniqueValuesPool
+
+	nelmio_alice.generator.resolver.value.property_accessor:
+		class: Symfony\Component\PropertyAccess\PropertyAccessorInterface
+		factory: @property_accessor
+
+	nelmio_alice.generator.resolver.value.chainable.array_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\ArrayValueResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.dynamic_array_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.evaluated_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.faker_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver(@nelmio_alice.faker.generator)
+
+	nelmio_alice.generator.resolver.value.chainable.php_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver(
+			[ current ] # replaced with configuration option "functions_blacklist" in a compiler extension
+			@nelmio_alice.generator.resolver.value.chainable.faker_value_resolver
+		)
+
+	nelmio_alice.generator.resolver.value.chainable.function_argument_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver(@nelmio_alice.generator.resolver.value.chainable.php_value_resolver)
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.fixture_property_reference_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver(@nelmio_alice.property_accessor)
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.fixture_method_call_reference_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureMethodCallReferenceResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.fixture_reference_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver
+
+	nelmio_alice.generator.resolver.value.chainable.self_fixture_reference_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\SelfFixtureReferenceResolver(@nelmio_alice.generator.resolver.value.chainable.fixture_reference_resolver)
+
+	nelmio_alice.generator.resolver.value.chainable.unresolved_fixture_reference_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver(@nelmio_alice.generator.resolver.value.chainable.self_fixture_reference_resolver)
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.fixture_wildcard_reference_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.list_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.optional_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.parameter_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.unique_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver(
+			@nelmio_alice.generator.resolver.value.unique_values_pool,
+			null,
+			150
+		)
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.value_for_current_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\ValueForCurrentValueResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.variable_value_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes

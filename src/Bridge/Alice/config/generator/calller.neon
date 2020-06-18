@@ -1,0 +1,43 @@
+services:
+	nelmio_alice.generator.caller:
+		autowired: no
+		class: Nelmio\Alice\Generator\CallerInterface
+		factory: Nelmio\Alice\Generator\Caller\SimpleCaller(
+			@nelmio_alice.generator.caller.registry,
+			@nelmio_alice.generator.resolver.value,
+			@nelmio_alice.generator.named_arguments_resolver
+		)
+
+	nelmio_alice.generator.caller.registry:
+		autowired: no
+		class: Nelmio\Alice\Generator\Caller\CallProcessorInterface
+		factory: Nelmio\Alice\Generator\Caller\CallProcessorRegistry
+		# arguments are into registry injected by tag "nelmio_alice.generator.caller.chainable_call_processor"
+
+	nelmio_alice.generator.caller.chainable.configurator_method_call:
+		autowired: no
+		class: Nelmio\Alice\Generator\Caller\ChainableCallProcessorInterface
+		factory: Nelmio\Alice\Generator\Caller\Chainable\ConfiguratorMethodCallProcessor
+		tags:
+			nelmio_alice.generator.caller.chainable_call_processor: yes
+
+	nelmio_alice.generator.caller.chainable.method_call_with_reference:
+		autowired: no
+		class: Nelmio\Alice\Generator\Caller\ChainableCallProcessorInterface
+		factory: Nelmio\Alice\Generator\Caller\Chainable\MethodCallWithReferenceProcessor
+		tags:
+			nelmio_alice.generator.caller.chainable_call_processor: yes
+
+	nelmio_alice.generator.caller.chainable.optional_method_call:
+		autowired: no
+		class: Nelmio\Alice\Generator\Caller\ChainableCallProcessorInterface
+		factory: Nelmio\Alice\Generator\Caller\Chainable\OptionalMethodCallProcessor
+		tags:
+			nelmio_alice.generator.caller.chainable_call_processor: yes
+
+	nelmio_alice.generator.caller.chainable.simple_call:
+		autowired: no
+		class: Nelmio\Alice\Generator\Caller\ChainableCallProcessorInterface
+		factory: Nelmio\Alice\Generator\Caller\Chainable\SimpleMethodCallProcessor
+		tags:
+			nelmio_alice.generator.caller.chainable_call_processor: yes

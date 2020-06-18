@@ -1,0 +1,37 @@
+{
+	"name": "68publishers/fixtures-bundle",
+	"description": "Fixtures bundle based on Alice project.",
+	"keywords": ["68publishers", "fixture", "fixtures", "fixture-bundle", "nette"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Tomáš Glawaty",
+			"email": "tomasglawaty@icloud.com"
+		}
+	],
+	"require": {
+		"php": "^7.2",
+		"nelmio/alice": "^3.7",
+		"nette/di": "^2.4",
+		"nette/finder": "^2.5",
+		"nette/utils": "^2.5"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-master",
+		"friendsofphp/php-cs-fixer": "^2.0",
+		"nette/tester": "^1.7"
+	},
+	"autoload": {
+		"psr-4": {
+			"SixtyEightPublishers\\FixturesBundle\\": "src/"
+		}
+	},
+	"config": {
+		"sort-packages": true
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"SixtyEightPublishers\\FixturesBundle\\Tests\\": "tests/"
+		}
+	}
+}

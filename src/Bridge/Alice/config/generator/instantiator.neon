@@ -1,0 +1,44 @@
+services:
+	nelmio_alice.generator.instantiator:
+		autowired: no
+		class: Nelmio\Alice\Generator\InstantiatorInterface
+		factory: Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator(@nelmio_alice.generator.instantiator.resolver)
+
+	nelmio_alice.generator.instantiator.resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\InstantiatorInterface
+		factory: Nelmio\Alice\Generator\Instantiator\InstantiatorResolver(@nelmio_alice.generator.instantiator.registry)
+
+	nelmio_alice.generator.instantiator.registry:
+		autowired: no
+		class: Nelmio\Alice\Generator\InstantiatorInterface
+		factory: Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry
+		# arguments are into registry injected by tag "nelmio_alice.generator.instantiator.chainable_instantiator"
+
+	nelmio_alice.generator.instantiator.chainable.no_caller_method_instantiator:
+		autowired: no
+		class: Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface
+		factory: Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator(@nelmio_alice.generator.named_arguments_resolver)
+		tags:
+			nelmio_alice.generator.instantiator.chainable_instantiator: yes
+
+	nelmio_alice.generator.instantiator.chainable.null_constructor_instantiator:
+		autowired: no
+		class: Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface
+		factory: Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator
+		tags:
+			nelmio_alice.generator.instantiator.chainable_instantiator: yes
+
+	nelmio_alice.generator.instantiator.chainable.no_method_call_instantiator:
+		autowired: no
+		class: Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface
+		factory: Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator
+		tags:
+			nelmio_alice.generator.instantiator.chainable_instantiator: yes
+
+	nelmio_alice.generator.instantiator.chainable.static_factory_instantiator:
+		autowired: no
+		class: Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface
+		factory: Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator(@nelmio_alice.generator.named_arguments_resolver)
+		tags:
+			nelmio_alice.generator.instantiator.chainable_instantiator: yes

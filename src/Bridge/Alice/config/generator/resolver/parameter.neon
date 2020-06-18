@@ -1,0 +1,45 @@
+services:
+	nelmio_alice.generator.resolver.parameter_bag:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver(@nelmio_alice.generator.resolver.parameter_bag.simple)
+
+	nelmio_alice.generator.resolver.parameter_bag.simple:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver(@nelmio_alice.generator.resolver.parameter.registry)
+
+	nelmio_alice.generator.resolver.parameter.registry:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\ParameterResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry
+		# arguments are into registry injected by tag "nelmio_alice.generator.resolver.parameter.chainable_resolver"
+
+	nelmio_alice.generator.resolver.parameter.chainable.static_parameter_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
+		tags:
+			nelmio_alice.generator.resolver.parameter.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.parameter.chainable.array_parameter_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
+		tags:
+			nelmio_alice.generator.resolver.parameter.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.parameter.chainable.recursive_parameter_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver(
+			@nelmio_alice.generator.resolver.parameter.chainable.string_parameter_resolver,
+			5 # loading limit is overrided from a configuration in an extension
+		)
+		tags:
+			nelmio_alice.generator.resolver.parameter.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.parameter.chainable.string_parameter_resolver:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver

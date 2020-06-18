@@ -1,0 +1,5 @@
+services:
+	nelmio_alice.file_locator:
+		autowired: no
+		class: Nelmio\Alice\FileLocatorInterface
+		factory: Nelmio\Alice\FileLocator\DefaultFileLocator()

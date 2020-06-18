@@ -1,0 +1,35 @@
+services:
+	nelmio_alice.fixture_builder.expression_language.lexer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
+		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer(@nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer)
+
+	nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
+		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer(@nelmio_alice.fixture_builder.expression_language.lexer.globals_patterns_lexer)
+
+	nelmio_alice.fixture_builder.expression_language.lexer.globals_patterns_lexer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
+		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer(@nelmio_alice.fixture_builder.expression_language.lexer.function_lexer)
+
+	nelmio_alice.fixture_builder.expression_language.lexer.function_lexer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
+		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer(@nelmio_alice.fixture_builder.expression_language.lexer.string_then_reference_lexer)
+
+	nelmio_alice.fixture_builder.expression_language.lexer.string_then_reference_lexer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
+		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer(@nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer)
+
+	nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
+		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer(@nelmio_alice.fixture_builder.expression_language.lexer.reference_lexer)
+
+	nelmio_alice.fixture_builder.expression_language.lexer.reference_lexer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
+		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer()

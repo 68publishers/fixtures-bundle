@@ -1,0 +1,5 @@
+services:
+	nelmio_alice.generator.resolver.fixture_bag:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\FixtureBagResolverInterface
+		factory: Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver

@@ -1,0 +1,12 @@
+services:
+	nelmio_alice.faker.generator:
+		class: Faker\Generator
+		factory: Faker\Factory::create()
+		# locale and seed is injected from an extension configuration
+		# providers are injected by tag "nelmio_alice.faker.provider"
+
+	nelmio_alice.faker.provider.alice:
+		autowired: no
+		class: Nelmio\Alice\Faker\Provider\AliceProvider
+		tags:
+			nelmio_alice.faker.provider: yes

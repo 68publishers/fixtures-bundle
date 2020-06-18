@@ -1,0 +1,179 @@
+services:
+	nelmio_alice.fixture_builder.denormalizer.fixture_bag:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture,
+			@nelmio_alice.fixture_builder.denormalizer.flag_parser
+		)
+
+	nelmio_alice.fixture_builder.denormalizer.fixture:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\TolerantFixtureDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer
+		)
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry(
+			@nelmio_alice.fixture_builder.denormalizer.flag_parser
+			# other arguments are into registry injected by tag "nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer"
+		)
+
+	# Chainables
+	nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_list:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizer
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_list:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizer
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizerWithTemporaryFixture(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_list
+		)
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.chainable.simple_list:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_list
+		)
+		tags:
+			nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer: yes
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_range:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizer
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.chainable.reference_range_name:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ReferenceRangeNameDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.specs
+		)
+		tags:
+			nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer: yes
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_range:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizer
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizerWithTemporaryFixture(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_range
+		)
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.chainable.simple_range:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_range
+		)
+		tags:
+			nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer: yes
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.chainable.simple:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.specs
+		)
+		tags:
+			nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer: yes
+
+	# specs: Denormalizer
+	nelmio_alice.fixture_builder.denormalizer.specs:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor,
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.property,
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls
+		)
+
+	# specs: Constructors Denormalizer
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\LegacyConstructorDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.constructor_denormalizer,
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.factory_denormalizer
+		)
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.factory_denormalizer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls
+		)
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.constructor_denormalizer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments
+		)
+
+	# spces: Arguments Denormalizer
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\SimpleArgumentsDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.value
+		)
+
+	# specs: Values Denormalizer
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.value:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.simple_value_denormalizer
+		)
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.simple_value_denormalizer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer(
+			@nelmio_alice.fixture_builder.expression_language.parser
+		)
+
+	# specs: Properties Denormalizer
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.property:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\PropertyDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\SimplePropertyDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.value
+		)
+
+	# specs: Calls Denormalizer
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\CallsWithFlagsDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.function_denormalizer
+			# other arguments are into registry injected by tag "nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler"
+		)
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.function_denormalizer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FunctionDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments
+		)
+
+	# Chainable method call handlers
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.method_flag_handler.configurator_flag_handler:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\ConfiguratorFlagHandler
+		tags:
+			nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler: yes
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.method_flag_handler.optional_flag_handler:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler
+		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\OptionalFlagHandler
+		tags:
+			nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler: yes
