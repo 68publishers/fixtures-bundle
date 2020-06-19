@@ -34,5 +34,13 @@
 		"psr-4": {
 			"SixtyEightPublishers\\FixturesBundle\\Tests\\": "tests/"
 		}
+	},
+	"scripts": {
+		"tests": [
+			"@tests:lowest",
+			"@tests:highest"
+		],
+		"tests:lowest" : "@composer update --no-progress --prefer-dist --prefer-lowest --prefer-stable && vendor/bin/tester ./tests",
+		"tests:highest" : "@composer update --no-progress --prefer-dist --prefer-stable && vendor/bin/tester ./tests"
 	}
 }
