@@ -12,14 +12,15 @@
 	"require": {
 		"php": "^7.2",
 		"nelmio/alice": "^3.7",
-		"nette/di": "^2.4",
-		"nette/finder": "^2.5",
-		"nette/utils": "^2.5"
+		"nette/di": "^2.4.16 || ^3.0",
+		"nette/finder": "^2.4 || ^3.0",
+		"nette/utils": "^2.4.2 || ^3.0"
 	},
 	"require-dev": {
-		"roave/security-advisories": "dev-master",
-		"friendsofphp/php-cs-fixer": "^2.0",
-		"nette/tester": "^1.7"
+		"friendsofphp/php-cs-fixer": "^2.16",
+		"nette/application": "^2.4 || ^3.0",
+		"nette/tester": "^2.3",
+		"roave/security-advisories": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
