@@ -1,0 +1,30 @@
+services:
+	fidry_alice_data_fixtures.loader.doctrine_mongodb:
+		autowired: no
+		class: Fidry\AliceDataFixtures\LoaderInterface
+		factory: Fidry\AliceDataFixtures\Loader\PurgerLoader(
+			@fidry_alice_data_fixtures.doctrine_mongodb.persister_loader,
+			@fidry_alice_data_fixtures.persistence.purger_factory.doctrine_mongodb,
+			delete,
+			@fidry_alice_data_fixtures.logger
+		)
+
+	fidry_alice_data_fixtures.doctrine_mongodb.persister_loader:
+		autowired: no
+		class: Fidry\AliceDataFixtures\LoaderInterface
+		factory: Fidry\AliceDataFixtures\Loader\PersisterLoader(
+			@fidry_alice_data_fixtures.loader.simple,
+			@fidry_alice_data_fixtures.persistence.persister.doctrine_mongodb,
+			@fidry_alice_data_fixtures.logger
+			# processors are injected by tag "fidry_alice_data_fixtures.processor"
+		)
+
+	fidry_alice_data_fixtures.persistence.purger_factory.doctrine_mongodb:
+		autowired: no
+		class: Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface
+		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Purger\Purger(@Doctrine\ODM\MongoDB\DocumentManager)
+
+	fidry_alice_data_fixtures.persistence.persister.doctrine_mongodb:
+		autowired: no
+		class: Fidry\AliceDataFixtures\Persistence\PersisterInterface
+		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Persister\ObjectManagerPersister(@Doctrine\ODM\MongoDB\DocumentManager)

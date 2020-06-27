@@ -1,0 +1,5 @@
+services:
+	fidry_alice_data_fixtures.loader.simple:
+		autowired: no
+		class: Fidry\AliceDataFixtures\LoaderInterface
+		factory: Fidry\AliceDataFixtures\Loader\SimpleLoader(@nelmio_alice.files_loader, @fidry_alice_data_fixtures.logger)
