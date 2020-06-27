@@ -30,12 +30,4 @@ final class NelmioAliceExtension extends AbstractNelmioAliceExtension
 	{
 		return $this->config;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function loadDefinitions(array $services): void
-	{
-		$this->compiler->loadDefinitionsFromConfig($services);
-	}
 }

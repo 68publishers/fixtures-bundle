@@ -47,12 +47,4 @@ final class NelmioAlice24Extension extends AbstractNelmioAliceExtension
 
 		return (object) $config;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function loadDefinitions(array $services): void
-	{
-		$this->compiler::loadDefinitions($this->getContainerBuilder(), $services);
-	}
 }

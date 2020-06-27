@@ -4,19 +4,13 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Bridge\Alice\DI;
 
-use Nette\Utils\Finder;
-use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\Statement;
 use Nette\DI\Definitions\ServiceDefinition;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use SixtyEightPublishers\FixturesBundle\Bridge\AbstractBridgeExtension;
 
-require_once __DIR__ . '/../nette.di.compatibility.php';
-
-/**
- * @property \stdClass $config
- */
-abstract class AbstractNelmioAliceExtension extends CompilerExtension
+abstract class AbstractNelmioAliceExtension extends AbstractBridgeExtension
 {
 	public const    TAG_NELMIO_ALICE_FAKER_PROVIDER = 'nelmio_alice.faker.provider',
 					TAG_NELMIO_ALICE_FILE_PARSER = 'nelmio_alice.file_parser',
@@ -29,28 +23,12 @@ abstract class AbstractNelmioAliceExtension extends CompilerExtension
 					TAG_NELMIO_ALICE_GENERATOR_RESOLVER_PARAMETER_CHAINABLE_RESOLVER = 'nelmio_alice.generator.resolver.parameter.chainable_resolver',
 					TAG_NELMIO_ALICE_GENERATOR_RESOLVER_VALUE_CHAINABLE_RESOLVER= 'nelmio_alice.generator.resolver.value.chainable_resolver';
 
-	/** @var object|NULL */
-	private $validConfig;
-
-	/**
-	 * @return object
-	 */
-	abstract protected function getValidConfig(): object;
-
-	/**
-	 * @param array $services
-	 *
-	 * @return void
-	 */
-	abstract protected function loadDefinitions(array $services): void;
-
 	/**
 	 * {@inheritDoc}
 	 */
-	public function loadConfiguration(): void
+	public function doLoadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
-		$this->validConfig = $this->getValidConfig();
 
 		if (!$builder->hasDefinition('property_accessor')) {
 			$builder->addDefinition($this->prefix('default_property_accessor'))
@@ -58,10 +36,6 @@ abstract class AbstractNelmioAliceExtension extends CompilerExtension
 				->setFactory(new Statement([new Statement([new Statement([PropertyAccess::class, 'createPropertyAccessorBuilder']), 'enableMagicCall']), 'getPropertyAccessor']));
 
 			$builder->addAlias('property_accessor', $this->prefix('default_property_accessor'));
-		}
-
-		foreach (Finder::findFiles('*.neon')->from(__DIR__ . '/../config') as $filename => $_) {
-			$this->loadDefinitions($this->loadFromFile($filename)['services']);
 		}
 	}
 
@@ -153,61 +127,5 @@ abstract class AbstractNelmioAliceExtension extends CompilerExtension
 			$this->validConfig->max_unique_values_retry,
 			2
 		);
-	}
-
-	/**
-	 * @param string $tag
-	 *
-	 * @return \Nette\DI\Definitions\ServiceDefinition[]
-	 */
-	private function findServicesByTag(string $tag): array
-	{
-		$builder = $this->getContainerBuilder();
-
-		return array_map(static function ($name) use ($builder) {
-			return $builder->getDefinition($name);
-		}, array_keys($builder->findByTag($tag)));
-	}
-
-	/**
-	 * @param \Nette\DI\Definitions\ServiceDefinition|\Nette\DI\Definitions\Definition $definition
-	 * @param int|NULL                                                                 $index
-	 * @param mixed                                                                    ...$args
-	 *
-	 * @return void
-	 */
-	protected function addServiceArguments(ServiceDefinition $definition, ?int $index = NULL, ...$args): void
-	{
-		if (NULL !== $definition->getFactory()) {
-			$currentArguments = $definition->getFactory()->arguments;
-
-			if (NULL === $index) {
-				$args = array_merge($currentArguments, $args);
-			} else {
-				$pre = array_slice($currentArguments, 0, $index);
-				$post = array_slice($currentArguments, $index);
-
-				$args = array_merge($pre, $args, $post);
-			}
-		}
-
-		$definition->setArguments($args);
-	}
-
-	/**
-	 * @param \Nette\DI\Definitions\ServiceDefinition|\Nette\DI\Definitions\Definition $definition
-	 * @param mixed                                                                    $arg
-	 * @param int                                                                      $index
-	 *
-	 * @return void
-	 */
-	protected function setServiceArgument(ServiceDefinition $definition, $arg, int $index): void
-	{
-		$args = NULL !== $definition->getFactory() ? $definition->getFactory()->arguments : [];
-		$keys = array_keys($args);
-
-		$args[$keys[$index] ?? $index] = $arg;
-
-		$definition->setArguments($args);
 	}
 }
