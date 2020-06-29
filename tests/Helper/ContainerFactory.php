@@ -10,7 +10,6 @@ use Nette\StaticClass;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
 use SixtyEightPublishers\FixturesBundle\Bridge\Alice\DI\NelmioAliceExtension;
-use SixtyEightPublishers\FixturesBundle\Bridge\Alice\DI\NelmioAlice24Extension;
 
 final class ContainerFactory
 {
@@ -26,7 +25,7 @@ final class ContainerFactory
 	{
 		$loader = new ContainerLoader(TEMP_PATH . '/Nette.Configurator_' . md5($name), TRUE);
 		$class = $loader->load(static function (Compiler $compiler) use ($config): void {
-			$compiler->addExtension('nelmio_alice', 2.4 === FrameworkVersionChecker::getVersion() ? new NelmioAlice24Extension() : new NelmioAliceExtension());
+			$compiler->addExtension('nelmio_alice', new NelmioAliceExtension());
 
 			if (is_array($config)) {
 				$compiler->addConfig($config);

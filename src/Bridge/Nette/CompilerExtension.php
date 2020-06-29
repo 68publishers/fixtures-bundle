@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Bridge;
+namespace SixtyEightPublishers\FixturesBundle\Bridge\Nette;
 
+use LogicException;
 use Nette\Utils\Finder;
-use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
+use Nette\DI\CompilerExtension as NetteCompilerExtension;
 
 require_once 'nette.di.compatibility.php';
 
-abstract class AbstractBridgeExtension extends CompilerExtension
+abstract class CompilerExtension extends NetteCompilerExtension
 {
 	/** @var object|NULL */
 	protected $validConfig;
@@ -18,7 +19,7 @@ abstract class AbstractBridgeExtension extends CompilerExtension
 	/**
 	 * @return object
 	 */
-	abstract protected function getValidConfig(): object;
+	abstract protected function getNette24Config(): object;
 
 	/**
 	 * Use instead of ::loadConfiguration()
@@ -35,7 +36,11 @@ abstract class AbstractBridgeExtension extends CompilerExtension
 	 */
 	public function loadConfiguration(): void
 	{
-		$this->validConfig = $this->getValidConfig();
+		if (interface_exists('Nette\\Schema\\Schema')) {
+			$this->validConfig = $this->config;
+		} else {
+			$this->validConfig = $this->getNette24Config();
+		}
 
 		$this->doLoadConfiguration();
 		$this->loadNeonConfiguration();
@@ -47,7 +52,9 @@ abstract class AbstractBridgeExtension extends CompilerExtension
 	 */
 	protected function getConfigFiles(): iterable
 	{
-		return array_keys(iterator_to_array(Finder::findFiles('*.neon')->from(dirname((new \ReflectionClass($this))->getFileName()) . '/../config')));
+		$dir = dirname((new \ReflectionClass($this))->getFileName()) . '/../config';
+
+		return is_dir($dir) ? array_keys(iterator_to_array(Finder::findFiles('*.neon')->from($dir))) : [];
 	}
 
 	/**
@@ -61,7 +68,7 @@ abstract class AbstractBridgeExtension extends CompilerExtension
 		foreach ($this->getConfigFiles() as $filename) {
 			$services = $this->loadFromFile($filename)['services'];
 
-			if (is_callable([$compiler, 'loadDefinitionsFromConfig'])) {
+			if ((new \ReflectionClass($compiler))->hasMethod('loadDefinitionsFromConfig')) {
 				$this->compiler->loadDefinitionsFromConfig($services);
 			} else {
 				$this->compiler::loadDefinitions($this->getContainerBuilder(), $services);
@@ -124,5 +131,24 @@ abstract class AbstractBridgeExtension extends CompilerExtension
 		ksort($args);
 
 		$definition->setArguments($args);
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 * @throws \LogicException
+	 */
+	protected function checkExtension(string $name): bool
+	{
+		if (0 >= count($this->compiler->getExtensions($name))) {
+			throw new LogicException(sprintf(
+				'Cannot register "%s" without "%s".',
+				static::class,
+				$name
+			));
+		}
+
+		return TRUE;
 	}
 }
