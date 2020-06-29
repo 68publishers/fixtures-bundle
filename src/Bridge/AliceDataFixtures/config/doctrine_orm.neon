@@ -1,11 +1,17 @@
 services:
+	# Loaders
 	fidry_alice_data_fixtures.loader.doctrine:
+		autowired: no
+		class: Fidry\AliceDataFixtures\LoaderInterface
+		factory: @fidry_alice_data_fixtures.doctrine.purger_loader
+
+	fidry_alice_data_fixtures.doctrine.purger_loader:
 		autowired: no
 		class: Fidry\AliceDataFixtures\LoaderInterface
 		factory: Fidry\AliceDataFixtures\Loader\PurgerLoader(
 			@fidry_alice_data_fixtures.doctrine.persister_loader,
 			@fidry_alice_data_fixtures.persistence.purger_factory.doctrine,
-			delete,
+			delete, # overrided by an option "default_purge_mode"
 			@fidry_alice_data_fixtures.logger
 		)
 
@@ -19,12 +25,24 @@ services:
 			# processors are injected by tag "fidry_alice_data_fixtures.processor"
 		)
 
+	# Purger Factory
 	fidry_alice_data_fixtures.persistence.purger_factory.doctrine:
+		autowired: no
+		class: Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface
+		factory: @fidry_alice_data_fixtures.persistence.doctrine.purger.purger_factory
+
+	fidry_alice_data_fixtures.persistence.doctrine.purger.purger_factory:
 		autowired: no
 		class: Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface
 		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Purger\Purger(@Doctrine\ORM\EntityManagerInterface)
 
+	# Persisters
 	fidry_alice_data_fixtures.persistence.persister.doctrine:
+		autowired: no
+		class: Fidry\AliceDataFixtures\Persistence\PersisterInterface
+		factory: @fidry_alice_data_fixtures.persistence.persister.doctrine.object_manager_persister
+
+	fidry_alice_data_fixtures.persistence.persister.doctrine.object_manager_persister:
 		autowired: no
 		class: Fidry\AliceDataFixtures\Persistence\PersisterInterface
 		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Persister\ObjectManagerPersister(@Doctrine\ORM\EntityManagerInterface)

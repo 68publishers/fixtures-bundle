@@ -2,6 +2,11 @@ services:
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser:
 		autowired: no
 		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface
+		factory: @nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry
+
+	nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\TokenParserRegistry
 		# arguments are into registry injected by tag "nelmio_alice.fixture_builder.expression_language.chainable_token_parser"
 

@@ -2,6 +2,11 @@ services:
 	nelmio_alice.fixture_builder.expression_language.lexer:
 		autowired: no
 		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
+		factory: @nelmio_alice.fixture_builder.expression_language.lexer.empty_value_lexer
+
+	nelmio_alice.fixture_builder.expression_language.lexer.empty_value_lexer:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer(@nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer)
 
 	nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer:

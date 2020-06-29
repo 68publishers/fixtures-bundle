@@ -2,6 +2,11 @@ services:
 	nelmio_alice.generator.instantiator:
 		autowired: no
 		class: Nelmio\Alice\Generator\InstantiatorInterface
+		factory: @nelmio_alice.generator.instantiator.existing_instance
+
+	nelmio_alice.generator.instantiator.existing_instance:
+		autowired: no
+		class: Nelmio\Alice\Generator\InstantiatorInterface
 		factory: Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator(@nelmio_alice.generator.instantiator.resolver)
 
 	nelmio_alice.generator.instantiator.resolver:

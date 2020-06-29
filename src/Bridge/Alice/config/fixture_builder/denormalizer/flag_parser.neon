@@ -2,6 +2,11 @@ services:
 	nelmio_alice.fixture_builder.denormalizer.flag_parser:
 		autowired: no
 		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface
+		factory: @nelmio_alice.fixture_builder.denormalizer.flag_parser.element
+
+	nelmio_alice.fixture_builder.denormalizer.flag_parser.element:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser(@nelmio_alice.fixture_builder.denormalizer.flag_parser.registry)
 
 	nelmio_alice.fixture_builder.denormalizer.flag_parser.registry:

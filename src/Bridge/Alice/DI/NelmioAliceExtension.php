@@ -117,7 +117,7 @@ final class NelmioAliceExtension extends CompilerExtension
 		);
 
 		$this->addServiceArguments(
-			$builder->getDefinition('nelmio_alice.fixture_builder.expression_language.parser.token_parser'),
+			$builder->getDefinition('nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry'),
 			NULL,
 			$this->findServicesByTag(self::TAG_NELMIO_ALICE_FIXTURE_BUILDER_EXPRESSION_LANGUAGE_CHAINABLE_TOKEN_PARSER)
 		);
@@ -135,7 +135,7 @@ final class NelmioAliceExtension extends CompilerExtension
 		);
 
 		$this->addServiceArguments(
-			$builder->getDefinition('nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls'),
+			$builder->getDefinition('nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.simple_denormalizer'),
 			NULL,
 			$this->findServicesByTag(self::TAG_NELMIO_ALICE_FIXTURE_BUILDER_DENORMALIZER_CHAINABLE_METHOD_FLAG_HANDLER)
 		);
@@ -159,7 +159,7 @@ final class NelmioAliceExtension extends CompilerExtension
 		);
 
 		$this->addServiceArguments(
-			$builder->getDefinition('nelmio_alice.generator.resolver.value'),
+			$builder->getDefinition('nelmio_alice.generator.resolver.value.registry'),
 			NULL,
 			$this->findServicesByTag(self::TAG_NELMIO_ALICE_GENERATOR_RESOLVER_VALUE_CHAINABLE_RESOLVER)
 		);

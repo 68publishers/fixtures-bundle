@@ -2,6 +2,11 @@ services:
 	nelmio_alice.generator.resolver.value:
 		autowired: no
 		class: Nelmio\Alice\Generator\ValueResolverInterface
+		factory: @nelmio_alice.generator.resolver.value.registry
+
+	nelmio_alice.generator.resolver.value.registry:
+		autowired: no
+		class: Nelmio\Alice\Generator\ValueResolverInterface
 		factory: Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
 		# arguments are into registry injected by tag "nelmio_alice.generator.resolver.value.chainable_resolver"
 
@@ -119,7 +124,7 @@ services:
 		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver(
 			@nelmio_alice.generator.resolver.value.unique_values_pool,
 			null,
-			150
+			150 # "max_unique_values_retry" limit is overrided from a configuration in an extension
 		)
 		tags:
 			nelmio_alice.generator.resolver.value.chainable_resolver: yes

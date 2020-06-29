@@ -2,6 +2,11 @@ services:
 	nelmio_alice.generator.caller:
 		autowired: no
 		class: Nelmio\Alice\Generator\CallerInterface
+		factory: @nelmio_alice.generator.caller.simple
+
+	nelmio_alice.generator.caller.simple:
+		autowired: no
+		class: Nelmio\Alice\Generator\CallerInterface
 		factory: Nelmio\Alice\Generator\Caller\SimpleCaller(
 			@nelmio_alice.generator.caller.registry,
 			@nelmio_alice.generator.resolver.value,

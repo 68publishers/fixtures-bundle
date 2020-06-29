@@ -2,6 +2,11 @@ services:
 	nelmio_alice.generator.resolver.fixture_set:
 		autowired: no
 		class: Nelmio\Alice\Generator\FixtureSetResolverInterface
+		factory: @nelmio_alice.generator.resolver.fixture_set.remove_conflicting_objects
+
+	nelmio_alice.generator.resolver.fixture_set.remove_conflicting_objects:
+		autowired: no
+		class: Nelmio\Alice\Generator\FixtureSetResolverInterface
 		factory: Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver(@nelmio_alice.generator.resolver.fixture_set.simple)
 
 	nelmio_alice.generator.resolver.fixture_set.simple:

@@ -2,6 +2,11 @@ services:
 	nelmio_alice.fixture_builder.expression_language.parser:
 		autowired: no
 		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface
+		factory: @nelmio_alice.fixture_builder.expression_language.parser.function_fixture_reference_parser
+
+	nelmio_alice.fixture_builder.expression_language.parser.function_fixture_reference_parser:
+		autowired: no
+		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser(@nelmio_alice.fixture_builder.expression_language.parser.string_parser)
 
 	nelmio_alice.fixture_builder.expression_language.parser.string_parser:

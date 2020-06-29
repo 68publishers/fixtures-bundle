@@ -2,12 +2,22 @@ services:
 	nelmio_alice.generator:
 		autowired: no
 		class: Nelmio\Alice\GeneratorInterface
+		factory: @nelmio_alice.generator.double_pass
+
+	nelmio_alice.generator.double_pass:
+		autowired: no
+		class: Nelmio\Alice\GeneratorInterface
 		factory: Nelmio\Alice\Generator\DoublePassGenerator(
 			@nelmio_alice.generator.resolver.fixture_set,
 			@nelmio_alice.generator.object_generator
 		)
 
 	nelmio_alice.generator.object_generator:
+		autowired: no
+		class: Nelmio\Alice\Generator\ObjectGeneratorInterface
+		factory: @nelmio_alice.generator.object_generator.complete
+
+	nelmio_alice.generator.object_generator.complete:
 		autowired: no
 		class: Nelmio\Alice\Generator\ObjectGeneratorInterface
 		factory: Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator(@nelmio_alice.generator.object_generator.simple)

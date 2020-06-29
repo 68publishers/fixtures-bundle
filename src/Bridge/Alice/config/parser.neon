@@ -2,6 +2,11 @@ services:
 	nelmio_alice.file_parser:
 		autowired: no
 		class: Nelmio\Alice\ParserInterface
+		factory: @nelmio_alice.file_parser.runtime_cache
+
+	nelmio_alice.file_parser.runtime_cache:
+		autowired: no
+		class: Nelmio\Alice\ParserInterface
 		factory: Nelmio\Alice\Parser\RuntimeCacheParser(
 			@nelmio_alice.file_parser.registry,
 			@nelmio_alice.file_locator,

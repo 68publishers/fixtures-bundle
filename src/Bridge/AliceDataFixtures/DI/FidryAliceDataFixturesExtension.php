@@ -125,17 +125,17 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 		}
 
 		if ($this->validConfig->db_drivers->{self::DOCTRINE_ORM_DRIVER}) {
-			$this->setDefaultPurgeMode('fidry_alice_data_fixtures.loader.doctrine');
+			$this->setDefaultPurgeMode('fidry_alice_data_fixtures.doctrine.purger_loader');
 			$this->setFixturesProcessors('fidry_alice_data_fixtures.doctrine.persister_loader');
 		}
 
 		if ($this->validConfig->db_drivers->{self::DOCTRINE_MONGODB_ODM_DRIVER}) {
-			$this->setDefaultPurgeMode('fidry_alice_data_fixtures.loader.doctrine_mongodb');
+			$this->setDefaultPurgeMode('fidry_alice_data_fixtures.doctrine_mongodb.purger_loader');
 			$this->setFixturesProcessors('fidry_alice_data_fixtures.doctrine_mongodb.persister_loader');
 		}
 
 		if ($this->validConfig->db_drivers->{self::DOCTRINE_PHPCR_ODM_DRIVER}) {
-			$this->setDefaultPurgeMode('fidry_alice_data_fixtures.loader.doctrine_phpcr');
+			$this->setDefaultPurgeMode('fidry_alice_data_fixtures.doctrine_phpcr.purger_loader');
 			$this->setFixturesProcessors('fidry_alice_data_fixtures.doctrine_phpcr.persister_loader');
 		}
 	}

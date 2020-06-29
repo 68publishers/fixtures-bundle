@@ -2,6 +2,11 @@ services:
 	nelmio_alice.generator.resolver.parameter_bag:
 		autowired: no
 		class: Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface
+		factory: @nelmio_alice.generator.resolver.parameter_bag.remove_conflicting_parameters
+
+	nelmio_alice.generator.resolver.parameter_bag.remove_conflicting_parameters:
+		autowired: no
+		class: Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface
 		factory: Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver(@nelmio_alice.generator.resolver.parameter_bag.simple)
 
 	nelmio_alice.generator.resolver.parameter_bag.simple:
