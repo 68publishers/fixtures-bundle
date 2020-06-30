@@ -46,3 +46,14 @@ services:
 		autowired: no
 		class: Fidry\AliceDataFixtures\Persistence\PersisterInterface
 		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Persister\ObjectManagerPersister(@Doctrine\ODM\MongoDB\DocumentManager)
+
+	# Driver
+	fidry_alice_data_fixtures.driver.doctrine_mongodb:
+		autowired: no
+		class: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\ComposedDriver(
+			doctrine_mongodb_odm,
+			@fidry_alice_data_fixtures.loader.doctrine_mongodb,
+			@fidry_alice_data_fixtures.persistence.purger_factory.doctrine_mongodb,
+			@fidry_alice_data_fixtures.persistence.persister.doctrine_mongodb
+		)

@@ -46,3 +46,14 @@ services:
 		autowired: no
 		class: Fidry\AliceDataFixtures\Persistence\PersisterInterface
 		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Persister\ObjectManagerPersister(@Doctrine\ORM\EntityManagerInterface)
+
+	# Driver
+	fidry_alice_data_fixtures.driver.doctrine:
+		autowired: no
+		class: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\ComposedDriver(
+			doctrine_orm,
+			@fidry_alice_data_fixtures.loader.doctrine,
+			@fidry_alice_data_fixtures.persistence.purger_factory.doctrine,
+			@fidry_alice_data_fixtures.persistence.persister.doctrine
+		)

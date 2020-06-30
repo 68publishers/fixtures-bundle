@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Logger;
+namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Logger;
 
 use Psr\Log\NullLogger;
 use Psr\Log\AbstractLogger;
