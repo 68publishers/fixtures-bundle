@@ -20,7 +20,7 @@ final class NelmioAliceExtension extends CompilerExtension
 					TAG_NELMIO_ALICE_FILE_PARSER = 'nelmio_alice.file_parser',
 					TAG_NELMIO_ALICE_FIXTURE_BUILDER_EXPRESSION_LANGUAGE_CHAINABLE_TOKEN_PARSER = 'nelmio_alice.fixture_builder.expression_language.chainable_token_parser',
 					TAG_NELMIO_ALICE_FIXTURE_BUILDER_DENORMALIZER_CHAINABLE_FLAG_PARSER = 'nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser',
-					TAG_NELMIO_ALICE_FIXTURE_BUILDER_DENORMALIZER_CHAINABLE_FIXTUE_NEMORMALIZER = 'nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer',
+					TAG_NELMIO_ALICE_FIXTURE_BUILDER_DENORMALIZER_CHAINABLE_FIXTUE_DENORMALIZER = 'nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer',
 					TAG_NELMIO_ALICE_FIXTURE_BUILDER_DENORMALIZER_CHAINABLE_METHOD_FLAG_HANDLER = 'nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler',
 					TAG_NELMIO_ALICE_GENERATOR_CALLLER_CHAINABLE_CALL_PROCESSOR = 'nelmio_alice.generator.caller.chainable_call_processor',
 					TAG_NELMIO_ALICE_GENERATOR_INSTANTIATOR_CHAINABLE_INSTANTIATOR = 'nelmio_alice.generator.instantiator.chainable_instantiator',
@@ -131,7 +131,7 @@ final class NelmioAliceExtension extends CompilerExtension
 		$this->addServiceArguments(
 			$builder->getDefinition('nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer'),
 			NULL,
-			$this->findServicesByTag(self::TAG_NELMIO_ALICE_FIXTURE_BUILDER_DENORMALIZER_CHAINABLE_FIXTUE_NEMORMALIZER)
+			$this->findServicesByTag(self::TAG_NELMIO_ALICE_FIXTURE_BUILDER_DENORMALIZER_CHAINABLE_FIXTUE_DENORMALIZER)
 		);
 
 		$this->addServiceArguments(

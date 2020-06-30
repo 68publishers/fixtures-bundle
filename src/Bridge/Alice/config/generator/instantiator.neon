@@ -47,3 +47,13 @@ services:
 		factory: Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator(@nelmio_alice.generator.named_arguments_resolver)
 		tags:
 			nelmio_alice.generator.instantiator.chainable_instantiator: yes
+
+	# Custom instantiators:
+	nelmio_alice.generator.instantiator.chainable.service_factory_instantiator:
+		autowired: no
+		class: Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Instantiator\Chainable\ServiceFactoryInstantiator
+		setup:
+			- setContainer(@container)
+		tags:
+			nelmio_alice.generator.instantiator.chainable_instantiator: yes
