@@ -1,0 +1,13 @@
+services:
+	68publishers_fixtures_bundle.file_resolver:
+		autowired: no
+		class: Fidry\AliceDataFixtures\FileResolverInterface
+		factory: @68publishers_fixtures_bundle.file_resolver.default
+
+	68publishers_fixtures_bundle.file_resolver.default:
+		autowired: no
+		class: Fidry\AliceDataFixtures\FileResolverInterface
+		factory: SixtyEightPublishers\FixturesBundle\FileResolver\FileResolver(
+			@nelmio_alice.file_locator,
+			[] # dirs are repalced in a compiler extension
+		)

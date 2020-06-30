@@ -1,0 +1,9 @@
+services:
+	68publishers_fixtures_bundle.scenario_provider:
+		class: SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider
+		factory: @68publishers_fixtures_bundle.scenario_provider.default
+
+	68publishers_fixtures_bundle.scenario_provider.default:
+		class: SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider
+		factory: SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProvider
+		# scenarios are injected in a compiler extension

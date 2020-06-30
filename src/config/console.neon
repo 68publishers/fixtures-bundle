@@ -1,0 +1,8 @@
+services:
+	68publishers_fixtures_bundle.console.load_data_fixtures_command:
+		class: SixtyEightPublishers\FixturesBundle\Console\LoadDataFixturesCommand
+		arguments:
+			- @68publishers_fixtures_bundle.loader
+			- @68publishers_fixtures_bundle.scenario_provider
+			- @fidry_alice_data_fixtures.driver_provider
+			- @fidry_alice_data_fixtures.logger
