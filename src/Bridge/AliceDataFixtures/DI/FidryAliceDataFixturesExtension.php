@@ -18,6 +18,7 @@ use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProvider;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Logger\LoggerDecorator;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
 
 final class FidryAliceDataFixturesExtension extends CompilerExtension
 {
@@ -25,17 +26,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	public const DOCTRINE_MONGODB_ODM_DRIVER = 'doctrine_mongodb_odm';
 	public const DOCTRINE_PHPCR_ODM_DRIVER = 'doctrine_phpcr_odm';
 
-	public const PURGE_MODE_DELETE = 'delete';
-	public const PURGE_MODE_TRUNCATE = 'truncate';
-	public const PURGE_MODE_NO_PURGE = 'no_purge';
-
 	public const TAG_FIDRY_ALICE_DATA_FIXTURES_PROCESSOR = 'fidry_alice_data_fixtures.processor';
-
-	public const PURGE_MODES = [
-		self::PURGE_MODE_DELETE,
-		self::PURGE_MODE_TRUNCATE,
-		self::PURGE_MODE_NO_PURGE,
-	];
 
 	/**
 	 * {@inheritDoc}
@@ -43,7 +34,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
-			'default_purge_mode' => Expect::anyOf(...self::PURGE_MODES)->default(self::PURGE_MODE_DELETE)->dynamic(),
+			'default_purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->default(PurgeModeFactory::PURGE_MODE_DELETE)->dynamic(),
 			'default_driver' => Expect::string(self::DOCTRINE_ORM_DRIVER),
 			'db_drivers' => Expect::structure([
 				self::DOCTRINE_ORM_DRIVER => Expect::bool(FALSE),
@@ -60,7 +51,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	protected function getNette24Config(): object
 	{
 		$config = $this->validateConfig([
-			'default_purge_mode' => self::PURGE_MODE_DELETE, # 'delete', 'truncate', 'no_purge'
+			'default_purge_mode' => PurgeModeFactory::PURGE_MODE_DELETE, # 'delete', 'truncate', 'no_purge'
 			'default_driver' => self::DOCTRINE_ORM_DRIVER,
 			'db_drivers' => [
 				self::DOCTRINE_ORM_DRIVER => FALSE,
@@ -71,7 +62,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 
 		Validators::assertField($config, 'default_purge_mode', 'string');
 
-		if (!in_array($config['default_purge_mode'], self::PURGE_MODES, TRUE)) {
+		if (!in_array($config['default_purge_mode'], PurgeModeFactory::PURGE_MODES, TRUE)) {
 			throw new AssertionException(sprintf(
 				'Invalid purge mode %s. Choose either "delete", "truncate" or "no_purge".',
 				$config['default_purge_mode']
@@ -96,6 +87,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	{
 		$files = [
 			__DIR__ . '/../config/loader.neon',
+			__DIR__ . '/../config/purge_mode.neon',
 		];
 
 		foreach ($this->getEnabledDrivers() as $name => $_) {
@@ -143,8 +135,9 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 				->setArguments([$builder->getDefinition($loggerService)]);
 		}
 
+		$this->setServiceArgument($builder->getDefinition('fidry_alice_data_fixtures.default_purge_mode'), $this->validConfig->default_purge_mode, 0);
+
 		foreach ($this->getEnabledDrivers() as $alias) {
-			$this->setDefaultPurgeMode('fidry_alice_data_fixtures.' . $alias . '.purger_loader');
 			$this->setFixturesProcessors('fidry_alice_data_fixtures.' . $alias . '.persister_loader');
 		}
 
@@ -154,19 +147,6 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 			$builder->findByType(IDriver::class),
 			$this->validConfig->default_driver
 		);
-	}
-
-	/**
-	 * @param string $serviceName
-	 * @param int    $argumentIndex
-	 *
-	 * @return void
-	 */
-	private function setDefaultPurgeMode(string $serviceName, int $argumentIndex = 2): void
-	{
-		$this->tryGetDefinition($serviceName, function ($definition) use ($argumentIndex) {
-			$this->setServiceArgument($definition, $this->validConfig->default_purge_mode, $argumentIndex);
-		});
 	}
 
 	/**

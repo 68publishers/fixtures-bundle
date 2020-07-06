@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Scenario;
 
-use Fidry\AliceDataFixtures\Persistence\PurgeMode;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
 
 interface IScenario
 {
@@ -19,14 +19,14 @@ interface IScenario
 	public function getFixtures(): array;
 
 	/**
-	 * @return \Fidry\AliceDataFixtures\Persistence\PurgeMode|NULL
+	 * @return \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode|NULL
 	 */
-	public function getPurgeMode(): ?PurgeMode;
+	public function getPurgeMode(): ?NamedPurgeMode;
 
 	/**
-	 * @param string|NULL $purgeMode
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode|NULL $purgeMode
 	 *
 	 * @return void
 	 */
-	public function setPurgeMode(?string $purgeMode): void;
+	public function setPurgeMode(?NamedPurgeMode $purgeMode): void;
 }

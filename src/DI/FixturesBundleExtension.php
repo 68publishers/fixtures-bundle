@@ -16,6 +16,7 @@ use SixtyEightPublishers\FixturesBundle\Bridge\Nette\Configuration;
 use SixtyEightPublishers\FixturesBundle\Bridge\Nette\CompilerExtension;
 use SixtyEightPublishers\FixturesBundle\Bridge\Alice\DI\NelmioAliceExtension;
 use SixtyEightPublishers\FixturesBundle\Bridge\Nette\IFixturesBundleContributor;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\DI\FidryAliceDataFixturesExtension;
 
 final class FixturesBundleExtension extends CompilerExtension
@@ -30,7 +31,7 @@ final class FixturesBundleExtension extends CompilerExtension
 				return Helpers::expand($dirs, $this->getContainerBuilder()->parameters);
 			}),
 			'scenarios' => Expect::arrayOf(Expect::structure([
-				'purge_mode' => Expect::anyOf(...FidryAliceDataFixturesExtension::PURGE_MODES)->nullable(),
+				'purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->nullable(),
 				'fixtures' => Expect::listOf('string'),
 			])),
 		]);
@@ -60,7 +61,7 @@ final class FixturesBundleExtension extends CompilerExtension
 			Validators::assertField($scenarioConfig, 'fixtures', 'list');
 			Validators::assertField($scenarioConfig, 'fixtures', 'string[]');
 
-			if (NULL !== $scenarioConfig['purge_mode'] && !in_array($scenarioConfig['purge_mode'], FidryAliceDataFixturesExtension::PURGE_MODES, TRUE)) {
+			if (NULL !== $scenarioConfig['purge_mode'] && !in_array($scenarioConfig['purge_mode'], PurgeModeFactory::PURGE_MODES, TRUE)) {
 				throw new AssertionException(sprintf(
 					'Invalid purge mode %s. Choose either "delete", "truncate" or "no_purge".',
 					$scenarioConfig['purge_mode']

@@ -1,0 +1,6 @@
+services:
+	fidry_alice_data_fixtures.default_purge_mode:
+		autowired: no
+		class: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory::create(delete)
+		# a default purge mode is overriden in a compiler extension

@@ -11,7 +11,7 @@ services:
 		factory: Fidry\AliceDataFixtures\Loader\PurgerLoader(
 			@fidry_alice_data_fixtures.doctrine.persister_loader,
 			@fidry_alice_data_fixtures.persistence.purger_factory.doctrine,
-			delete, # overrided by an option "default_purge_mode"
+			@fidry_alice_data_fixtures.default_purge_mode::getName(),
 			@fidry_alice_data_fixtures.logger
 		)
 

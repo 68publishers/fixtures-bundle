@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Scenario;
 
-use InvalidArgumentException;
-use Fidry\AliceDataFixtures\Persistence\PurgeMode;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\DI\FidryAliceDataFixturesExtension;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
 
 final class Scenario implements IScenario
 {
@@ -16,7 +15,7 @@ final class Scenario implements IScenario
 	/** @var string[]  */
 	private $fixtures;
 
-	/** @var \Fidry\AliceDataFixtures\Persistence\PurgeMode|string|NULL  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode|string|NULL  */
 	private $purgeMode;
 
 	/**
@@ -50,14 +49,14 @@ final class Scenario implements IScenario
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getPurgeMode(): ?PurgeMode
+	public function getPurgeMode(): ?NamedPurgeMode
 	{
 		if (NULL === $this->purgeMode) {
 			return NULL;
 		}
 
-		if (!$this->purgeMode instanceof PurgeMode) {
-			$this->purgeMode = $this->createPurgeMode();
+		if (!$this->purgeMode instanceof NamedPurgeMode) {
+			$this->purgeMode = PurgeModeFactory::create($this->purgeMode);
 		}
 
 		return $this->purgeMode;
@@ -66,30 +65,8 @@ final class Scenario implements IScenario
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setPurgeMode(?string $purgeMode): void
+	public function setPurgeMode(?NamedPurgeMode $purgeMode): void
 	{
 		$this->purgeMode = $purgeMode;
-	}
-
-	/**
-	 * @return \Fidry\AliceDataFixtures\Persistence\PurgeMode
-	 * @throws \InvalidArgumentException
-	 */
-	private function createPurgeMode(): PurgeMode
-	{
-		switch ($this->purgeMode) {
-			case FidryAliceDataFixturesExtension::PURGE_MODE_DELETE:
-				return PurgeMode::createDeleteMode();
-			case FidryAliceDataFixturesExtension::PURGE_MODE_TRUNCATE:
-				return PurgeMode::createTruncateMode();
-			case FidryAliceDataFixturesExtension::PURGE_MODE_NO_PURGE:
-				return PurgeMode::createNoPurgeMode();
-		}
-
-		throw new InvalidArgumentException(sprintf(
-			'An invalid purge mode "%s" passed into a scenario "%s".',
-			$this->purgeMode,
-			$this->name
-		));
 	}
 }

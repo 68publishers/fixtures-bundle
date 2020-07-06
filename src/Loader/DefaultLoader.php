@@ -57,7 +57,7 @@ final class DefaultLoader implements ILoader
 			$this->fileResolver->resolve($scenario->getFixtures()),
 			$this->parameters,
 			[],
-			$scenario->getPurgeMode()
+			$scenario->getPurgeMode() ? $scenario->getPurgeMode()->getMode() : NULL
 		);
 
 		$this->logger->info('fixtures loaded');

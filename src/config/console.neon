@@ -5,4 +5,5 @@ services:
 			- @68publishers_fixtures_bundle.loader
 			- @68publishers_fixtures_bundle.scenario_provider
 			- @fidry_alice_data_fixtures.driver_provider
+			- @fidry_alice_data_fixtures.default_purge_mode
 			- @fidry_alice_data_fixtures.logger

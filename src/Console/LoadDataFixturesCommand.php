@@ -18,7 +18,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Logger\LoggerDecorator;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\DI\FidryAliceDataFixturesExtension;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
 
 final class LoadDataFixturesCommand extends Command
 {
@@ -31,22 +32,27 @@ final class LoadDataFixturesCommand extends Command
 	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider  */
 	private $driverProvider;
 
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode  */
+	private $defaultPurgeMode;
+
 	/** @var NULL|\Psr\Log\LoggerInterface  */
 	private $logger;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ILoader                                  $loader
-	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider                      $scenarioProvider
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider $driverProvider
-	 * @param \Psr\Log\LoggerInterface|NULL                                                        $logger
+	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ILoader                                      $loader
+	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider                          $scenarioProvider
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider     $driverProvider
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode $defaultPurgeMode
+	 * @param \Psr\Log\LoggerInterface|NULL                                                            $logger
 	 */
-	public function __construct(ILoader $loader, IScenarioProvider $scenarioProvider, IDriverProvider $driverProvider, LoggerInterface $logger = NULL)
+	public function __construct(ILoader $loader, IScenarioProvider $scenarioProvider, IDriverProvider $driverProvider, NamedPurgeMode $defaultPurgeMode, LoggerInterface $logger = NULL)
 	{
 		parent::__construct();
 
 		$this->loader = $loader;
 		$this->scenarioProvider = $scenarioProvider;
 		$this->driverProvider = $driverProvider;
+		$this->defaultPurgeMode = $defaultPurgeMode;
 		$this->logger = $logger;
 	}
 
@@ -87,7 +93,17 @@ final class LoadDataFixturesCommand extends Command
 		$purgeMode = $input->getOption('purge-mode');
 		$driver = $input->getOption('driver');
 
-		if (FidryAliceDataFixturesExtension::PURGE_MODE_NO_PURGE !== $purgeMode && $input->isInteractive()) {
+		$scenario = $this->scenarioProvider->getScenario($scenario);
+
+		if (NULL !== $purgeMode) {
+			$scenario->setPurgeMode(PurgeModeFactory::create($purgeMode));
+		}
+
+		if (NULL === $scenario->getPurgeMode()) {
+			$scenario->setPurgeMode($this->defaultPurgeMode);
+		}
+
+		if (PurgeModeFactory::PURGE_MODE_NO_PURGE !== $scenario->getPurgeMode()->getName() && $input->isInteractive()) {
 			/** @var QuestionHelper $questionHelper */
 			$questionHelper = $this->getHelperSet()->get('question');
 			$question = new ConfirmationQuestion('<question>Careful, database will be purged. Do you want to continue y/N ?</question>', FALSE);
@@ -99,12 +115,6 @@ final class LoadDataFixturesCommand extends Command
 
 		if ($this->logger instanceof LoggerDecorator && !$this->logger->hasLogger()) {
 			$this->logger->setLogger(new ConsoleLogger($output));
-		}
-
-		$scenario = $this->scenarioProvider->getScenario($scenario);
-
-		if (NULL !== $purgeMode) {
-			$scenario->setPurgeMode($purgeMode);
 		}
 
 		$this->loader->load($this->driverProvider->getDriver($driver), $scenario);
