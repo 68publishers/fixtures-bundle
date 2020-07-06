@@ -8,6 +8,7 @@ use Nette\DI\Helpers;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Nette\Utils\Validators;
+use Nette\PhpGenerator\PhpLiteral;
 use Nette\DI\Definitions\Statement;
 use Nette\Utils\AssertionException;
 use SixtyEightPublishers\FixturesBundle\Scenario\Scenario;
@@ -125,7 +126,11 @@ final class FixturesBundleExtension extends CompilerExtension
 		foreach ($this->validConfig->scenarios as $name => $scenario) {
 			$scenarios[] = new Statement(Scenario::class, [
 				$name,
-				$scenario->fixtures,
+				array_map(static function (string $path) {
+					$path = addslashes($path);
+
+					return new PhpLiteral("'$path'");
+				}, $scenario->fixtures),
 				$scenario->purge_mode,
 			]);
 		}

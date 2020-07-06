@@ -48,17 +48,16 @@ final class DefaultLoader implements ILoader
 	 */
 	public function load(IDriver $driver, IScenario $scenario): array
 	{
+		$files = $this->fileResolver->resolve($scenario->getFixtures());
+
 		$this->logger->info(sprintf(
 			'Loading fixtures for scenario "%s"',
 			$scenario->getName()
-		));
+		), [
+			'files' => $files,
+		]);
 
-		$fixtures = $driver->load(
-			$this->fileResolver->resolve($scenario->getFixtures()),
-			$this->parameters,
-			[],
-			$scenario->getPurgeMode() ? $scenario->getPurgeMode()->getMode() : NULL
-		);
+		$fixtures = $driver->load($files, $this->parameters, [], $scenario->getPurgeMode() ? $scenario->getPurgeMode()->getMode() : NULL);
 
 		$this->logger->info('fixtures loaded');
 
