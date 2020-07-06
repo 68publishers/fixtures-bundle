@@ -1,6 +1,6 @@
 services:
 	68publishers_fixtures_bundle.console.load_data_fixtures_command:
-		class: SixtyEightPublishers\FixturesBundle\Console\LoadDataFixturesCommand
+		type: SixtyEightPublishers\FixturesBundle\Console\LoadDataFixturesCommand
 		arguments:
 			- @68publishers_fixtures_bundle.loader
 			- @68publishers_fixtures_bundle.scenario_provider

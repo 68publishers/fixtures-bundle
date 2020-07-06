@@ -1,106 +1,106 @@
 services:
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface
 		factory: @nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\TokenParserRegistry
 		# arguments are into registry injected by tag "nelmio_alice.fixture_builder.expression_language.chainable_token_parser"
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.argument_escaper:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\ArgumentEscaper
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\ArgumentEscaper
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.dynamic_array_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.escaped_value_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedValueTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.fixture_list_reference_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureListReferenceTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.fixture_method_reference_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureMethodReferenceTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.fixture_range_reference_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureRangeReferenceTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.method_reference_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\MethodReferenceTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.optional_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\OptionalTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.parameter_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\ParameterTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.property_reference_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\PropertyReferenceTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.variable_reference_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\VariableReferenceTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.simple_reference_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\SimpleReferenceTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.string_array_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringArrayTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.string_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringTokenParser(
 			@nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.argument_escaper
 		)
@@ -109,7 +109,7 @@ services:
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.tolerant_function_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\TolerantFunctionTokenParser(
 			@nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.identity_token_parser
 		)
@@ -118,7 +118,7 @@ services:
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.identity_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\IdentityTokenParser(
 			@nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.function_token_parser
 		)
@@ -127,7 +127,7 @@ services:
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.function_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FunctionTokenParser(
 			@nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.argument_escaper
 		)
@@ -136,14 +136,14 @@ services:
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.variable_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\VariableTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes
 
 	nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.wildcard_reference_token_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
+		type: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\WildcardReferenceTokenParser
 		tags:
 			nelmio_alice.fixture_builder.expression_language.chainable_token_parser: yes

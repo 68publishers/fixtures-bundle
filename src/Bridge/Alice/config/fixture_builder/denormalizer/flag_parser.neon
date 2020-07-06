@@ -1,51 +1,51 @@
 services:
 	nelmio_alice.fixture_builder.denormalizer.flag_parser:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface
 		factory: @nelmio_alice.fixture_builder.denormalizer.flag_parser.element
 
 	nelmio_alice.fixture_builder.denormalizer.flag_parser.element:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser(@nelmio_alice.fixture_builder.denormalizer.flag_parser.registry)
 
 	nelmio_alice.fixture_builder.denormalizer.flag_parser.registry:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry
 		# arguments are into registry injected by tag "nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser"
 
 	nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.configurator:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ConfiguratorFlagParser
 		tags:
 			nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser: yes
 
 	nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.extend:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ExtendFlagParser
 		tags:
 			nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser: yes
 
 	nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.optional:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\OptionalFlagParser
 		tags:
 			nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser: yes
 
 	nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.template:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\TemplateFlagParser
 		tags:
 			nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser: yes
 
 	nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.unique:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\UniqueFlagParser
 		tags:
 			nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser: yes

@@ -4,7 +4,7 @@ services:
 
 	fixtures_bundle.alice.file_locator.bundle:
 		autowired: no
-		class: Nelmio\Alice\FileLocatorInterface
+		type: Nelmio\Alice\FileLocatorInterface
 		factory: SixtyEightPublishers\FixturesBundle\FileLocator\BundleFileLocator(
 			@nelmio_alice.file_locator.default
 			# Map is passed in the CompilerExtension

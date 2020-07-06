@@ -1,32 +1,32 @@
 services:
 	nelmio_alice.fixture_builder:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilderInterface
+		type: Nelmio\Alice\FixtureBuilderInterface
 		factory: @nelmio_alice.fixture_builder.simple
 
 	nelmio_alice.fixture_builder.simple:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilderInterface
+		type: Nelmio\Alice\FixtureBuilderInterface
 		factory: Nelmio\Alice\FixtureBuilder\SimpleBuilder(@nelmio_alice.fixture_builder.denormalizer)
 
 	nelmio_alice.fixture_builder.denormalizer:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\DenormalizerInterface
+		type: Nelmio\Alice\FixtureBuilder\DenormalizerInterface
 		factory: @nelmio_alice.fixture_builder.denormalizer.simple
 
 	nelmio_alice.fixture_builder.denormalizer.simple:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\DenormalizerInterface
+		type: Nelmio\Alice\FixtureBuilder\DenormalizerInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer(
 			@nelmio_alice.fixture_builder.denormalizer.parameter_bag,
 			@nelmio_alice.fixture_builder.denormalizer.fixture_bag
 		)
 
 	nelmio_alice.fixture_builder.denormalizer.parameter_bag:
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface
 		factory: @nelmio_alice.fixture_builder.denormalizer.parameter.simple_parameter_bag_denormalizer
 
 	nelmio_alice.fixture_builder.denormalizer.parameter.simple_parameter_bag_denormalizer:
 		autowired: no
-		class: Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer()

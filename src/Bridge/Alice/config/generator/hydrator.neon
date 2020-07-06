@@ -1,20 +1,20 @@
 services:
 	nelmio_alice.generator.hydrator:
 		autowired: no
-		class: Nelmio\Alice\Generator\HydratorInterface
+		type: Nelmio\Alice\Generator\HydratorInterface
 		factory: @nelmio_alice.generator.hydrator.simple
 
 	nelmio_alice.generator.hydrator.simple:
 		autowired: no
-		class: Nelmio\Alice\Generator\HydratorInterface
+		type: Nelmio\Alice\Generator\HydratorInterface
 		factory: Nelmio\Alice\Generator\Hydrator\SimpleHydrator(@nelmio_alice.generator.hydrator.property)
 
 	nelmio_alice.generator.hydrator.property:
 		autowired: no
-		class: Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface
+		type: Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface
 		factory: @nelmio_alice.generator.hydrator.property.symfony_property_access
 
 	nelmio_alice.generator.hydrator.property.symfony_property_access:
 		autowired: no
-		class: Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface
+		type: Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface
 		factory: Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator(@nelmio_alice.property_accessor)

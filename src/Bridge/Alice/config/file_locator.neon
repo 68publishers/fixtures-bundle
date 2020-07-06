@@ -1,10 +1,10 @@
 services:
 	nelmio_alice.file_locator:
 		autowired: no
-		class: Nelmio\Alice\FileLocatorInterface
+		type: Nelmio\Alice\FileLocatorInterface
 		factory: @nelmio_alice.file_locator.default
 
 	nelmio_alice.file_locator.default:
 		autowired: no
-		class: Nelmio\Alice\FileLocatorInterface
+		type: Nelmio\Alice\FileLocatorInterface
 		factory: Nelmio\Alice\FileLocator\DefaultFileLocator()

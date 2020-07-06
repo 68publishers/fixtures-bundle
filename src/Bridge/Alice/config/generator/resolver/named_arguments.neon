@@ -1,4 +1,4 @@
 services:
 	nelmio_alice.generator.named_arguments_resolver:
 		autowired: no
-		class: Nelmio\Alice\Generator\NamedArgumentsResolver
+		type: Nelmio\Alice\Generator\NamedArgumentsResolver

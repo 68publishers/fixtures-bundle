@@ -2,12 +2,12 @@ services:
 	# Loaders
 	fidry_alice_data_fixtures.loader.doctrine:
 		autowired: no
-		class: Fidry\AliceDataFixtures\LoaderInterface
+		type: Fidry\AliceDataFixtures\LoaderInterface
 		factory: @fidry_alice_data_fixtures.doctrine.purger_loader
 
 	fidry_alice_data_fixtures.doctrine.purger_loader:
 		autowired: no
-		class: Fidry\AliceDataFixtures\LoaderInterface
+		type: Fidry\AliceDataFixtures\LoaderInterface
 		factory: Fidry\AliceDataFixtures\Loader\PurgerLoader(
 			@fidry_alice_data_fixtures.doctrine.persister_loader,
 			@fidry_alice_data_fixtures.persistence.purger_factory.doctrine,
@@ -17,7 +17,7 @@ services:
 
 	fidry_alice_data_fixtures.doctrine.persister_loader:
 		autowired: no
-		class: Fidry\AliceDataFixtures\LoaderInterface
+		type: Fidry\AliceDataFixtures\LoaderInterface
 		factory: Fidry\AliceDataFixtures\Loader\PersisterLoader(
 			@fidry_alice_data_fixtures.loader.simple,
 			@fidry_alice_data_fixtures.persistence.persister.doctrine,
@@ -28,29 +28,29 @@ services:
 	# Purger Factory
 	fidry_alice_data_fixtures.persistence.purger_factory.doctrine:
 		autowired: no
-		class: Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface
+		type: Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface
 		factory: @fidry_alice_data_fixtures.persistence.doctrine.purger.purger_factory
 
 	fidry_alice_data_fixtures.persistence.doctrine.purger.purger_factory:
 		autowired: no
-		class: Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface
+		type: Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface
 		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Purger\Purger(@Doctrine\ORM\EntityManagerInterface)
 
 	# Persisters
 	fidry_alice_data_fixtures.persistence.persister.doctrine:
 		autowired: no
-		class: Fidry\AliceDataFixtures\Persistence\PersisterInterface
+		type: Fidry\AliceDataFixtures\Persistence\PersisterInterface
 		factory: @fidry_alice_data_fixtures.persistence.persister.doctrine.object_manager_persister
 
 	fidry_alice_data_fixtures.persistence.persister.doctrine.object_manager_persister:
 		autowired: no
-		class: Fidry\AliceDataFixtures\Persistence\PersisterInterface
+		type: Fidry\AliceDataFixtures\Persistence\PersisterInterface
 		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Persister\ObjectManagerPersister(@Doctrine\ORM\EntityManagerInterface)
 
 	# Driver
 	fidry_alice_data_fixtures.driver.doctrine:
 		autowired: no
-		class: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver
 		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\ComposedDriver(
 			doctrine_orm,
 			@fidry_alice_data_fixtures.loader.doctrine,

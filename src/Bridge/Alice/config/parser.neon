@@ -1,12 +1,12 @@
 services:
 	nelmio_alice.file_parser:
 		autowired: no
-		class: Nelmio\Alice\ParserInterface
+		type: Nelmio\Alice\ParserInterface
 		factory: @nelmio_alice.file_parser.runtime_cache
 
 	nelmio_alice.file_parser.runtime_cache:
 		autowired: no
-		class: Nelmio\Alice\ParserInterface
+		type: Nelmio\Alice\ParserInterface
 		factory: Nelmio\Alice\Parser\RuntimeCacheParser(
 			@nelmio_alice.file_parser.registry,
 			@nelmio_alice.file_locator,
@@ -15,36 +15,36 @@ services:
 
 	nelmio_alice.file_parser.symfony_yaml:
 		autowired: no
-		class: Symfony\Component\Yaml\Parser
+		type: Symfony\Component\Yaml\Parser
 
 	nelmio_alice.file_parser.default_include_processor:
 		autowired: no
-		class: Nelmio\Alice\Parser\IncludeProcessorInterface
+		type: Nelmio\Alice\Parser\IncludeProcessorInterface
 		factory: Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor(@nelmio_alice.file_locator)
 
 	nelmio_alice.file_parser.registry:
 		autowired: no
-		class: Nelmio\Alice\ParserInterface
+		type: Nelmio\Alice\ParserInterface
 		factory: Nelmio\Alice\Parser\ParserRegistry
 		# arguments are into registry injected by tag "nelmio_alice.file_parser"
 
 	nelmio_alice.file_parser.chainable.yaml:
 		autowired: no
-		class: Nelmio\Alice\Parser\ChainableParserInterface
+		type: Nelmio\Alice\Parser\ChainableParserInterface
 		factory: Nelmio\Alice\Parser\Chainable\YamlParser(@nelmio_alice.file_parser.symfony_yaml)
 		tags:
 			nelmio_alice.file_parser: yes
 
 	nelmio_alice.file_parser.chainable.php:
 		autowired: no
-		class: Nelmio\Alice\Parser\ChainableParserInterface
+		type: Nelmio\Alice\Parser\ChainableParserInterface
 		factory: Nelmio\Alice\Parser\Chainable\PhpParser
 		tags:
 			nelmio_alice.file_parser: yes
 
 	nelmio_alice.file_parser.chainable.json:
 		autowired: no
-		class: Nelmio\Alice\Parser\ChainableParserInterface
+		type: Nelmio\Alice\Parser\ChainableParserInterface
 		factory: Nelmio\Alice\Parser\Chainable\JsonParser
 		tags:
 			nelmio_alice.file_parser: yes

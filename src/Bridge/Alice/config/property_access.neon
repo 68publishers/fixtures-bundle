@@ -1,10 +1,10 @@
 services:
 	nelmio_alice.property_accessor:
 		autowired: no
-		class: Symfony\Component\PropertyAccess\PropertyAccessorInterface
+		type: Symfony\Component\PropertyAccess\PropertyAccessorInterface
 		factory: @nelmio_alice.property_accessor.std
 
 	nelmio_alice.property_accessor.std:
 		autowired: no
-		class: Symfony\Component\PropertyAccess\PropertyAccessorInterface
+		type: Symfony\Component\PropertyAccess\PropertyAccessorInterface
 		factory: Nelmio\Alice\PropertyAccess\StdPropertyAccessor(@property_accessor)
