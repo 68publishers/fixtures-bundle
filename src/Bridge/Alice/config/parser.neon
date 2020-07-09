@@ -48,3 +48,10 @@ services:
 		factory: Nelmio\Alice\Parser\Chainable\JsonParser
 		tags:
 			nelmio_alice.file_parser: yes
+
+	nelmio_alice.file_parser.chainable.neon:
+		autowired: no
+		type: Nelmio\Alice\Parser\ChainableParserInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Parser\Chainable\NeonParser
+		tags:
+			nelmio_alice.file_parser: yes

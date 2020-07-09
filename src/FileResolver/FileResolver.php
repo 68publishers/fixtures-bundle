@@ -104,6 +104,6 @@ final class FileResolver implements FileResolverInterface
 	 */
 	private function getFilesFromDirectory(string $directory): array
 	{
-		return array_keys(iterator_to_array(Finder::findFiles('*.yaml', '*.yml', '*.php', '*.json')->in($directory)));
+		return array_keys(iterator_to_array(Finder::findFiles('*.yaml', '*.yml', '*.php', '*.json', '*.neon')->in($directory)));
 	}
 }
