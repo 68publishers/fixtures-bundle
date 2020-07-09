@@ -65,8 +65,9 @@ final class LoadDataFixturesCommand extends Command
 			->setDescription('Load data fixtures to your database.')
 			->addArgument(
 				'scenario',
-				InputArgument::REQUIRED,
-				'The name of a scenario.'
+				InputArgument::OPTIONAL,
+				'The name of a scenario.',
+				'default'
 			)
 			->addOption(
 				'purge-mode',
