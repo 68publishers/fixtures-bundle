@@ -12,7 +12,6 @@ use Nette\PhpGenerator\PhpLiteral;
 use Nette\DI\Definitions\Statement;
 use Nette\Utils\AssertionException;
 use SixtyEightPublishers\FixturesBundle\Scenario\Scenario;
-use SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap;
 use SixtyEightPublishers\FixturesBundle\Bridge\Nette\Configuration;
 use SixtyEightPublishers\FixturesBundle\Bridge\Nette\CompilerExtension;
 use SixtyEightPublishers\FixturesBundle\Bridge\Alice\DI\NelmioAliceExtension;
@@ -29,7 +28,9 @@ final class FixturesBundleExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'fixture_dirs' => Expect::arrayOf('string')->default(['%appDir%/fixtures', '%appDir%/../fixtures'])->before(function (array $dirs) {
-				return Helpers::expand($dirs, $this->getContainerBuilder()->parameters);
+				return array_map(static function (string $path) {
+					return realpath($path);
+				}, Helpers::expand($dirs, $this->getContainerBuilder()->parameters));
 			}),
 			'scenarios' => Expect::arrayOf(Expect::structure([
 				'purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->nullable(),
@@ -50,6 +51,11 @@ final class FixturesBundleExtension extends CompilerExtension
 		]), $this->getContainerBuilder()->parameters);
 
 		Validators::assertField($config, 'fixture_dirs', 'string[]');
+
+		$config['fixture_dirs'] = array_map(static function (string $path) {
+			return realpath($path);
+		}, $config['fixture_dirs']);
+
 		Validators::assertField($config, 'scenarios', 'array[]');
 
 		foreach ($config['scenarios'] as $k => $scenarioConfig) {
@@ -108,11 +114,7 @@ final class FixturesBundleExtension extends CompilerExtension
 			}
 		}
 
-		$this->setServiceArgument(
-			$builder->getDefinition('fixtures_bundle.alice.file_locator.bundle'),
-			new Statement(BundleMap::class, [$bundleFixtureDirs]),
-			1
-		);
+		$this->setServiceArgument($builder->getDefinition('fixtures_bundle.alice.bundle_map'), $bundleFixtureDirs, 0);
 	}
 
 	/**
@@ -137,5 +139,6 @@ final class FixturesBundleExtension extends CompilerExtension
 
 		$this->addServiceArguments($builder->getDefinition('68publishers_fixtures_bundle.scenario_provider.default'), NULL, $scenarios);
 		$this->setServiceArgument($builder->getDefinition('68publishers_fixtures_bundle.file_resolver.default'), $this->validConfig->fixture_dirs, 1);
+		$this->setServiceArgument($builder->getDefinition('68publishers_fixtures_bundle.file_resolver.relative'), $this->validConfig->fixture_dirs, 2);
 	}
 }

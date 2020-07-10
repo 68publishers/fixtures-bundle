@@ -24,7 +24,9 @@ final class FileResolver implements FileResolverInterface
 	public function __construct(FileLocatorInterface $locator, array $fixtureDirs)
 	{
 		$this->locator = $locator;
-		$this->fixtureDirs = $fixtureDirs;
+		$this->fixtureDirs = array_map(static function (string $path) {
+			return realpath($path);
+		}, $fixtureDirs);
 	}
 
 	/**

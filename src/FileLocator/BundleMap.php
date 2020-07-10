@@ -17,7 +17,9 @@ final class BundleMap
 	 */
 	public function __construct(array $map)
 	{
-		$this->map = $map;
+		$this->map = array_map(static function (string $path) {
+			return realpath($path);
+		}, $map);
 	}
 
 	/**
@@ -61,5 +63,13 @@ final class BundleMap
 			'Unable to find file or directory "%s".',
 			$name
 		));
+	}
+
+	/**
+	 * @return array
+	 */
+	public function toArray(): array
+	{
+		return $this->map;
 	}
 }

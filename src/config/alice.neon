@@ -6,6 +6,11 @@ services:
 		autowired: no
 		type: Nelmio\Alice\FileLocatorInterface
 		factory: SixtyEightPublishers\FixturesBundle\FileLocator\BundleFileLocator(
-			@nelmio_alice.file_locator.default
-			# Map is passed in the CompilerExtension
+			@nelmio_alice.file_locator.default,
+			@fixtures_bundle.alice.bundle_map
 		)
+
+	fixtures_bundle.alice.bundle_map:
+		autowired: no
+		type: SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap
+		factory: SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap() # map is injected in a compiler extension
