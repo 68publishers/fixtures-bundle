@@ -38,6 +38,14 @@ final class ScenarioProvider implements IScenarioProvider
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function getIterator(): \ArrayIterator
+	{
+		return new \ArrayIterator($this->scenarios);
+	}
+
+	/**
 	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenario $scenario
 	 *
 	 * @return void

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Scenario;
 
-interface IScenarioProvider
+interface IScenarioProvider extends \IteratorAggregate
 {
 	/**
 	 * @param string $name
