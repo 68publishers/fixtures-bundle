@@ -28,8 +28,9 @@ final class ScenarioProvider implements IScenarioProvider
 	{
 		if (!isset($this->scenarios[$name])) {
 			throw new InvalidArgumentException(sprintf(
-				'Missing scenario with name "%s".',
-				$name
+				'Missing scenario with name "%s". %s',
+				$name,
+				0 >= count($this->scenarios) ? 'No scenarios found.' : "Available scenarios are: \n- " . implode("\n- ", array_keys($this->scenarios))
 			));
 		}
 
