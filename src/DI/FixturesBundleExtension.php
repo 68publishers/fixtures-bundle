@@ -28,9 +28,9 @@ final class FixturesBundleExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'fixture_dirs' => Expect::arrayOf('string')->default(['%appDir%/fixtures', '%appDir%/../fixtures'])->before(function (array $dirs) {
-				return array_map(static function (string $path) {
+				return array_filter(array_map(static function (string $path) {
 					return realpath($path);
-				}, Helpers::expand($dirs, $this->getContainerBuilder()->parameters));
+				}, Helpers::expand($dirs, $this->getContainerBuilder()->parameters)));
 			}),
 			'scenarios' => Expect::arrayOf(Expect::structure([
 				'purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->nullable(),
@@ -52,9 +52,9 @@ final class FixturesBundleExtension extends CompilerExtension
 
 		Validators::assertField($config, 'fixture_dirs', 'string[]');
 
-		$config['fixture_dirs'] = array_map(static function (string $path) {
+		$config['fixture_dirs'] = array_filter(array_map(static function (string $path) {
 			return realpath($path);
-		}, $config['fixture_dirs']);
+		}, $config['fixture_dirs']));
 
 		Validators::assertField($config, 'scenarios', 'array[]');
 
