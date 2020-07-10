@@ -138,7 +138,7 @@ final class FixturesBundleExtension extends CompilerExtension
 		}
 
 		$this->addServiceArguments($builder->getDefinition('68publishers_fixtures_bundle.scenario_provider.default'), NULL, $scenarios);
-		$this->setServiceArgument($builder->getDefinition('68publishers_fixtures_bundle.file_resolver.default'), $this->validConfig->fixture_dirs, 1);
-		$this->setServiceArgument($builder->getDefinition('68publishers_fixtures_bundle.file_resolver.relative'), $this->validConfig->fixture_dirs, 2);
+		$this->setServiceArgument($builder->getDefinition('68publishers_fixtures_bundle.file_resolver.default'), $this->validConfig->fixture_dirs, 2);
+		$this->setServiceArgument($builder->getDefinition('68publishers_fixtures_bundle.file_resolver.relative'), $this->validConfig->fixture_dirs, 3);
 	}
 }

@@ -9,6 +9,7 @@ services:
 		type: Fidry\AliceDataFixtures\FileResolverInterface
 		factory: SixtyEightPublishers\FixturesBundle\FileResolver\FileResolver(
 			@nelmio_alice.file_locator,
+			@fixtures_bundle.alice.bundle_map,
 			[] # dirs are repalced in a compiler extension
 		)
 
@@ -17,6 +18,7 @@ services:
 		type: Fidry\AliceDataFixtures\FileResolverInterface
 		factory: SixtyEightPublishers\FixturesBundle\FileResolver\RelativeFileResolver(
 			@68publishers_fixtures_bundle.file_resolver,
+			@68publishers_fixtures_bundle.file_exporter.absolute,
 			@fixtures_bundle.alice.bundle_map,
 			[] # dirs are repalced in a compiler extension
 		)

@@ -7,23 +7,30 @@ namespace SixtyEightPublishers\FixturesBundle\FileResolver;
 use Nette\Utils\Finder;
 use Nelmio\Alice\FileLocatorInterface;
 use Fidry\AliceDataFixtures\FileResolverInterface;
+use SixtyEightPublishers\FixturesBundle\IFileExporter;
+use SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
-final class FileResolver implements FileResolverInterface
+final class FileResolver implements FileResolverInterface, IFileExporter
 {
 	/** @var \Nelmio\Alice\FileLocatorInterface  */
 	private $locator;
+
+	/** @var \SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap  */
+	private $bundleMap;
 
 	/** @var array  */
 	private $fixtureDirs;
 
 	/**
-	 * @param \Nelmio\Alice\FileLocatorInterface $locator
-	 * @param array                              $fixtureDirs
+	 * @param \Nelmio\Alice\FileLocatorInterface                         $locator
+	 * @param \SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap $bundleMap
+	 * @param array                                                      $fixtureDirs
 	 */
-	public function __construct(FileLocatorInterface $locator, array $fixtureDirs)
+	public function __construct(FileLocatorInterface $locator, BundleMap $bundleMap, array $fixtureDirs)
 	{
 		$this->locator = $locator;
+		$this->bundleMap = $bundleMap;
 		$this->fixtureDirs = array_map(static function (string $path) {
 			return realpath($path);
 		}, $fixtureDirs);
@@ -37,7 +44,7 @@ final class FileResolver implements FileResolverInterface
 		$newPaths = [];
 
 		foreach ($filePaths as $filePath) {
-			if ('@' === $filePath[0]) {
+			if ($this->bundleMap->isBundlePath($filePath)) {
 				$newPaths[] = $this->getRealPaths($this->locator->locate($filePath));
 
 				continue;
@@ -47,6 +54,17 @@ final class FileResolver implements FileResolverInterface
 		}
 
 		return array_values(array_unique(array_merge([], ... $newPaths)));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function export(): array
+	{
+		return $this->getFilesFromDirectories(...array_merge(
+			array_values($this->fixtureDirs),
+			array_values($this->bundleMap->toArray())
+		));
 	}
 
 	/**
@@ -89,7 +107,7 @@ final class FileResolver implements FileResolverInterface
 	private function getRealPaths(string $path): array
 	{
 		if (is_dir($path)) {
-			return $this->getFilesFromDirectory($path);
+			return $this->getFilesFromDirectories($path);
 		}
 
 		if (file_exists($path)) {
@@ -100,12 +118,12 @@ final class FileResolver implements FileResolverInterface
 	}
 
 	/**
-	 * @param string $directory
+	 * @param string ...$directories
 	 *
 	 * @return array
 	 */
-	private function getFilesFromDirectory(string $directory): array
+	private function getFilesFromDirectories(string ...$directories): array
 	{
-		return array_keys(iterator_to_array(Finder::findFiles('*.yaml', '*.yml', '*.php', '*.json', '*.neon')->in($directory)));
+		return array_keys(iterator_to_array(Finder::findFiles('*.yaml', '*.yml', '*.php', '*.json', '*.neon')->from(...$directories)));
 	}
 }

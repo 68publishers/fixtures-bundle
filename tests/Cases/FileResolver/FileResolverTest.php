@@ -24,11 +24,14 @@ final class FileResolverTest extends TestCase
 	 */
 	protected function setUp(): void
 	{
+		$bundleMap = new BundleMap([
+			'foo_bundle' => realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle'),
+			'bar_bundle' => realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle'),
+		]);
+
 		$this->fileResolver = new FileResolver(
-			new BundleFileLocator(new DefaultFileLocator(), new BundleMap([
-				'foo_bundle' => realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle'),
-				'bar_bundle' => realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle'),
-			])),
+			new BundleFileLocator(new DefaultFileLocator(), $bundleMap),
+			$bundleMap,
 			[__DIR__ . '/../../resources/fixtures']
 		);
 	}
@@ -74,6 +77,22 @@ final class FileResolverTest extends TestCase
 				'path/to/non-existent-file.yaml',
 			]);
 		}, FileNotFoundException::class);
+	}
+
+	public function testExport(): void
+	{
+		Assert::equal(
+			$this->fileResolver->export(),
+			[
+				realpath(__DIR__ . '/../../resources/fixtures/foo/empty_fixture_3.json'),
+				realpath(__DIR__ . '/../../resources/fixtures/foo/empty_fixture_4.yaml'),
+				realpath(__DIR__ . '/../../resources/fixtures/empty_fixture_2.php'),
+				realpath(__DIR__ . '/../../resources/fixtures/empty_fixture_1.yaml'),
+				realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle/empty_fixture_1.yaml'),
+				realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle/dummy/empty_fixture_2.yaml'),
+				realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle/dummy/empty_fixture_1.yaml'),
+			]
+		);
 	}
 }
 

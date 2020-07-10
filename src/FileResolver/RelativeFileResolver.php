@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\FixturesBundle\FileResolver;
 
 use Fidry\AliceDataFixtures\FileResolverInterface;
+use SixtyEightPublishers\FixturesBundle\IFileExporter;
 use SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
-final class RelativeFileResolver implements FileResolverInterface
+final class RelativeFileResolver implements FileResolverInterface, IFileExporter
 {
 	/** @var \Fidry\AliceDataFixtures\FileResolverInterface  */
 	private $fileResolver;
+
+	/** @var \SixtyEightPublishers\FixturesBundle\IFileExporter  */
+	private $fileExporter;
 
 	/** @var \SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap  */
 	private $bundleMap;
@@ -21,12 +25,14 @@ final class RelativeFileResolver implements FileResolverInterface
 
 	/**
 	 * @param \Fidry\AliceDataFixtures\FileResolverInterface             $fileResolver
+	 * @param \SixtyEightPublishers\FixturesBundle\IFileExporter         $fileExporter
 	 * @param \SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap $bundleMap
 	 * @param array                                                      $fixtureDirs
 	 */
-	public function __construct(FileResolverInterface $fileResolver, BundleMap $bundleMap, array $fixtureDirs)
+	public function __construct(FileResolverInterface $fileResolver, IFileExporter $fileExporter, BundleMap $bundleMap, array $fixtureDirs)
 	{
 		$this->fileResolver = $fileResolver;
+		$this->fileExporter = $fileExporter;
 		$this->bundleMap = $bundleMap;
 
 		$this->fixtureDirs = array_map(static function (string $path) {
@@ -39,15 +45,23 @@ final class RelativeFileResolver implements FileResolverInterface
 	}
 
 	/**
-	 * @param array $filePaths
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function resolve(array $filePaths): array
 	{
 		return array_map(function (string $realPath) {
 			return $this->getRelativePath($realPath);
 		}, $this->fileResolver->resolve($filePaths));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function export(): array
+	{
+		return array_map(function (string $realPath) {
+			return $this->getRelativePath($realPath);
+		}, $this->fileExporter->export());
 	}
 
 	/**
