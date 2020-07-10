@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\FixturesBundle\FileLocator;
 
 use Nelmio\Alice\FileLocatorInterface;
+use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
 final class BundleFileLocator implements FileLocatorInterface
 {
@@ -30,9 +31,30 @@ final class BundleFileLocator implements FileLocatorInterface
 	public function locate(string $name, string $currentPath = NULL): string
 	{
 		if ($this->map->isBundlePath($name)) {
-			return $this->map->locate($name);
+			return $this->locateBundleFile($name);
 		}
 
 		return $this->fileLocator->locate($name, $currentPath);
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return string
+	 * @throws \Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException
+	 */
+	private function locateBundleFile(string $name): string
+	{
+		[$bundleName, $path] = $this->map->parseBundlePath($name);
+		$root = $this->map->getFixturesDirectory($bundleName);
+
+		if (FALSE !== $path = realpath($root . DIRECTORY_SEPARATOR . $path)) {
+			return $path;
+		}
+
+		throw new FileNotFoundException(sprintf(
+			'Unable to find file or directory "%s".',
+			$name
+		));
 	}
 }

@@ -10,6 +10,7 @@ use Tester\TestCase;
 use Nelmio\Alice\FileLocatorInterface;
 use SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap;
 use SixtyEightPublishers\FixturesBundle\FileLocator\BundleFileLocator;
+use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -52,6 +53,21 @@ final class BundleFileLocatorTest extends TestCase
 			realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle/empty_fixture_1.yaml'),
 			$this->bundleFileLocator->locate('@foo_bundle/empty_fixture_1.yaml')
 		);
+	}
+
+	public function testLocateBundleDirectory(): void
+	{
+		Assert::same(
+			realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle/dummy'),
+			$this->bundleFileLocator->locate('@bar_bundle/dummy')
+		);
+	}
+
+	public function testThrowExceptionWhenPathIsInvalid(): void
+	{
+		Assert::throws(function () {
+			$this->bundleFileLocator->locate('@foo_bundle/missing_fixture.yml');
+		}, FileNotFoundException::class, 'Unable to find file or directory "@foo_bundle/missing_fixture.yml".');
 	}
 
 	public function testLocateNonBundleFile(): void

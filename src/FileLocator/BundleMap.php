@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\FixturesBundle\FileLocator;
 
 use InvalidArgumentException;
-use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
 final class BundleMap
 {
@@ -33,21 +32,31 @@ final class BundleMap
 	}
 
 	/**
-	 * @param string $name
+	 * Returns an array [
+	 *    0 => bundle name
+	 *    1 => path
+	 * ]
 	 *
-	 * @return string
-	 * @throws \InvalidArgumentException
-	 * @throws \Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException
+	 * @param string $path
+	 *
+	 * @return array
 	 */
-	public function locate(string $name): string
+	public function parseBundlePath(string $path): array
 	{
-		if (!$this->isBundlePath($name)) {
-			throw new InvalidArgumentException('A path must start with @.');
+		if ($this->isBundlePath($path)) {
+			$path = substr($path, 1);
 		}
 
-		$bundleName = substr($name, 1);
-		[$bundleName, $path] = (FALSE !== strpos($bundleName, '/')) ? explode('/', $bundleName, 2) : [$bundleName, ''];
+		return (FALSE !== strpos($path, '/')) ? explode('/', $path, 2) : [$path, ''];
+	}
 
+	/**
+	 * @param string $bundleName
+	 *
+	 * @return string
+	 */
+	public function getFixturesDirectory(string $bundleName): string
+	{
 		if (!isset($this->map[$bundleName])) {
 			throw new InvalidArgumentException(sprintf(
 				'An bundle "%s" isn\'t defined in the map.',
@@ -55,14 +64,7 @@ final class BundleMap
 			));
 		}
 
-		if (FALSE !== $path = realpath($this->map[$bundleName] . '/' . $path)) {
-			return $path;
-		}
-
-		throw new FileNotFoundException(sprintf(
-			'Unable to find file or directory "%s".',
-			$name
-		));
+		return $this->map[$bundleName];
 	}
 
 	/**

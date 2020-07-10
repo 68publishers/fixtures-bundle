@@ -8,7 +8,6 @@ use Tester\Assert;
 use Tester\TestCase;
 use InvalidArgumentException;
 use SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap;
-use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -28,41 +27,51 @@ final class BundleMapTest extends TestCase
 		]);
 	}
 
-	public function testLocateFile(): void
+	public function testIsBundlePath(): void
+	{
+		Assert::true($this->bundleMap->isBundlePath('@foo_bundle/empty_fixture_1.yaml'));
+		Assert::false($this->bundleMap->isBundlePath('empty_fixture_1.yaml'));
+	}
+
+	public function testParseBundlePath(): void
 	{
 		Assert::same(
-			realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle/empty_fixture_1.yaml'),
-			$this->bundleMap->locate('@foo_bundle/empty_fixture_1.yaml')
+			$this->bundleMap->parseBundlePath('@foo_bundle/empty_fixture_1.yaml'),
+			['foo_bundle', 'empty_fixture_1.yaml']
+		);
+
+		Assert::same(
+			$this->bundleMap->parseBundlePath('bar_bundle/dummy/empty_fixture_1.yaml'),
+			['bar_bundle', 'dummy/empty_fixture_1.yaml']
 		);
 	}
 
-	public function testLocateDirectory(): void
+	public function testGetFixturesDirectory(): void
 	{
 		Assert::same(
-			realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle/dummy'),
-			$this->bundleMap->locate('@bar_bundle/dummy')
+			$this->bundleMap->getFixturesDirectory('foo_bundle'),
+			realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle')
 		);
-	}
 
-	public function testThrowExceptionWhenAtIsMissingInFilename(): void
-	{
-		Assert::throws(function () {
-			$this->bundleMap->locate('foo_bundle/empty_fixture_1.yml');
-		}, InvalidArgumentException::class, 'A path must start with @.');
-	}
+		Assert::same(
+			$this->bundleMap->getFixturesDirectory('bar_bundle'),
+			realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle')
+		);
 
-	public function testThrowExceptionWhenBundleIsNotDefined(): void
-	{
 		Assert::throws(function () {
-			$this->bundleMap->locate('@baz_bundle/missing_fixture.yml');
+			$this->bundleMap->getFixturesDirectory('baz_bundle');
 		}, InvalidArgumentException::class, 'An bundle "baz_bundle" isn\'t defined in the map.');
 	}
 
-	public function testThrowExceptionWhenPathIsInvalid(): void
+	public function testToArray(): void
 	{
-		Assert::throws(function () {
-			$this->bundleMap->locate('@foo_bundle/missing_fixture.yml');
-		}, FileNotFoundException::class, 'Unable to find file or directory "@foo_bundle/missing_fixture.yml".');
+		Assert::equal(
+			$this->bundleMap->toArray(),
+			[
+				'foo_bundle' => realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle'),
+				'bar_bundle' => realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle'),
+			]
+		);
 	}
 }
 
