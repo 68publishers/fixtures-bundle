@@ -13,6 +13,7 @@ use Fidry\AliceDataFixtures\FileResolverInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use SixtyEightPublishers\FixturesBundle\IFileExporter;
 use SixtyEightPublishers\FixturesBundle\Scenario\IScenario;
 use SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider;
 
@@ -32,16 +33,21 @@ final class DataFixturesListCommand extends Command
 	/** @var \Fidry\AliceDataFixtures\FileResolverInterface  */
 	private $fileResolver;
 
+	/** @var \SixtyEightPublishers\FixturesBundle\IFileExporter  */
+	private $fileExporter;
+
 	/**
 	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider $scenarioProvider
 	 * @param \Fidry\AliceDataFixtures\FileResolverInterface                  $fileResolver
+	 * @param \SixtyEightPublishers\FixturesBundle\IFileExporter              $fileExporter
 	 */
-	public function __construct(IScenarioProvider $scenarioProvider, FileResolverInterface $fileResolver)
+	public function __construct(IScenarioProvider $scenarioProvider, FileResolverInterface $fileResolver, IFileExporter $fileExporter)
 	{
 		parent::__construct();
 
 		$this->scenarioProvider = $scenarioProvider;
 		$this->fileResolver = $fileResolver;
+		$this->fileExporter = $fileExporter;
 	}
 
 	/**
@@ -81,20 +87,53 @@ final class DataFixturesListCommand extends Command
 			self::FORMAT_RAW => TRUE,
 		]);
 
-		# print singe scenario
+		# print single scenario
 		if (NULL !== $scenario) {
 			$this->printScenario($output, $this->scenarioProvider->getScenario($scenario), $format);
 
 			return 0;
 		}
 
-		# or print all scenarios
+		# or print all available fixtures and all scenarios
+		$this->printFixturesList($output, $format);
+
 		/** @var \SixtyEightPublishers\FixturesBundle\Scenario\IScenario $scenario */
 		foreach ($this->scenarioProvider as $scenario) {
 			$this->printScenario($output, $scenario, $format);
 		}
 
 		return 0;
+	}
+
+	/**
+	 * @param \Symfony\Component\Console\Output\OutputInterface $output
+	 * @param string                                            $format
+	 *
+	 * @return void
+	 */
+	private function printFixturesList(OutputInterface $output, string $format): void
+	{
+		$files = $this->fileExporter->export();
+
+		$this->resolveFormat($format, [
+			self::FORMAT_TABLE => static function () use ($output, $files) {
+				(new Table($output))
+					->setHeaders(['All available fixtures'])
+					->setRows(array_map(static function (string $file) {
+						return [$file];
+					}, $files))
+					->render();
+			},
+			self::FORMAT_RAW => static function () use ($output, $files) {
+				$output->writeln('All available fixtures:');
+
+				foreach ($files as $file) {
+					$output->writeln($file);
+				}
+
+				$output->writeln('');
+			},
+		]);
 	}
 
 	/**
@@ -110,7 +149,7 @@ final class DataFixturesListCommand extends Command
 			self::FORMAT_TABLE => function () use ($output, $scenario) {
 				$table = new Table($output);
 
-				$table->setHeaders([$scenario->getName()]);
+				$table->setHeaders(['Scenario ' . $scenario->getName()]);
 
 				foreach ($this->fileResolver->resolve($scenario->getFixtures()) as $filename) {
 					$table->addRow([$filename]);
@@ -119,7 +158,7 @@ final class DataFixturesListCommand extends Command
 				$table->render();
 			},
 			self::FORMAT_RAW => function () use ($output, $scenario) {
-				$output->writeln($scenario->getName());
+				$output->writeln('Scenario ' . $scenario->getName() . ':');
 
 				foreach ($this->fileResolver->resolve($scenario->getFixtures()) as $filename) {
 					$output->writeln($filename);
