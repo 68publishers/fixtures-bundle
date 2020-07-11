@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Bridge\Nette;
+namespace SixtyEightPublishers\FixturesBundle\DI;
 
 use InvalidArgumentException;
 use Nette\DI\ContainerBuilder;

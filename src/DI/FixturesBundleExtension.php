@@ -12,10 +12,8 @@ use Nette\PhpGenerator\PhpLiteral;
 use Nette\DI\Definitions\Statement;
 use Nette\Utils\AssertionException;
 use SixtyEightPublishers\FixturesBundle\Scenario\Scenario;
-use SixtyEightPublishers\FixturesBundle\Bridge\Nette\Configuration;
 use SixtyEightPublishers\FixturesBundle\Bridge\Nette\CompilerExtension;
 use SixtyEightPublishers\FixturesBundle\Bridge\Alice\DI\NelmioAliceExtension;
-use SixtyEightPublishers\FixturesBundle\Bridge\Nette\IFixturesBundleContributor;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\DI\FidryAliceDataFixturesExtension;
 
@@ -100,7 +98,7 @@ final class FixturesBundleExtension extends CompilerExtension
 		$bundleFixtureDirs = [];
 		$builder = $this->getContainerBuilder();
 
-		/** @var \SixtyEightPublishers\FixturesBundle\Bridge\Nette\IFixturesBundleContributor $extension */
+		/** @var \SixtyEightPublishers\FixturesBundle\DI\IFixturesBundleContributor $extension */
 		foreach ($this->compiler->getExtensions(IFixturesBundleContributor::class) as $extension) {
 			$configuration = new Configuration($this->getContainerBuilder(), $this->name);
 

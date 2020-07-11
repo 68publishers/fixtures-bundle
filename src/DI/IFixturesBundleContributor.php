@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Bridge\Nette;
+namespace SixtyEightPublishers\FixturesBundle\DI;
 
 interface IFixturesBundleContributor
 {
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\Nette\Configuration $configuration
+	 * @param \SixtyEightPublishers\FixturesBundle\DI\Configuration $configuration
 	 */
 	public function contributeToFixturesBundle(Configuration $configuration): void;
 }
