@@ -80,3 +80,19 @@ services:
 		type: Symfony\Component\PropertyAccess\PropertyAccessorInterface
 		factory: Nelmio\Alice\PropertyAccess\ReflectionPropertyAccessor(@nelmio_alice.property_accessor.std)
 ```
+
+## Service factories
+
+Alice already supports static factories but this integration adds the ability to use services from DIC as factories.
+
+```neon
+# config.neon
+services:
+	dummyEntityFactory: App\Entity\Factory\DummyEntityFactory
+
+# fixtures/dummy.neon
+App\Entity\Dummy:
+	dummy_entity:
+		__factory:
+			'@dummyEntityFactory::create': [John, Doe] 
+```

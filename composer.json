@@ -24,6 +24,9 @@
 		"nette/tester": "^2.3",
 		"roave/security-advisories": "dev-master"
 	},
+	"suggest": {
+		"symfony/console": "For fixtures commands"
+	},
 	"autoload": {
 		"psr-4": {
 			"SixtyEightPublishers\\FixturesBundle\\": "src/"
