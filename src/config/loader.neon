@@ -10,4 +10,4 @@ services:
 			@fidry_alice_data_fixtures.logger
 		)
 		setup:
-			- setParameters(@container::getParameters())
+			- setParameters(SixtyEightPublishers\FixturesBundle\Loader\ParametersHelper::flatten(@container::getParameters(), app))

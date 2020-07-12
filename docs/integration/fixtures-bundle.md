@@ -50,6 +50,35 @@ $ php bin/console fixtures:list [<SCENARIO>] [--format <FORMAT>]
 
 All fixtures and scenarios are listed if an argument `scenario` is not provided. Otherwise, the only fixtures for the specified scenario are listed. An allowed values for an option `--format` are `table` (default) and `raw`.
 
+## Application parameters in fixtures
+
+Parameters defined in the application's configuration like
+
+```neon
+parameters:
+	foo: foo
+	bar: 3
+```
+
+are also accessible in your fixtures. Nested parameters are flattened with a dot notation. For example
+
+```neon
+parameters: 
+	aws_config:
+		region: eu-central-1
+		user: user
+		password: 123456
+```
+
+will be accessible in your fixtures with these keys (the prefix `app` is automatically added)
+
+```neon
+parameters: 
+    app.aws_config.region: eu-central-1
+    app.aws_config.user: user
+    app.aws_config.password: 123456
+```
+
 ## Fixtures defined by another Compiler Extension
 
 The Fixtures Bundle provides an interface `SixtyEightPublishers\FixturesBundle\DI\IFixturesBundleContributor` that can be implemented by another Compiler Extensions. 
