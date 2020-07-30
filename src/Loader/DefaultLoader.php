@@ -22,8 +22,6 @@ final class DefaultLoader implements ILoader
 	private $parameters = [];
 
 	/**
-	 * DefaultLoader constructor.
-	 *
 	 * @param \Fidry\AliceDataFixtures\FileResolverInterface $fileResolver
 	 * @param \Psr\Log\LoggerInterface|NULL                  $logger
 	 */

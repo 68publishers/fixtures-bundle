@@ -14,8 +14,6 @@ final class LoggerDecorator extends AbstractLogger
 	private $logger;
 
 	/**
-	 * LoggerDecorator constructor.
-	 *
 	 * @param \Psr\Log\LoggerInterface|NULL $logger
 	 */
 	public function __construct(?LoggerInterface $logger = NULL)
