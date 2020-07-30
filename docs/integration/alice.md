@@ -96,3 +96,21 @@ App\Entity\Dummy:
 		__factory:
 			'@dummyEntityFactory::create': [John, Doe] 
 ```
+
+## Generate the fixtures in a specific order
+
+Alice merges the fixtures from all files into one array and then are the objects generated from this common definition. 
+Sometimes you need to generate objects in a specific order. In this case, you can redefine the DataLoader service:
+
+```neon
+services:
+	nelmio_alice.data_loader:
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Loader\SortableDataLoader(
+			@nelmio_alice.data_loader.simple,
+			SixtyEightPublishers\FixturesBundle\Bridge\Alice\Loader\Processor\ClassPrioritySortableProcessor([
+				App\Entity\Image: -10
+			])
+		)
+```
+
+In this example an `Image` entities will be always generated as last. A default priority is `0`.
