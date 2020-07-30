@@ -78,10 +78,10 @@ final class FileResolver implements FileResolverInterface, IFileExporter
 		$paths = $realPaths = [];
 
 		foreach ($this->fixtureDirs as $fixtureDir) {
-			$paths[] = $filePath = $fixtureDir . DIRECTORY_SEPARATOR . $path;
+			$paths[] = $fixtureDir . DIRECTORY_SEPARATOR . $path;
 
 			try {
-				$realPaths[] = $this->getRealPaths($this->locator->locate($filePath));
+				$realPaths[] = $this->getRealPaths($this->locator->locate($path, $fixtureDir));
 			} catch (FileNotFoundException $e) {
 				# nothing
 			}
