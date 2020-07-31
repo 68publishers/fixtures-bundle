@@ -10,3 +10,9 @@ services:
 		type: Nelmio\Alice\Faker\Provider\AliceProvider
 		tags:
 			nelmio_alice.faker.provider: yes
+
+	nelmio_alice.faker.provider.parameters:
+		autowired: no
+		type: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Faker\Provider\ParametersProvider
+		tags:
+			nelmio_alice.faker.provider: yes
