@@ -3,7 +3,16 @@ services:
 	fidry_alice_data_fixtures.loader.doctrine:
 		autowired: no
 		type: Fidry\AliceDataFixtures\LoaderInterface
-		factory: @fidry_alice_data_fixtures.doctrine.purger_loader
+		factory: @fidry_alice_data_fixtures.doctrine.event_manager_loader
+
+	fidry_alice_data_fixtures.doctrine.event_manager_loader:
+		autowired: no
+		type: Fidry\AliceDataFixtures\LoaderInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Loader\EventManagerLoader(
+			@fidry_alice_data_fixtures.doctrine.purger_loader,
+			@fidry_alice_data_fixtures.event_manager_restrictor_factory,
+			@Doctrine\ORM\EntityManagerInterface::getEventManager()
+		)
 
 	fidry_alice_data_fixtures.doctrine.purger_loader:
 		autowired: no

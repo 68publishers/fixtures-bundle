@@ -41,6 +41,10 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 				self::DOCTRINE_MONGODB_ODM_DRIVER => Expect::bool(FALSE),
 				self::DOCTRINE_PHPCR_ODM_DRIVER => Expect::bool(FALSE),
 			]),
+			'event_listeners' => Expect::structure([
+				'allow_all' => Expect::bool(TRUE),
+				'excluded' => Expect::arrayOf('string')->default([]),
+			]),
 		]);
 	}
 
@@ -57,6 +61,10 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 				self::DOCTRINE_ORM_DRIVER => FALSE,
 				self::DOCTRINE_MONGODB_ODM_DRIVER => FALSE,
 				self::DOCTRINE_PHPCR_ODM_DRIVER => FALSE,
+			],
+			'event_listeners' => [
+				'allow_all' => TRUE,
+				'excluded' => [],
 			],
 		]);
 
@@ -77,6 +85,12 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 
 		$config['db_drivers'] = (object) $config['db_drivers'];
 
+		Validators::assertField($config, 'event_listeners', 'array');
+		Validators::assertField($config['event_listeners'], 'allow_all', 'bool');
+		Validators::assertField($config['event_listeners'], 'excluded', 'string[]');
+
+		$config['event_listeners'] = (object) $config['event_listeners'];
+
 		return (object) $config;
 	}
 
@@ -88,6 +102,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 		$files = [
 			__DIR__ . '/../config/loader.neon',
 			__DIR__ . '/../config/purge_mode.neon',
+			__DIR__ . '/../config/event_manager.neon',
 		];
 
 		foreach ($this->getEnabledDrivers() as $name => $_) {
@@ -146,6 +161,13 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 			NULL,
 			$builder->findByType(IDriver::class),
 			$this->validConfig->default_driver
+		);
+
+		$this->addServiceArguments(
+			$builder->getDefinition('fidry_alice_data_fixtures.event_manager_restrictor_factory.default'),
+			0,
+			$this->validConfig->event_listeners->allow_all,
+			$this->validConfig->event_listeners->excluded
 		);
 	}
 
