@@ -3,7 +3,16 @@ services:
 	fidry_alice_data_fixtures.loader.doctrine_mongodb:
 		autowired: no
 		type: Fidry\AliceDataFixtures\LoaderInterface
-		factory: @fidry_alice_data_fixtures.doctrine_mongodb.purger_loader
+		factory: @fidry_alice_data_fixtures.doctrine_mongodb.event_manager_loader
+
+	fidry_alice_data_fixtures.doctrine_mongodb.event_manager_loader:
+		autowired: no
+		type: Fidry\AliceDataFixtures\LoaderInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Loader\EventManagerLoader(
+			@fidry_alice_data_fixtures.doctrine_mongodb.purger_loader,
+			@fidry_alice_data_fixtures.event_manager_restrictor_factory,
+			@Doctrine\ODM\MongoDB\DocumentManager::getEventManager()
+		)
 
 	fidry_alice_data_fixtures.doctrine_mongodb.purger_loader:
 		autowired: no
