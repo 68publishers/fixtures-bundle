@@ -2,7 +2,16 @@ services:
 	nelmio_alice.generator:
 		autowired: no
 		type: Nelmio\Alice\GeneratorInterface
-		factory: @nelmio_alice.generator.double_pass
+		factory: @nelmio_alice.generator.decorated
+
+	nelmio_alice.generator.decorated:
+		autowired: no
+		type: Nelmio\Alice\GeneratorInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\DecoratedGenerator(
+			@nelmio_alice.generator.double_pass,
+			@nelmio_alice.generator.resolver.parameter_bag,
+			@nelmio_alice.faker.generator
+		)
 
 	nelmio_alice.generator.double_pass:
 		autowired: no
