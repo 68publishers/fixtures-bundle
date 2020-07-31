@@ -11,6 +11,7 @@
 	],
 	"require": {
 		"php": "^7.2",
+		"doctrine/event-manager": "^1.1",
 		"nelmio/alice": "^3.7",
 		"nette/di": "^2.4.16 || ^3.0",
 		"nette/finder": "^2.4 || ^3.0",
