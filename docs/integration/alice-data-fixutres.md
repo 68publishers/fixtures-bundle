@@ -34,6 +34,9 @@ fidry.alice_data_fixtures:
 		doctrine_orm: no
 		doctrine_mongodb_odm: no
 		doctrine_phpcr_odm: no
+	event_listeners:
+		allow_all: yes
+		excluded: []
 ```
 
 Integrations expects a service of type `ObjectManager` in your DI Container. For example, the driver `doctrine_orm` expects the existence of a service of type `@Doctrine\ORM\EntityManagerInterface`.
@@ -102,3 +105,27 @@ services:
 
 The package using PSR Logger for logging information about loaded fixtures etc. 
 If some service of type `Psr\Log\LoggerInterface` is accessible in the application's DI Container then this service will be used.
+
+## Event Listener management
+
+An event listeners or subscribers are an awesome feature but sometimes you don't wanna fire some event listeners when you are running fixtures.
+For example, you have a listener that sends an email to a user after the entity is saved but you really won't to send email to the generated users.
+
+So you can disable this listener/subscriber in the configuration:
+
+```neon
+fidry.alice_data_fixtures:
+	event_listeners:
+		excluded: 
+			- App\Subscriber\SendEmailOnUserCreationSubscriber
+```
+
+Alternatively, if you have a lot of listeners/subscribers in your application you can disable all of them and keep enabled a few:
+
+```neon
+fidry.alice_data_fixtures:
+	event_listeners:
+		allow_all: no
+		excluded: 
+			- App\Subscriber\MyEventSubscriber
+```
