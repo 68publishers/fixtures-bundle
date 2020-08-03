@@ -130,3 +130,22 @@ App\Entity\Dummy:
 	'dummy_entity_{1..3}':
 		name: '<parameter(dummy_name_<current()>)>'
 ```
+
+This function also adds a syntax sugar - a nested parameters can be accessed with a dot notation. This behavior can be disabled via the second argument:
+
+```neon
+parameters:
+	dummy:
+		foo:
+			name: Foo
+			description: lorem ipsum ...
+		bar:
+			name: Bar
+			description: lorem ipsum ...
+	attribute.active: yes
+
+App\Entity\Dummy:
+	'dummy_entity_{foo, bar}':
+		name: '<parameter(dummy.<current()>.name)>' # evaluates $parameters['dummy'][$current]['name']
+		active: '<parameter(attribute.active, false)>' # evalueates $parameters['attribute.active']
+```
