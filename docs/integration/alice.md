@@ -114,3 +114,19 @@ services:
 ```
 
 In this example an `Image` entities will be always generated as last. A default priority is `0`.
+
+## Dynamic parameters
+
+Alice's documentation contains mentions about a [dynamic parameters](https://github.com/nelmio/alice/blob/master/doc/fixtures-refactoring.md#dynamic-parameters) but this functionality has been broken and it's not fixed yet.
+With this integration you can use a simple workaround:
+
+```neon
+parameters:
+	dummy_name_1: Foo
+	dummy_name_2: Bar
+	dummy_name_3: Baz
+
+App\Entity\Dummy:
+	'dummy_entity_{1..3}':
+		name: '<parameter(dummy_name_<current()>)>'
+```
