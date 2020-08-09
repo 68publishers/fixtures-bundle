@@ -6,9 +6,9 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver;
 
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Fidry\AliceDataFixtures\Persistence\PurgeMode;
-use Fidry\AliceDataFixtures\Persistence\PurgerInterface;
 use Fidry\AliceDataFixtures\Persistence\PersisterInterface;
-use Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\LoadContext;
 
 final class ComposedDriver implements IDriver
 {
@@ -18,24 +18,24 @@ final class ComposedDriver implements IDriver
 	/** @var \Fidry\AliceDataFixtures\LoaderInterface  */
 	private $loader;
 
-	/** @var \Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface  */
-	private $purgerFactory;
-
 	/** @var \Fidry\AliceDataFixtures\Persistence\PersisterInterface  */
 	private $persister;
 
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext */
+	private $context;
+
 	/**
-	 * @param string                                                      $name
-	 * @param \Fidry\AliceDataFixtures\LoaderInterface                    $loader
-	 * @param \Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface $purgerFactory
-	 * @param \Fidry\AliceDataFixtures\Persistence\PersisterInterface     $persister
+	 * @param string                                                                                $name
+	 * @param \Fidry\AliceDataFixtures\LoaderInterface                                              $loader
+	 * @param \Fidry\AliceDataFixtures\Persistence\PersisterInterface                               $persister
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext $context
 	 */
-	public function __construct(string $name, LoaderInterface $loader, PurgerFactoryInterface $purgerFactory, PersisterInterface $persister)
+	public function __construct(string $name, LoaderInterface $loader, PersisterInterface $persister, IContext $context)
 	{
 		$this->name = $name;
 		$this->loader = $loader;
-		$this->purgerFactory = $purgerFactory;
 		$this->persister = $persister;
+		$this->context = $context;
 	}
 
 	/**
@@ -51,7 +51,13 @@ final class ComposedDriver implements IDriver
 	 */
 	public function load(array $fixturesFiles, array $parameters = [], array $objects = [], PurgeMode $purgeMode = NULL): array
 	{
-		return $this->loader->load($fixturesFiles, $parameters, $objects, $purgeMode);
+		$this->context->bindContext(LoadContext::class, $this->getName());
+
+		$fixtures = $this->loader->load($fixturesFiles, $parameters, $objects, $purgeMode);
+
+		$this->context->unbindContext(LoadContext::class);
+
+		return $fixtures;
 	}
 
 	/**
@@ -68,13 +74,5 @@ final class ComposedDriver implements IDriver
 	public function flush()
 	{
 		return $this->persister->flush();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function create(PurgeMode $mode, PurgerInterface $purger = NULL): PurgerInterface
-	{
-		return $this->purgerFactory->create($mode, $purger);
 	}
 }

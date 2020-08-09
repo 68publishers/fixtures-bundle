@@ -22,11 +22,8 @@ use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\Pur
 
 final class FidryAliceDataFixturesExtension extends CompilerExtension
 {
-	public const DOCTRINE_ORM_DRIVER = 'doctrine_orm';
-	public const DOCTRINE_MONGODB_ODM_DRIVER = 'doctrine_mongodb_odm';
-	public const DOCTRINE_PHPCR_ODM_DRIVER = 'doctrine_phpcr_odm';
-
-	public const TAG_FIDRY_ALICE_DATA_FIXTURES_PROCESSOR = 'fidry_alice_data_fixtures.processor';
+	public const    TAG_FIDRY_ALICE_DATA_FIXTURES_PROCESSOR = 'fidry_alice_data_fixtures.processor',
+					TAG_FIDRY_ALICE_DATA_FIXTURES_GENERATOR_RESOLVER_CHAINABLE_PRELOADER = 'fidry_alice_data_fixtures.generator.resolver.chainable_preloader';
 
 	/**
 	 * {@inheritDoc}
@@ -35,11 +32,11 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'default_purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->default(PurgeModeFactory::PURGE_MODE_DELETE)->dynamic(),
-			'default_driver' => Expect::string(self::DOCTRINE_ORM_DRIVER),
+			'default_driver' => Expect::string(IDriver::DOCTRINE_ORM_DRIVER),
 			'db_drivers' => Expect::structure([
-				self::DOCTRINE_ORM_DRIVER => Expect::bool(FALSE),
-				self::DOCTRINE_MONGODB_ODM_DRIVER => Expect::bool(FALSE),
-				self::DOCTRINE_PHPCR_ODM_DRIVER => Expect::bool(FALSE),
+				IDriver::DOCTRINE_ORM_DRIVER => Expect::bool(FALSE),
+				IDriver::DOCTRINE_MONGODB_ODM_DRIVER => Expect::bool(FALSE),
+				IDriver::DOCTRINE_PHPCR_ODM_DRIVER => Expect::bool(FALSE),
 			]),
 			'event_listeners' => Expect::structure([
 				'allow_all' => Expect::bool(TRUE),
@@ -56,11 +53,11 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	{
 		$config = $this->validateConfig([
 			'default_purge_mode' => PurgeModeFactory::PURGE_MODE_DELETE, # 'delete', 'truncate', 'no_purge'
-			'default_driver' => self::DOCTRINE_ORM_DRIVER,
+			'default_driver' => IDriver::DOCTRINE_ORM_DRIVER,
 			'db_drivers' => [
-				self::DOCTRINE_ORM_DRIVER => FALSE,
-				self::DOCTRINE_MONGODB_ODM_DRIVER => FALSE,
-				self::DOCTRINE_PHPCR_ODM_DRIVER => FALSE,
+				IDriver::DOCTRINE_ORM_DRIVER => FALSE,
+				IDriver::DOCTRINE_MONGODB_ODM_DRIVER => FALSE,
+				IDriver::DOCTRINE_PHPCR_ODM_DRIVER => FALSE,
 			],
 			'event_listeners' => [
 				'allow_all' => TRUE,
@@ -79,9 +76,9 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 
 		Validators::assertField($config, 'default_driver', 'string');
 		Validators::assertField($config, 'db_drivers', 'array');
-		Validators::assertField($config['db_drivers'], self::DOCTRINE_ORM_DRIVER, 'bool');
-		Validators::assertField($config['db_drivers'], self::DOCTRINE_MONGODB_ODM_DRIVER, 'bool');
-		Validators::assertField($config['db_drivers'], self::DOCTRINE_PHPCR_ODM_DRIVER, 'bool');
+		Validators::assertField($config['db_drivers'], IDriver::DOCTRINE_ORM_DRIVER, 'bool');
+		Validators::assertField($config['db_drivers'], IDriver::DOCTRINE_MONGODB_ODM_DRIVER, 'bool');
+		Validators::assertField($config['db_drivers'], IDriver::DOCTRINE_PHPCR_ODM_DRIVER, 'bool');
 
 		$config['db_drivers'] = (object) $config['db_drivers'];
 
@@ -103,6 +100,8 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 			__DIR__ . '/../config/loader.neon',
 			__DIR__ . '/../config/purge_mode.neon',
 			__DIR__ . '/../config/event_manager.neon',
+			__DIR__ . '/../config/context.neon',
+			__DIR__ . '/../config/unique_value_preloader.neon',
 		];
 
 		foreach ($this->getEnabledDrivers() as $name => $_) {
@@ -169,6 +168,12 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 			$this->validConfig->event_listeners->allow_all,
 			$this->validConfig->event_listeners->excluded
 		);
+
+		$this->addServiceArguments(
+			$builder->getDefinition('fidry_alice_data_fixtures.generator.resolver.preloader.unique_value_preloader.context_based'),
+			NULL,
+			$this->findServicesByTag(self::TAG_FIDRY_ALICE_DATA_FIXTURES_GENERATOR_RESOLVER_CHAINABLE_PRELOADER)
+		);
 	}
 
 	/**
@@ -212,9 +217,9 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	private function getEnabledDrivers(): Generator
 	{
 		$map = [
-			self::DOCTRINE_ORM_DRIVER => 'doctrine',
-			self::DOCTRINE_MONGODB_ODM_DRIVER => 'doctrine_mongodb',
-			self::DOCTRINE_PHPCR_ODM_DRIVER => 'doctrine_phpcr',
+			IDriver::DOCTRINE_ORM_DRIVER => 'doctrine',
+			IDriver::DOCTRINE_MONGODB_ODM_DRIVER => 'doctrine_mongodb',
+			IDriver::DOCTRINE_PHPCR_ODM_DRIVER => 'doctrine_phpcr',
 		];
 
 		foreach ($this->validConfig->db_drivers as $name => $enabled) {

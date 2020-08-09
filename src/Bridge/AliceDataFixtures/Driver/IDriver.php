@@ -6,10 +6,13 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver;
 
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Fidry\AliceDataFixtures\Persistence\PersisterInterface;
-use Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface;
 
-interface IDriver extends LoaderInterface, PurgerFactoryInterface, PersisterInterface
+interface IDriver extends LoaderInterface, PersisterInterface
 {
+	public const DOCTRINE_ORM_DRIVER = 'doctrine_orm';
+	public const DOCTRINE_MONGODB_ODM_DRIVER = 'doctrine_mongodb_odm';
+	public const DOCTRINE_PHPCR_ODM_DRIVER = 'doctrine_phpcr_odm';
+
 	/**
 	 * @return string
 	 */
