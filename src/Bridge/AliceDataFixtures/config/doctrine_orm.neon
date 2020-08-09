@@ -61,8 +61,16 @@ services:
 		autowired: no
 		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver
 		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\ComposedDriver(
-			doctrine_orm,
+			SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver::DOCTRINE_ORM_DRIVER,
 			@fidry_alice_data_fixtures.loader.doctrine,
-			@fidry_alice_data_fixtures.persistence.purger_factory.doctrine,
-			@fidry_alice_data_fixtures.persistence.persister.doctrine
+			@fidry_alice_data_fixtures.persistence.persister.doctrine,
+			@fidry_alice_data_fixtures.context.main
 		)
+
+	# Unique value preloader
+	fidry_alice_data_fixtures.generator.resolver.preloader.chainable_preloader.doctrine:
+		autowired: no
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\IChainableUniqueValuePreloader
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\Chainable\DoctrineOrmUniqueValuePreloader(@Doctrine\ORM\EntityManagerInterface)
+		tags:
+			fidry_alice_data_fixtures.generator.resolver.chainable_preloader: yes

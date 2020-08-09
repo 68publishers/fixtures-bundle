@@ -1,0 +1,5 @@
+services:
+	fidry_alice_data_fixtures.context.main:
+		autowired: no
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\MainContext
