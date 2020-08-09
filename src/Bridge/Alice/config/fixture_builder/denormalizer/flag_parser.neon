@@ -49,3 +49,10 @@ services:
 		factory: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\UniqueFlagParser
 		tags:
 			nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser: yes
+
+	nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.preload:
+		autowired: no
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\PreloadFlagParser
+		tags:
+			nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser: yes
