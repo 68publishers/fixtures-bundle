@@ -129,3 +129,9 @@ fidry.alice_data_fixtures:
 		excluded: 
 			- App\Subscriber\MyEventSubscriber
 ```
+
+## Preload unique values
+
+The extension automatically register a preloader for feature described [here](alice.md#preload-unique-values).
+
+**NOTE:** This functionality is for now supported for Doctrine ORM only.

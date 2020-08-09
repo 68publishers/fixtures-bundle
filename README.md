@@ -28,7 +28,7 @@ A package AliceDataFixtures provides a persistent layer for data fixtures. The o
 
 Eloquent and Propel 2 are not supported by this integration.
 
-Continue to the integration guide [here](docs/integration/alice-data-fixutres.md).
+Continue to the integration guide [here](docs/integration/alice-data-fixtures.md).
 
 ## Integration of Fixtures Bundle
 
