@@ -1,0 +1,17 @@
+services:
+	nelmio_alice.generator.resolver.preloader.unique_value_preloader:
+		autowired: no
+		type: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader
+		factory: @nelmio_alice.generator.resolver.preloader.unique_value_preloader.runtime_cache
+
+	nelmio_alice.generator.resolver.preloader.unique_value_preloader.runtime_cache:
+		autowired: no
+		type: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\RuntimeCacheUniqueValuePreloader(
+			@nelmio_alice.generator.resolver.preloader.unique_value_preloader.base
+		)
+
+	nelmio_alice.generator.resolver.preloader.unique_value_preloader.base:
+		autowired: no
+		type: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\FakeUniqueValuePreloader

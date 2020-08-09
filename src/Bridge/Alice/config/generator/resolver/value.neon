@@ -142,3 +142,13 @@ services:
 		factory: Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver
 		tags:
 			nelmio_alice.generator.resolver.value.chainable_resolver: yes
+
+	nelmio_alice.generator.resolver.value.chainable.preloaded_unique_value_resolver:
+		autowired: no
+		type: Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Value\Chainable\PreloadedUniqueValueResolver(
+			@nelmio_alice.generator.resolver.value.unique_values_pool,
+			@nelmio_alice.generator.resolver.preloader.unique_value_preloader
+		)
+		tags:
+			nelmio_alice.generator.resolver.value.chainable_resolver: yes

@@ -153,7 +153,14 @@ services:
 	nelmio_alice.fixture_builder.denormalizer.fixture.specs.value:
 		autowired: no
 		type: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface
-		factory: @nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.unique_value_denormalizer
+		factory: @nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.preloaded_unique_value_denormalizer
+
+	nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.preloaded_unique_value_denormalizer:
+		autowired: no
+		type: Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\PreloadedUniqueValueDenormalizer(
+			@nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.unique_value_denormalizer
+		)
 
 	nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.unique_value_denormalizer:
 		autowired: no
