@@ -149,3 +149,43 @@ App\Entity\Dummy:
 		name: '<parameter(dummy.<current()>.name)>' # evaluates $parameters['dummy'][$current]['name']
 		active: '<parameter(attribute.active, false)>' # evalueates $parameters['attribute.active']
 ```
+
+## Preload unique values
+
+Alice's `unique` flag works well but what if your database already contains some records and you must take these persisted values into account?
+A flag `preload` is here for these cases:
+
+```neon
+App\Entity\Dummy:
+	dummy_entity:
+		name: Dummy
+		'active (unique, preload email)': '<email()>'
+```
+
+The flag `preload` must be always combined with the flag `unique`.
+
+If you integrate only this extension into your application without the [AliceDataFixtures](../../README.md#integration-of-alicedatafixtures) then you must define your own preloader:
+
+```php
+namespace App;
+
+use SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader;
+
+final class UniqueValuesPreloader implements IUniqueValuePreloader
+{
+    public function preload(string $className, string $column) : array
+    {
+        return [
+            # load values from the database ...
+        ];
+    }
+}
+```
+
+```neon
+services:
+	nelmio_alice.generator.resolver.preloader.unique_value_preloader.base:
+		factory: App\UniqueValuesPreloader
+```
+
+If you integrate the extension `AliceDataFixtures` then the preloader will be created automatically and you don't have to define nothing. For more information place follow [this link](alice-data-fixtures.md#preload-unique-values).
