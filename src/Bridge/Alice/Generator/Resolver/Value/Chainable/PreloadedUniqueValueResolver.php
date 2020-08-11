@@ -16,7 +16,7 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use SixtyEightPublishers\FixturesBundle\Bridge\Alice\Definition\Value\PreloadedUniqueValue;
-use SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader;
+use SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface;
 
 final class PreloadedUniqueValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
@@ -25,7 +25,7 @@ final class PreloadedUniqueValueResolver implements ChainableValueResolverInterf
 	/** @var \Nelmio\Alice\Generator\Resolver\UniqueValuesPool  */
 	private $pool;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface  */
 	private $uniqueValuePreloader;
 
 	/** @var \Nelmio\Alice\Generator\ValueResolverInterface|NULL  */
@@ -35,11 +35,11 @@ final class PreloadedUniqueValueResolver implements ChainableValueResolverInterf
 	private $preloadedIdentifiers = [];
 
 	/**
-	 * @param \Nelmio\Alice\Generator\Resolver\UniqueValuesPool                                                    $pool
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader $uniqueValuePreloader
-	 * @param \Nelmio\Alice\Generator\ValueResolverInterface|NULL                                                  $resolver
+	 * @param \Nelmio\Alice\Generator\Resolver\UniqueValuesPool                                                            $pool
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface $uniqueValuePreloader
+	 * @param \Nelmio\Alice\Generator\ValueResolverInterface|NULL                                                          $resolver
 	 */
-	public function __construct(UniqueValuesPool $pool, IUniqueValuePreloader $uniqueValuePreloader, ValueResolverInterface $resolver = NULL)
+	public function __construct(UniqueValuesPool $pool, UniqueValuePreloaderInterface $uniqueValuePreloader, ValueResolverInterface $resolver = NULL)
 	{
 		$this->pool = $pool;
 		$this->uniqueValuePreloader = $uniqueValuePreloader;

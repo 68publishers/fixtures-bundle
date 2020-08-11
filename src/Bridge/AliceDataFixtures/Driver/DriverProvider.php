@@ -6,17 +6,17 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver;
 
 use InvalidArgumentException;
 
-final class DriverProvider implements IDriverProvider
+final class DriverProvider implements DriverProviderInterface
 {
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver[] */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface[] */
 	private $drivers = [];
 
 	/** @var string  */
 	private $defaultName;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver[] $drivers
-	 * @param string                                                                         $defaultName
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface[] $drivers
+	 * @param string                                                                                 $defaultName
 	 */
 	public function __construct(array $drivers, string $defaultName)
 	{
@@ -30,7 +30,7 @@ final class DriverProvider implements IDriverProvider
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getDriver(?string $name = NULL): IDriver
+	public function getDriver(?string $name = NULL): DriverInterface
 	{
 		$driver = $this->drivers[$name ?? $this->defaultName] ?? NULL;
 
@@ -42,11 +42,11 @@ final class DriverProvider implements IDriverProvider
 	}
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver $driver
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface $driver
 	 *
 	 * @return void
 	 */
-	private function addDriver(IDriver $driver): void
+	private function addDriver(DriverInterface $driver): void
 	{
 		$this->drivers[$driver->getName()] = $driver;
 	}

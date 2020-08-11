@@ -59,9 +59,9 @@ services:
 	# Driver
 	fidry_alice_data_fixtures.driver.doctrine_phpcr:
 		autowired: no
-		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface
 		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\ComposedDriver(
-			SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver::DOCTRINE_PHPCR_ODM_DRIVER,
+			SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface::DOCTRINE_PHPCR_ODM_DRIVER,
 			@fidry_alice_data_fixtures.loader.doctrine_phpcr,
 			@fidry_alice_data_fixtures.persistence.persister.doctrine_phpcr,
 			@fidry_alice_data_fixtures.context.main

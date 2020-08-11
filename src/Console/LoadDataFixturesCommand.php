@@ -13,23 +13,23 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
-use SixtyEightPublishers\FixturesBundle\Loader\ILoader;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider;
+use SixtyEightPublishers\FixturesBundle\Loader\LoaderInterface;
+use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Logger\LoggerDecorator;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProviderInterface;
 
 final class LoadDataFixturesCommand extends Command
 {
-	/** @var \SixtyEightPublishers\FixturesBundle\Loader\ILoader  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Loader\LoaderInterface  */
 	private $loader;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface  */
 	private $scenarioProvider;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProviderInterface  */
 	private $driverProvider;
 
 	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode  */
@@ -39,13 +39,13 @@ final class LoadDataFixturesCommand extends Command
 	private $logger;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ILoader                                      $loader
-	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider                          $scenarioProvider
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider     $driverProvider
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode $defaultPurgeMode
-	 * @param \Psr\Log\LoggerInterface|NULL                                                            $logger
+	 * @param \SixtyEightPublishers\FixturesBundle\Loader\LoaderInterface                                  $loader
+	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface                      $scenarioProvider
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProviderInterface $driverProvider
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode     $defaultPurgeMode
+	 * @param \Psr\Log\LoggerInterface|NULL                                                                $logger
 	 */
-	public function __construct(ILoader $loader, IScenarioProvider $scenarioProvider, IDriverProvider $driverProvider, NamedPurgeMode $defaultPurgeMode, LoggerInterface $logger = NULL)
+	public function __construct(LoaderInterface $loader, ScenarioProviderInterface $scenarioProvider, DriverProviderInterface $driverProvider, NamedPurgeMode $defaultPurgeMode, LoggerInterface $logger = NULL)
 	{
 		parent::__construct();
 

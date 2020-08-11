@@ -15,14 +15,14 @@ final class SortableDataLoader implements DataLoaderInterface
 	/** @var \Nelmio\Alice\DataLoaderInterface  */
 	private $dataLoader;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Loader\Processor\ISortableProcessor  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Loader\Processor\SortableProcessorInterface  */
 	private $sortableProcessor;
 
 	/**
-	 * @param \Nelmio\Alice\DataLoaderInterface                                                     $dataLoader
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Loader\Processor\ISortableProcessor $sortableProcessor
+	 * @param \Nelmio\Alice\DataLoaderInterface                                                             $dataLoader
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Loader\Processor\SortableProcessorInterface $sortableProcessor
 	 */
-	public function __construct(DataLoaderInterface $dataLoader, Processor\ISortableProcessor $sortableProcessor)
+	public function __construct(DataLoaderInterface $dataLoader, Processor\SortableProcessorInterface $sortableProcessor)
 	{
 		$this->dataLoader = $dataLoader;
 		$this->sortableProcessor = $sortableProcessor;

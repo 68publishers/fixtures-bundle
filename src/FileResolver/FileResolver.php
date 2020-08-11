@@ -7,11 +7,11 @@ namespace SixtyEightPublishers\FixturesBundle\FileResolver;
 use Nette\Utils\Finder;
 use Nelmio\Alice\FileLocatorInterface;
 use Fidry\AliceDataFixtures\FileResolverInterface;
-use SixtyEightPublishers\FixturesBundle\IFileExporter;
+use SixtyEightPublishers\FixturesBundle\FileExporterInterface;
 use SixtyEightPublishers\FixturesBundle\FileLocator\BundleMap;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
-final class FileResolver implements FileResolverInterface, IFileExporter
+final class FileResolver implements FileResolverInterface, FileExporterInterface
 {
 	/** @var \Nelmio\Alice\FileLocatorInterface  */
 	private $locator;

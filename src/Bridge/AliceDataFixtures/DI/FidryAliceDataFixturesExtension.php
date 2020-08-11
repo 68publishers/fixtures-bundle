@@ -14,11 +14,11 @@ use Nette\DI\MissingServiceException;
 use Fidry\AliceDataFixtures\ProcessorInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\Nette\CompilerExtension;
 use SixtyEightPublishers\FixturesBundle\Bridge\Alice\DI\NelmioAliceExtension;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProvider;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Logger\LoggerDecorator;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProviderInterface;
 
 final class FidryAliceDataFixturesExtension extends CompilerExtension
 {
@@ -32,11 +32,11 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'default_purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->default(PurgeModeFactory::PURGE_MODE_DELETE)->dynamic(),
-			'default_driver' => Expect::string(IDriver::DOCTRINE_ORM_DRIVER),
+			'default_driver' => Expect::string(DriverInterface::DOCTRINE_ORM_DRIVER),
 			'db_drivers' => Expect::structure([
-				IDriver::DOCTRINE_ORM_DRIVER => Expect::bool(FALSE),
-				IDriver::DOCTRINE_MONGODB_ODM_DRIVER => Expect::bool(FALSE),
-				IDriver::DOCTRINE_PHPCR_ODM_DRIVER => Expect::bool(FALSE),
+				DriverInterface::DOCTRINE_ORM_DRIVER => Expect::bool(FALSE),
+				DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER => Expect::bool(FALSE),
+				DriverInterface::DOCTRINE_PHPCR_ODM_DRIVER => Expect::bool(FALSE),
 			]),
 			'event_listeners' => Expect::structure([
 				'allow_all' => Expect::bool(TRUE),
@@ -53,11 +53,11 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	{
 		$config = $this->validateConfig([
 			'default_purge_mode' => PurgeModeFactory::PURGE_MODE_DELETE, # 'delete', 'truncate', 'no_purge'
-			'default_driver' => IDriver::DOCTRINE_ORM_DRIVER,
+			'default_driver' => DriverInterface::DOCTRINE_ORM_DRIVER,
 			'db_drivers' => [
-				IDriver::DOCTRINE_ORM_DRIVER => FALSE,
-				IDriver::DOCTRINE_MONGODB_ODM_DRIVER => FALSE,
-				IDriver::DOCTRINE_PHPCR_ODM_DRIVER => FALSE,
+				DriverInterface::DOCTRINE_ORM_DRIVER => FALSE,
+				DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER => FALSE,
+				DriverInterface::DOCTRINE_PHPCR_ODM_DRIVER => FALSE,
 			],
 			'event_listeners' => [
 				'allow_all' => TRUE,
@@ -76,9 +76,9 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 
 		Validators::assertField($config, 'default_driver', 'string');
 		Validators::assertField($config, 'db_drivers', 'array');
-		Validators::assertField($config['db_drivers'], IDriver::DOCTRINE_ORM_DRIVER, 'bool');
-		Validators::assertField($config['db_drivers'], IDriver::DOCTRINE_MONGODB_ODM_DRIVER, 'bool');
-		Validators::assertField($config['db_drivers'], IDriver::DOCTRINE_PHPCR_ODM_DRIVER, 'bool');
+		Validators::assertField($config['db_drivers'], DriverInterface::DOCTRINE_ORM_DRIVER, 'bool');
+		Validators::assertField($config['db_drivers'], DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER, 'bool');
+		Validators::assertField($config['db_drivers'], DriverInterface::DOCTRINE_PHPCR_ODM_DRIVER, 'bool');
 
 		$config['db_drivers'] = (object) $config['db_drivers'];
 
@@ -127,7 +127,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 			->setAutowired(FALSE);
 
 		$builder->addDefinition('fidry_alice_data_fixtures.driver_provider')
-			->setType(IDriverProvider::class)
+			->setType(DriverProviderInterface::class)
 			->setFactory(DriverProvider::class);
 	}
 
@@ -158,7 +158,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 		$this->addServiceArguments(
 			$builder->getDefinition('fidry_alice_data_fixtures.driver_provider'),
 			NULL,
-			$builder->findByType(IDriver::class),
+			$builder->findByType(DriverInterface::class),
 			$this->validConfig->default_driver
 		);
 
@@ -217,9 +217,9 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 	private function getEnabledDrivers(): Generator
 	{
 		$map = [
-			IDriver::DOCTRINE_ORM_DRIVER => 'doctrine',
-			IDriver::DOCTRINE_MONGODB_ODM_DRIVER => 'doctrine_mongodb',
-			IDriver::DOCTRINE_PHPCR_ODM_DRIVER => 'doctrine_phpcr',
+			DriverInterface::DOCTRINE_ORM_DRIVER => 'doctrine',
+			DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER => 'doctrine_mongodb',
+			DriverInterface::DOCTRINE_PHPCR_ODM_DRIVER => 'doctrine_phpcr',
 		];
 
 		foreach ($this->validConfig->db_drivers as $name => $enabled) {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Bridge\Alice\Loader\Processor;
 
-final class ClassPrioritySortableProcessor implements ISortableProcessor
+final class ClassPrioritySortableProcessor implements SortableProcessorInterface
 {
 	/** @var int[] */
 	private $priorityMap;

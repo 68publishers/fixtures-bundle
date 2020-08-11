@@ -6,13 +6,13 @@ namespace SixtyEightPublishers\FixturesBundle\Scenario;
 
 use InvalidArgumentException;
 
-final class ScenarioProvider implements IScenarioProvider
+final class ScenarioProvider implements ScenarioProviderInterface
 {
-	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\IScenario[]  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface[]  */
 	private $scenarios = [];
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenario[] $scenarios
+	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface[] $scenarios
 	 */
 	public function __construct(array $scenarios)
 	{
@@ -24,7 +24,7 @@ final class ScenarioProvider implements IScenarioProvider
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getScenario(string $name): IScenario
+	public function getScenario(string $name): ScenarioInterface
 	{
 		if (!isset($this->scenarios[$name])) {
 			throw new InvalidArgumentException(sprintf(
@@ -46,11 +46,11 @@ final class ScenarioProvider implements IScenarioProvider
 	}
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenario $scenario
+	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface $scenario
 	 *
 	 * @return void
 	 */
-	private function addScenario(IScenario $scenario): void
+	private function addScenario(ScenarioInterface $scenario): void
 	{
 		$this->scenarios[$scenario->getName()] = $scenario;
 	}

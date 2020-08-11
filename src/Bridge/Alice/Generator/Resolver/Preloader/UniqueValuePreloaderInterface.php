@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader;
 
-interface IUniqueValuePreloader
+interface UniqueValuePreloaderInterface
 {
 	/**
 	 * @param string $className

@@ -98,8 +98,8 @@ final class FixturesBundleExtension extends CompilerExtension
 		$bundleFixtureDirs = [];
 		$builder = $this->getContainerBuilder();
 
-		/** @var \SixtyEightPublishers\FixturesBundle\DI\IFixturesBundleContributor $extension */
-		foreach ($this->compiler->getExtensions(IFixturesBundleContributor::class) as $extension) {
+		/** @var \SixtyEightPublishers\FixturesBundle\DI\FixturesBundleContributorInterface $extension */
+		foreach ($this->compiler->getExtensions(FixturesBundleContributorInterface::class) as $extension) {
 			$configuration = new Configuration($this->getContainerBuilder(), $this->name);
 
 			$extension->contributeToFixturesBundle($configuration);

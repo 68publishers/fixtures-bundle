@@ -7,7 +7,7 @@ namespace SixtyEightPublishers\FixturesBundle\Scenario;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
 
-final class Scenario implements IScenario
+final class Scenario implements ScenarioInterface
 {
 	/** @var string  */
 	private $name;

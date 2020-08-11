@@ -6,20 +6,20 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Pr
 
 use Nelmio\Alice\IsAServiceTrait;
 
-final class RuntimeCacheUniqueValuePreloader implements IUniqueValuePreloader
+final class RuntimeCacheUniqueValuePreloader implements UniqueValuePreloaderInterface
 {
 	use IsAServiceTrait;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface  */
 	private $preloader;
 
 	/** @var array  */
 	private $cache = [];
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader $preloader
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface $preloader
 	 */
-	public function __construct(IUniqueValuePreloader $preloader)
+	public function __construct(UniqueValuePreloaderInterface $preloader)
 	{
 		$this->preloader = $preloader;
 	}

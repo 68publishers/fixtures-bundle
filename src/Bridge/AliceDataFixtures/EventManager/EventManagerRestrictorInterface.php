@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager;
 
-interface IEventManagerRestrictor
+interface EventManagerRestrictorInterface
 {
 	/**
 	 * Modifies EventManager's listeners

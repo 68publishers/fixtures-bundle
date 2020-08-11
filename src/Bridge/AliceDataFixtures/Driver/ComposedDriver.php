@@ -7,10 +7,10 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Fidry\AliceDataFixtures\Persistence\PurgeMode;
 use Fidry\AliceDataFixtures\Persistence\PersisterInterface;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\LoadContext;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface;
 
-final class ComposedDriver implements IDriver
+final class ComposedDriver implements DriverInterface
 {
 	/** @var string  */
 	private $name;
@@ -21,16 +21,16 @@ final class ComposedDriver implements IDriver
 	/** @var \Fidry\AliceDataFixtures\Persistence\PersisterInterface  */
 	private $persister;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface */
 	private $context;
 
 	/**
-	 * @param string                                                                                $name
-	 * @param \Fidry\AliceDataFixtures\LoaderInterface                                              $loader
-	 * @param \Fidry\AliceDataFixtures\Persistence\PersisterInterface                               $persister
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext $context
+	 * @param string                                                                                        $name
+	 * @param \Fidry\AliceDataFixtures\LoaderInterface                                                      $loader
+	 * @param \Fidry\AliceDataFixtures\Persistence\PersisterInterface                                       $persister
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface $context
 	 */
-	public function __construct(string $name, LoaderInterface $loader, PersisterInterface $persister, IContext $context)
+	public function __construct(string $name, LoaderInterface $loader, PersisterInterface $persister, ContextInterface $context)
 	{
 		$this->name = $name;
 		$this->loader = $loader;

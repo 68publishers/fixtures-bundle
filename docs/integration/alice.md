@@ -169,9 +169,9 @@ If you integrate only this extension into your application without the [AliceDat
 ```php
 namespace App;
 
-use SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader;
+use SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface;
 
-final class UniqueValuesPreloader implements IUniqueValuePreloader
+final class UniqueValuesPreloader implements UniqueValuePreloaderInterface
 {
     public function preload(string $className, string $column) : array
     {

@@ -7,10 +7,10 @@ namespace SixtyEightPublishers\FixturesBundle\Loader;
 use Psr\Log\NullLogger;
 use Psr\Log\LoggerInterface;
 use Fidry\AliceDataFixtures\FileResolverInterface;
-use SixtyEightPublishers\FixturesBundle\Scenario\IScenario;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver;
+use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface;
 
-final class DefaultLoader implements ILoader
+final class DefaultLoader implements LoaderInterface
 {
 	/** @var \Fidry\AliceDataFixtures\FileResolverInterface  */
 	private $fileResolver;
@@ -44,7 +44,7 @@ final class DefaultLoader implements ILoader
 	/**
 	 * {@inheritDoc}
 	 */
-	public function load(IDriver $driver, IScenario $scenario): array
+	public function load(DriverInterface $driver, ScenarioInterface $scenario): array
 	{
 		$files = $this->fileResolver->resolve($scenario->getFixtures());
 

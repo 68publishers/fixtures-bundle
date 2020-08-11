@@ -13,9 +13,9 @@ use Fidry\AliceDataFixtures\FileResolverInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use SixtyEightPublishers\FixturesBundle\IFileExporter;
-use SixtyEightPublishers\FixturesBundle\Scenario\IScenario;
-use SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider;
+use SixtyEightPublishers\FixturesBundle\FileExporterInterface;
+use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface;
+use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface;
 
 final class DataFixturesListCommand extends Command
 {
@@ -27,21 +27,21 @@ final class DataFixturesListCommand extends Command
 		self::FORMAT_RAW,
 	];
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface  */
 	private $scenarioProvider;
 
 	/** @var \Fidry\AliceDataFixtures\FileResolverInterface  */
 	private $fileResolver;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\IFileExporter  */
+	/** @var \SixtyEightPublishers\FixturesBundle\FileExporterInterface  */
 	private $fileExporter;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenarioProvider $scenarioProvider
-	 * @param \Fidry\AliceDataFixtures\FileResolverInterface                  $fileResolver
-	 * @param \SixtyEightPublishers\FixturesBundle\IFileExporter              $fileExporter
+	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface $scenarioProvider
+	 * @param \Fidry\AliceDataFixtures\FileResolverInterface                          $fileResolver
+	 * @param \SixtyEightPublishers\FixturesBundle\FileExporterInterface              $fileExporter
 	 */
-	public function __construct(IScenarioProvider $scenarioProvider, FileResolverInterface $fileResolver, IFileExporter $fileExporter)
+	public function __construct(ScenarioProviderInterface $scenarioProvider, FileResolverInterface $fileResolver, FileExporterInterface $fileExporter)
 	{
 		parent::__construct();
 
@@ -97,7 +97,7 @@ final class DataFixturesListCommand extends Command
 		# or print all available fixtures and all scenarios
 		$this->printFixturesList($output, $format);
 
-		/** @var \SixtyEightPublishers\FixturesBundle\Scenario\IScenario $scenario */
+		/** @var \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface $scenario */
 		foreach ($this->scenarioProvider as $scenario) {
 			$this->printScenario($output, $scenario, $format);
 		}
@@ -137,13 +137,13 @@ final class DataFixturesListCommand extends Command
 	}
 
 	/**
-	 * @param \Symfony\Component\Console\Output\OutputInterface       $output
-	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\IScenario $scenario
-	 * @param string                                                  $format
+	 * @param \Symfony\Component\Console\Output\OutputInterface               $output
+	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface $scenario
+	 * @param string                                                          $format
 	 *
 	 * @return void
 	 */
-	private function printScenario(OutputInterface $output, IScenario $scenario, string $format): void
+	private function printScenario(OutputInterface $output, ScenarioInterface $scenario, string $format): void
 	{
 		$this->resolveFormat($format, [
 			self::FORMAT_TABLE => function () use ($output, $scenario) {

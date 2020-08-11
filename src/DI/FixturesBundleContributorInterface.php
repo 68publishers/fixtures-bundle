@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\DI;
 
-interface IFixturesBundleContributor
+interface FixturesBundleContributorInterface
 {
 	/**
 	 * @param \SixtyEightPublishers\FixturesBundle\DI\Configuration $configuration
