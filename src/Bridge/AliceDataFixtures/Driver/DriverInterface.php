@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver;
 
 use Fidry\AliceDataFixtures\LoaderInterface;
-use Fidry\AliceDataFixtures\Persistence\PersisterInterface;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PersisterInterface;
 
 interface DriverInterface extends LoaderInterface, PersisterInterface
 {
