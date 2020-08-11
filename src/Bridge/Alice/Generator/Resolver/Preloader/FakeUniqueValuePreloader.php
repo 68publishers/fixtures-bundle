@@ -6,7 +6,7 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Pr
 
 use Nelmio\Alice\IsAServiceTrait;
 
-final class FakeUniqueValuePreloader implements IUniqueValuePreloader
+final class FakeUniqueValuePreloader implements UniqueValuePreloaderInterface
 {
 	use IsAServiceTrait;
 

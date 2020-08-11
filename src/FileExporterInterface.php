@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle;
 
-interface IFileExporter
+interface FileExporterInterface
 {
 	/**
 	 * Returns paths to ALL available fixtures

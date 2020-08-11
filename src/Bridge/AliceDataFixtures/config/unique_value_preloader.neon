@@ -4,7 +4,7 @@ services:
 
 	fidry_alice_data_fixtures.generator.resolver.preloader.unique_value_preloader.context_based:
 		autowired: no
-		type: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader
+		type: SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface
 		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\ContextBasedUniqueValuePreloader(
 			@fidry_alice_data_fixtures.context.main
 			# the arguments are injected in a compiler extension

@@ -6,7 +6,7 @@ namespace SixtyEightPublishers\FixturesBundle\Scenario;
 
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
 
-interface IScenario
+interface ScenarioInterface
 {
 	/**
 	 * @return string

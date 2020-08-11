@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Bridge\Alice\Loader\Processor;
 
-interface ISortableProcessor
+interface SortableProcessorInterface
 {
 	/**
 	 * Returns sorted input data

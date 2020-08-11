@@ -6,7 +6,7 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventMana
 
 use Doctrine\Common\EventManager;
 
-final class EventManagerRestrictorFactory implements IEventManagerRestrictorFactory
+final class EventManagerRestrictorFactory implements EventManagerRestrictorFactoryInterface
 {
 	/** @var bool  */
 	private $allowAll;
@@ -27,7 +27,7 @@ final class EventManagerRestrictorFactory implements IEventManagerRestrictorFact
 	/**
 	 * {@inheritDoc}
 	 */
-	public function create(EventManager $eventManager): IEventManagerRestrictor
+	public function create(EventManager $eventManager): EventManagerRestrictorInterface
 	{
 		return new EventManagerRestrictor($eventManager, $this->allowAll, $this->excluded);
 	}

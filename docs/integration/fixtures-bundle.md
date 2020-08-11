@@ -91,9 +91,9 @@ use Nette\DI\CompilerExtension;
 use ProductBundle\Faker\ProductFakeProvider;
 use ProductBundle\Processor\ProductProcessor;
 use SixtyEightPublishers\FixturesBundle\DI\Configuration;
-use SixtyEightPublishers\FixturesBundle\DI\IFixturesBundleContributor;
+use SixtyEightPublishers\FixturesBundle\DI\FixturesBundleContributorInterface;
 
-final class ProductBundleExtension extends CompilerExtension implements IFixturesBundleContributor
+final class ProductBundleExtension extends CompilerExtension implements FixturesBundleContributorInterface
 {
     # loadConfiguration(), beforeCompile(), afterCompile()
 

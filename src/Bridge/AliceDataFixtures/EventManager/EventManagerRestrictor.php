@@ -6,7 +6,7 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventMana
 
 use Doctrine\Common\EventManager;
 
-final class EventManagerRestrictor implements IEventManagerRestrictor
+final class EventManagerRestrictor implements EventManagerRestrictorInterface
 {
 	/** @var \Doctrine\Common\EventManager  */
 	private $eventManager;

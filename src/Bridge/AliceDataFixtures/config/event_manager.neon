@@ -1,11 +1,11 @@
 services:
 	fidry_alice_data_fixtures.event_manager_restrictor_factory:
 		autowired: no
-		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\IEventManagerRestrictorFactory
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\EventManagerRestrictorFactoryInterface
 		factory: @fidry_alice_data_fixtures.event_manager_restrictor_factory.default
 
 	fidry_alice_data_fixtures.event_manager_restrictor_factory.default:
 		autowired: no
-		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\IEventManagerRestrictorFactory
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\EventManagerRestrictorFactoryInterface
 		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\EventManagerRestrictorFactory
 		# the arguments are injected in a compiler extension

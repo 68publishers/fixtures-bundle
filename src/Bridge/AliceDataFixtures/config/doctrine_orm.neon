@@ -59,9 +59,9 @@ services:
 	# Driver
 	fidry_alice_data_fixtures.driver.doctrine:
 		autowired: no
-		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface
 		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\ComposedDriver(
-			SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver::DOCTRINE_ORM_DRIVER,
+			SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface::DOCTRINE_ORM_DRIVER,
 			@fidry_alice_data_fixtures.loader.doctrine,
 			@fidry_alice_data_fixtures.persistence.persister.doctrine,
 			@fidry_alice_data_fixtures.context.main
@@ -70,7 +70,7 @@ services:
 	# Unique value preloader
 	fidry_alice_data_fixtures.generator.resolver.preloader.chainable_preloader.doctrine:
 		autowired: no
-		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\IChainableUniqueValuePreloader
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\ChainableUniqueValuePreloaderInterfaceInterface
 		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\Chainable\DoctrineOrmUniqueValuePreloader(@Doctrine\ORM\EntityManagerInterface)
 		tags:
 			fidry_alice_data_fixtures.generator.resolver.chainable_preloader: yes

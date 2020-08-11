@@ -46,7 +46,7 @@ Integrations expects a service of type `ObjectManager` in your DI Container. For
 Now you have access to enabled drivers and you can persist loaded fixtures:
 
 ```php
-$provider = $container->getByType(SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriverProvider::class);
+$provider = $container->getByType(SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProviderInterface::class);
 $loader = $container->getByType(Nelmio\Alice\FilesLoaderInterface::class);
 $driver = $provider->getDriver('doctrine_orm');
 

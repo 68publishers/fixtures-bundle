@@ -6,11 +6,11 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator
 
 use Nelmio\Alice\IsAServiceTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\IDriver;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\LoadContext;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\IChainableUniqueValuePreloader;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\ChainableUniqueValuePreloaderInterfaceInterface;
 
-final class DoctrineOrmUniqueValuePreloader implements IChainableUniqueValuePreloader
+final class DoctrineOrmUniqueValuePreloader implements ChainableUniqueValuePreloaderInterfaceInterface
 {
 	use IsAServiceTrait;
 
@@ -30,7 +30,7 @@ final class DoctrineOrmUniqueValuePreloader implements IChainableUniqueValuePrel
 	 */
 	public function canPreload(LoadContext $context): bool
 	{
-		return IDriver::DOCTRINE_ORM_DRIVER === $context->getDriver();
+		return DriverInterface::DOCTRINE_ORM_DRIVER === $context->getDriver();
 	}
 
 	/**

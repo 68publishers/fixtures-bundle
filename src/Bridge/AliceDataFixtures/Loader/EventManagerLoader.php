@@ -10,7 +10,7 @@ use Fidry\AliceDataFixtures\LoaderInterface;
 use Fidry\AliceDataFixtures\Persistence\PurgeMode;
 use Fidry\AliceDataFixtures\Persistence\PersisterInterface;
 use Fidry\AliceDataFixtures\Persistence\PersisterAwareInterface;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\IEventManagerRestrictorFactory;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\EventManagerRestrictorFactoryInterface;
 
 final class EventManagerLoader implements LoaderInterface, PersisterAwareInterface
 {
@@ -19,18 +19,18 @@ final class EventManagerLoader implements LoaderInterface, PersisterAwareInterfa
 	/** @var \Fidry\AliceDataFixtures\LoaderInterface  */
 	private $loader;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\IEventManagerRestrictorFactory  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\EventManagerRestrictorFactoryInterface  */
 	private $eventManagerRestrictorFactory;
 
 	/** @var \Doctrine\Common\EventManager  */
 	private $eventManager;
 
 	/**
-	 * @param \Fidry\AliceDataFixtures\LoaderInterface                                                                  $decoratedLoader
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\IEventManagerRestrictorFactory $eventManagerRestrictorFactory
-	 * @param \Doctrine\Common\EventManager                                                                             $eventManager
+	 * @param \Fidry\AliceDataFixtures\LoaderInterface                                                                          $decoratedLoader
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\EventManager\EventManagerRestrictorFactoryInterface $eventManagerRestrictorFactory
+	 * @param \Doctrine\Common\EventManager                                                                                     $eventManager
 	 */
-	public function __construct(LoaderInterface $decoratedLoader, IEventManagerRestrictorFactory $eventManagerRestrictorFactory, EventManager $eventManager)
+	public function __construct(LoaderInterface $decoratedLoader, EventManagerRestrictorFactoryInterface $eventManagerRestrictorFactory, EventManager $eventManager)
 	{
 		$this->loader = $decoratedLoader;
 		$this->eventManagerRestrictorFactory = $eventManagerRestrictorFactory;

@@ -9,10 +9,10 @@ class LoadContext extends AbstractContext
 	public const KEY_DRIVER = 'driver';
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext $mainContext
-	 * @param string                                                                                $driver
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface $mainContext
+	 * @param string                                                                                        $driver
 	 */
-	public function __construct(IContext $mainContext, string $driver)
+	public function __construct(ContextInterface $mainContext, string $driver)
 	{
 		parent::__construct($mainContext, [
 			self::KEY_DRIVER => $driver,

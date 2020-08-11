@@ -6,29 +6,29 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator
 
 use RuntimeException;
 use Nelmio\Alice\IsAServiceTrait;
-use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\LoadContext;
-use SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\IUniqueValuePreloader;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface;
+use SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface;
 
-final class ContextBasedUniqueValuePreloader implements IUniqueValuePreloader
+final class ContextBasedUniqueValuePreloader implements UniqueValuePreloaderInterface
 {
 	use IsAServiceTrait;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface  */
 	private $context;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\IChainableUniqueValuePreloader[] */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Generator\Resolver\Preloader\ChainableUniqueValuePreloaderInterfaceInterface[] */
 	private $preloaders;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext $context
-	 * @param array                                                                                 $preloaders
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface $context
+	 * @param array                                                                                         $preloaders
 	 */
-	public function __construct(IContext $context, array $preloaders)
+	public function __construct(ContextInterface $context, array $preloaders)
 	{
 		$this->context = $context;
 
-		$this->preloaders = (static function (IChainableUniqueValuePreloader ...$preloaders) {
+		$this->preloaders = (static function (ChainableUniqueValuePreloaderInterfaceInterface ...$preloaders) {
 			return $preloaders;
 		})(...$preloaders);
 	}

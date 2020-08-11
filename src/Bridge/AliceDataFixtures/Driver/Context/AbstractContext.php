@@ -6,19 +6,19 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Co
 
 use InvalidArgumentException;
 
-abstract class AbstractContext implements IContext
+abstract class AbstractContext implements ContextInterface
 {
-	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext  */
+	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface  */
 	private $mainContext;
 
 	/** @var array  */
 	private $contextValues = [];
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext|null $mainContext
-	 * @param array                                                                                      $contextValues
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface|null $mainContext
+	 * @param array                                                                                              $contextValues
 	 */
-	public function __construct(?IContext $mainContext = NULL, array $contextValues = [])
+	public function __construct(?ContextInterface $mainContext = NULL, array $contextValues = [])
 	{
 		$this->mainContext = $mainContext ?? $this;
 
@@ -30,7 +30,7 @@ abstract class AbstractContext implements IContext
 	/**
 	 * {@inheritDoc}
 	 */
-	public function resolveContext(string $type): IContext
+	public function resolveContext(string $type): ContextInterface
 	{
 		if ($this->mainContext !== $this) {
 			return $this->mainContext->resolveContext($type);

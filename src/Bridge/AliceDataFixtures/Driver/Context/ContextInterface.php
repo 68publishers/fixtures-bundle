@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context;
 
-interface IContext
+interface ContextInterface
 {
 	/**
 	 * @param string $type
 	 *
-	 * @return \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\IContext
+	 * @return \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\Context\ContextInterface
 	 */
-	public function resolveContext(string $type): IContext;
+	public function resolveContext(string $type): ContextInterface;
 
 	/**
 	 * @param string $type
