@@ -33,6 +33,9 @@ final class FixturesBundleExtension extends CompilerExtension
 			'scenarios' => Expect::arrayOf(Expect::structure([
 				'purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->nullable(),
 				'fixtures' => Expect::listOf('string'),
+				'object_loaders' => Expect::array()->before(static function ($loader) {
+					return $loader instanceof Statement ? $loader : new Statement($loader);
+				}),
 			])),
 		]);
 	}
@@ -60,11 +63,13 @@ final class FixturesBundleExtension extends CompilerExtension
 			$scenarioConfig = $this->validateConfig([
 				'purge_mode' => NULL,
 				'fixtures' => [],
+				'object_loaders' => [],
 			], $scenarioConfig);
 
 			Validators::assertField($scenarioConfig, 'purge_mode', 'string|null');
 			Validators::assertField($scenarioConfig, 'fixtures', 'list');
 			Validators::assertField($scenarioConfig, 'fixtures', 'string[]');
+			Validators::assertField($scenarioConfig, 'object_loaders', 'list');
 
 			if (NULL !== $scenarioConfig['purge_mode'] && !in_array($scenarioConfig['purge_mode'], PurgeModeFactory::PURGE_MODES, TRUE)) {
 				throw new AssertionException(sprintf(
@@ -72,6 +77,10 @@ final class FixturesBundleExtension extends CompilerExtension
 					$scenarioConfig['purge_mode']
 				));
 			}
+
+			$scenarioConfig['object_loaders'] = array_map(static function ($loader) {
+				return $loader instanceof Statement ? $loader : new Statement($loader);
+			}, $scenarioConfig['object_loaders']);
 
 			$config['scenarios'][$k] = (object) $scenarioConfig;
 		}
@@ -132,6 +141,7 @@ final class FixturesBundleExtension extends CompilerExtension
 					return new PhpLiteral("'$path'");
 				}, $scenario->fixtures),
 				$scenario->purge_mode,
+				$scenario->object_loaders,
 			]);
 		}
 
