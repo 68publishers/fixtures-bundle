@@ -48,13 +48,13 @@ services:
 	# Persisters
 	fidry_alice_data_fixtures.persistence.persister.doctrine:
 		autowired: no
-		type: Fidry\AliceDataFixtures\Persistence\PersisterInterface
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PersisterInterface
 		factory: @fidry_alice_data_fixtures.persistence.persister.doctrine.object_manager_persister
 
 	fidry_alice_data_fixtures.persistence.persister.doctrine.object_manager_persister:
 		autowired: no
-		type: Fidry\AliceDataFixtures\Persistence\PersisterInterface
-		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Persister\ObjectManagerPersister(@Doctrine\ORM\EntityManagerInterface)
+		type: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PersisterInterface
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\ObjectManagerPersister(@Doctrine\ORM\EntityManagerInterface)
 
 	# Driver
 	fidry_alice_data_fixtures.driver.doctrine:
