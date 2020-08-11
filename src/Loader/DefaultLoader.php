@@ -8,6 +8,7 @@ use Psr\Log\NullLogger;
 use Psr\Log\LoggerInterface;
 use Fidry\AliceDataFixtures\FileResolverInterface;
 use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface;
+use SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface;
 
 final class DefaultLoader implements LoaderInterface
@@ -47,6 +48,7 @@ final class DefaultLoader implements LoaderInterface
 	public function load(DriverInterface $driver, ScenarioInterface $scenario): array
 	{
 		$files = $this->fileResolver->resolve($scenario->getFixtures());
+		$objects = $this->loadObjects($driver, $scenario);
 
 		$this->logger->info(sprintf(
 			'Loading fixtures for scenario "%s"',
@@ -55,10 +57,39 @@ final class DefaultLoader implements LoaderInterface
 			'files' => $files,
 		]);
 
-		$fixtures = $driver->load($files, $this->parameters, [], $scenario->getPurgeMode() ? $scenario->getPurgeMode()->getMode() : NULL);
+		$fixtures = $driver->load($files, $this->parameters, $objects, $scenario->getPurgeMode() ? $scenario->getPurgeMode()->getMode() : NULL);
 
 		$this->logger->info('fixtures loaded');
 
 		return $fixtures;
+	}
+
+	/**
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface $driver
+	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface                      $scenario
+	 *
+	 * @return object[]
+	 */
+	private function loadObjects(DriverInterface $driver, ScenarioInterface $scenario): array
+	{
+		$objectLoaders = $scenario->getObjectLoaders();
+
+		if (0 >= count($objectLoaders)) {
+			return [];
+		}
+
+		$this->logger->info('Loading objects from storage', [
+			'entities' => array_values(array_unique(array_map(static function (ObjectLoaderInterface $objectLoader): string {
+				return $objectLoader->getClassName();
+			}, $objectLoaders))),
+		]);
+
+		$objects = [];
+
+		foreach ($objectLoaders as $objectLoader) {
+			$objects[] = $objectLoader->load($driver->getStorageDriver());
+		}
+
+		return array_merge([], ...$objects);
 	}
 }

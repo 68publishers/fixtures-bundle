@@ -29,4 +29,9 @@ interface ScenarioInterface
 	 * @return void
 	 */
 	public function setPurgeMode(?NamedPurgeMode $purgeMode): void;
+
+	/**
+	 * @return \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface[]
+	 */
+	public function getObjectLoaders(): array;
 }
