@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader;
+namespace SixtyEightPublishers\FixturesBundle\ObjectLoader;
 
 use InvalidArgumentException;
 
@@ -12,7 +12,7 @@ abstract class AbstractDelegatingObjectLoader implements ObjectLoaderInterface
 		'Doctrine\Common\Persistence\ObjectManager' => __NAMESPACE__ . '\\ObjectManager',
 	];
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id\IdGeneratorInterface  */
+	/** @var \SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface  */
 	protected $idGenerator;
 
 	/** @var string  */
@@ -22,9 +22,9 @@ abstract class AbstractDelegatingObjectLoader implements ObjectLoaderInterface
 	protected $args;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id\IdGeneratorInterface $idGenerator
-	 * @param string                                                                           $className
-	 * @param mixed                                                                            ...$args
+	 * @param \SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface $idGenerator
+	 * @param string                                                                    $className
+	 * @param mixed                                                                     ...$args
 	 */
 	public function __construct(Id\IdGeneratorInterface $idGenerator, string $className, ...$args)
 	{

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectManager;
+namespace SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectManager;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id\IdGeneratorInterface;
+use SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface;
 
 final class Find extends ObjectManagerLoader
 {
@@ -13,9 +13,9 @@ final class Find extends ObjectManagerLoader
 	private $id;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id\IdGeneratorInterface $idGenerator
-	 * @param string                                                                           $className
-	 * @param mixed                                                                            $id
+	 * @param \SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface $idGenerator
+	 * @param string                                                                    $className
+	 * @param mixed                                                                     $id
 	 */
 	public function __construct(IdGeneratorInterface $idGenerator, string $className, $id)
 	{

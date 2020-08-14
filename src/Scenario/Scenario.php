@@ -24,7 +24,7 @@ final class Scenario implements ScenarioInterface
 	/**
 	 * @param string      $name
 	 * @param string|NULL $purgeMode
-	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface[]
+	 * @param \SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectLoaderInterface[]
 	 */
 	public function __construct(string $name, ?string $purgeMode, array $scenes = [])
 	{

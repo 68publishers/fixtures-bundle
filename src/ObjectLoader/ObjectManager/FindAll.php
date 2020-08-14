@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectManager;
+namespace SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectManager;
 
 use Doctrine\Common\Persistence\ObjectManager;
 

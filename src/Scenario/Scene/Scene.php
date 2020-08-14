@@ -7,7 +7,7 @@ namespace SixtyEightPublishers\FixturesBundle\Scenario\Scene;
 use Psr\Log\LoggerInterface;
 use Fidry\AliceDataFixtures\FileResolverInterface;
 use Fidry\AliceDataFixtures\Persistence\PurgeMode;
-use SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface;
+use SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectLoaderInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface;
 
 class Scene implements SceneInterface
@@ -21,7 +21,7 @@ class Scene implements SceneInterface
 	/** @var string[]  */
 	private $fixtures;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface[] */
+	/** @var \SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectLoaderInterface[] */
 	private $objectLoaders;
 
 	/**
