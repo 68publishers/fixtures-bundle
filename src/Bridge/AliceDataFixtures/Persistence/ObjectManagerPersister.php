@@ -34,4 +34,12 @@ final class ObjectManagerPersister extends FidryObjectManagerPersister implement
 	{
 		return $this->manager;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function clear(): void
+	{
+		$this->manager->clear();
+	}
 }
