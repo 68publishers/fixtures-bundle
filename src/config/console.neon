@@ -9,8 +9,8 @@ services:
 		setup:
 			- setParameters(SixtyEightPublishers\FixturesBundle\Helper\ParametersHelper::flatten(@container::getParameters(), app))
 
-	68publishers_fixtures_bundle.console.data_fixutres_list_command:
-		type: SixtyEightPublishers\FixturesBundle\Console\DataFixturesListCommand
+	68publishers_fixtures_bundle.console.list_data_fixutres_command:
+		type: SixtyEightPublishers\FixturesBundle\Console\ListDataFixturesCommand
 		arguments:
 			- @68publishers_fixtures_bundle.scenario_provider
 			- @68publishers_fixtures_bundle.file_resolver.relative

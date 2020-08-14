@@ -17,7 +17,7 @@ use SixtyEightPublishers\FixturesBundle\FileExporterInterface;
 use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface;
 use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface;
 
-final class DataFixturesListCommand extends Command
+final class ListDataFixturesCommand extends Command
 {
 	private const   FORMAT_TABLE = 'table',
 					FORMAT_RAW = 'raw';
@@ -130,10 +130,10 @@ final class DataFixturesListCommand extends Command
 				foreach ($files as $file) {
 					$output->writeln($file);
 				}
-
-				$output->writeln('');
 			},
 		]);
+
+		$output->writeln('');
 	}
 
 	/**
@@ -172,10 +172,10 @@ final class DataFixturesListCommand extends Command
 						$output->writeln($filename);
 					}
 				}
-
-				$output->writeln('');
 			},
 		]);
+
+		$output->writeln('');
 	}
 
 	/**
