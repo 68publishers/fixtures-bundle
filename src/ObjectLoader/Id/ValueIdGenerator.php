@@ -39,4 +39,12 @@ final class ValueIdGenerator implements IdGeneratorInterface
 
 		return $this->id;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function reset(): void
+	{
+		$this->used = FALSE;
+	}
 }

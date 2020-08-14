@@ -47,4 +47,12 @@ final class ListIdGenerator implements IdGeneratorInterface
 
 		return str_replace('*', $value, $this->mask);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function reset(): void
+	{
+		$this->stack = $this->list;
+	}
 }
