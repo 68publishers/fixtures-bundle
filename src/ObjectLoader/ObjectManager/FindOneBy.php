@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectManager;
+namespace SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectManager;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id\IdGeneratorInterface;
+use SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface;
 
 final class FindOneBy extends ObjectManagerLoader
 {
@@ -13,9 +13,9 @@ final class FindOneBy extends ObjectManagerLoader
 	private $criteria;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id\IdGeneratorInterface $idGenerator
-	 * @param string                                                                           $className
-	 * @param array                                                                            $criteria
+	 * @param \SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface $idGenerator
+	 * @param string                                                                    $className
+	 * @param array                                                                     $criteria
 	 */
 	public function __construct(IdGeneratorInterface $idGenerator, string $className, array $criteria)
 	{

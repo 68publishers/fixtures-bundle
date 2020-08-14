@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectManager;
+namespace SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectManager;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id\IdGeneratorInterface;
+use SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface;
 
 final class FindBy extends ObjectManagerLoader
 {
@@ -22,12 +22,12 @@ final class FindBy extends ObjectManagerLoader
 	private $offset;
 
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id\IdGeneratorInterface $idGenerator
-	 * @param string                                                                           $className
-	 * @param array                                                                            $criteria
-	 * @param array|NULL                                                                       $orderBy
-	 * @param int|NULL                                                                         $limit
-	 * @param int|NULL                                                                         $offset
+	 * @param \SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface $idGenerator
+	 * @param string                                                                    $className
+	 * @param array                                                                     $criteria
+	 * @param array|NULL                                                                $orderBy
+	 * @param int|NULL                                                                  $limit
+	 * @param int|NULL                                                                  $offset
 	 */
 	public function __construct(IdGeneratorInterface $idGenerator, string $className, array $criteria, ?array $orderBy = NULL, ?int $limit = NULL, ?int $offset = NULL)
 	{

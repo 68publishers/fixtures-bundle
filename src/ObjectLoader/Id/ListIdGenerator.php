@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\Id;
+namespace SixtyEightPublishers\FixturesBundle\ObjectLoader\Id;
 
 use RuntimeException;
 
