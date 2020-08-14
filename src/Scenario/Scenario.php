@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Scenario;
 
-use SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface;
+use ArrayIterator;
+use Psr\Log\LoggerInterface;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
 
@@ -13,29 +15,24 @@ final class Scenario implements ScenarioInterface
 	/** @var string  */
 	private $name;
 
-	/** @var string[]  */
-	private $fixtures;
-
 	/** @var \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode|string|NULL  */
 	private $purgeMode;
 
-	/** @var \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface[] */
-	private $objectLoaders;
+	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\Scene\SceneInterface[] */
+	private $scenes;
 
 	/**
 	 * @param string      $name
-	 * @param string[]    $fixtures
 	 * @param string|NULL $purgeMode
 	 * @param \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface[]
 	 */
-	public function __construct(string $name, array $fixtures, ?string $purgeMode, array $objectLoaders = [])
+	public function __construct(string $name, ?string $purgeMode, array $scenes = [])
 	{
 		$this->name = $name;
-		$this->fixtures = $fixtures;
 		$this->purgeMode = $purgeMode;
-		$this->objectLoaders = (static function (ObjectLoaderInterface ...$objectLoaders) {
-			return $objectLoaders;
-		})(...$objectLoaders);
+		$this->scenes = (static function (Scene\SceneInterface ...$scenes) {
+			return $scenes;
+		})(...$scenes);
 	}
 
 	/**
@@ -44,14 +41,6 @@ final class Scenario implements ScenarioInterface
 	public function getName(): string
 	{
 		return $this->name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getFixtures(): array
-	{
-		return $this->fixtures;
 	}
 
 	/**
@@ -81,8 +70,34 @@ final class Scenario implements ScenarioInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getObjectLoaders(): array
+	public function run(DriverInterface $driver, LoggerInterface $logger, array $parameters = []): void
 	{
-		return $this->objectLoaders;
+		$logger->info(sprintf(
+			'Running scenario "%s":',
+			$this->getName()
+		));
+
+		$purgeMode = $this->getPurgeMode();
+
+		if (NULL !== $purgeMode) {
+			$purgeMode = $purgeMode->getMode();
+		}
+
+		foreach ($this->scenes as $scene) {
+			$logger->info(sprintf(
+				'Running scene "%s":',
+				$scene->getName()
+			));
+
+			$scene->run($driver, $logger, $purgeMode, $parameters);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getIterator(): ArrayIterator
+	{
+		return new ArrayIterator($this->scenes);
 	}
 }

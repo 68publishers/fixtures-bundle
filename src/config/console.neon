@@ -2,11 +2,12 @@ services:
 	68publishers_fixtures_bundle.console.load_data_fixtures_command:
 		type: SixtyEightPublishers\FixturesBundle\Console\LoadDataFixturesCommand
 		arguments:
-			- @68publishers_fixtures_bundle.loader
 			- @68publishers_fixtures_bundle.scenario_provider
 			- @fidry_alice_data_fixtures.driver_provider
 			- @fidry_alice_data_fixtures.default_purge_mode
 			- @fidry_alice_data_fixtures.logger
+		setup:
+			- setParameters(SixtyEightPublishers\FixturesBundle\Helper\ParametersHelper::flatten(@container::getParameters(), app))
 
 	68publishers_fixtures_bundle.console.data_fixutres_list_command:
 		type: SixtyEightPublishers\FixturesBundle\Console\DataFixturesListCommand

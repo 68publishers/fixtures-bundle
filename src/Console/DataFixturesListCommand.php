@@ -145,23 +145,32 @@ final class DataFixturesListCommand extends Command
 	 */
 	private function printScenario(OutputInterface $output, ScenarioInterface $scenario, string $format): void
 	{
+		$output->writeln('Scenario ' . $scenario->getName() . ':');
+
 		$this->resolveFormat($format, [
 			self::FORMAT_TABLE => function () use ($output, $scenario) {
 				$table = new Table($output);
 
-				$table->setHeaders(['Scenario ' . $scenario->getName()]);
+				$table->setHeaders(['Scene', 'Files']);
 
-				foreach ($this->fileResolver->resolve($scenario->getFixtures()) as $filename) {
-					$table->addRow([$filename]);
+				/** @var \SixtyEightPublishers\FixturesBundle\Scenario\Scene\Scene $scene */
+				foreach ($scenario as $scene) {
+					$table->addRow([
+						$scene->getName(),
+						implode("\n", $this->fileResolver->resolve($scene->getFixtures())),
+					]);
 				}
 
 				$table->render();
 			},
 			self::FORMAT_RAW => function () use ($output, $scenario) {
-				$output->writeln('Scenario ' . $scenario->getName() . ':');
+				/** @var \SixtyEightPublishers\FixturesBundle\Scenario\Scene\Scene $scene */
+				foreach ($scenario as $scene) {
+					$output->writeln('Scene ' . $scene->getName() . ':');
 
-				foreach ($this->fileResolver->resolve($scenario->getFixtures()) as $filename) {
-					$output->writeln($filename);
+					foreach ($this->fileResolver->resolve($scene->getFixtures()) as $filename) {
+						$output->writeln($filename);
+					}
 				}
 
 				$output->writeln('');

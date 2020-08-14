@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Loader;
+namespace SixtyEightPublishers\FixturesBundle\Helper;
 
 use Nette\StaticClass;
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SixtyEightPublishers\FixturesBundle\Tests\Cases\Loader;
+namespace SixtyEightPublishers\FixturesBundle\Tests\Cases\Helper;
 
 use Tester\Assert;
 use Tester\TestCase;
-use SixtyEightPublishers\FixturesBundle\Loader\ParametersHelper;
+use SixtyEightPublishers\FixturesBundle\Helper\ParametersHelper;
 
 require __DIR__ . '/../../bootstrap.php';
 
