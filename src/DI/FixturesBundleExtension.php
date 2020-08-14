@@ -12,6 +12,9 @@ use Nette\PhpGenerator\PhpLiteral;
 use Nette\DI\Definitions\Statement;
 use Nette\Utils\AssertionException;
 use SixtyEightPublishers\FixturesBundle\Scenario\Scenario;
+use SixtyEightPublishers\FixturesBundle\Scenario\Scene\Scene;
+use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface;
+use SixtyEightPublishers\FixturesBundle\Scenario\Scene\SceneInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\Nette\CompilerExtension;
 use SixtyEightPublishers\FixturesBundle\Bridge\Alice\DI\NelmioAliceExtension;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
@@ -32,10 +35,17 @@ final class FixturesBundleExtension extends CompilerExtension
 			}),
 			'scenarios' => Expect::arrayOf(Expect::structure([
 				'purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->nullable(),
-				'fixtures' => Expect::listOf('string'),
-				'object_loaders' => Expect::array()->before(static function ($loader) {
-					return $loader instanceof Statement ? $loader : new Statement($loader);
-				}),
+
+				# default scene:
+				'fixtures' => Expect::listOf('string')->default([]),
+				'object_loaders' => Expect::array()->before([$this, 'normalizeStatement']),
+
+				# another scenes:
+				'scenes' => Expect::arrayOf(Expect::structure([
+					'decorator' => Expect::string()->nullable()->dynamic()->before([$this, 'normalizeStatement']),
+					'fixtures' => Expect::listOf('string'),
+					'object_loaders' => Expect::array()->before([$this, 'normalizeStatement']),
+				])),
 			])),
 		]);
 	}
@@ -64,12 +74,14 @@ final class FixturesBundleExtension extends CompilerExtension
 				'purge_mode' => NULL,
 				'fixtures' => [],
 				'object_loaders' => [],
+				'scenes' => [],
 			], $scenarioConfig);
 
 			Validators::assertField($scenarioConfig, 'purge_mode', 'string|null');
 			Validators::assertField($scenarioConfig, 'fixtures', 'list');
 			Validators::assertField($scenarioConfig, 'fixtures', 'string[]');
 			Validators::assertField($scenarioConfig, 'object_loaders', 'list');
+			Validators::assertField($scenarioConfig, 'scenes', 'array[]');
 
 			if (NULL !== $scenarioConfig['purge_mode'] && !in_array($scenarioConfig['purge_mode'], PurgeModeFactory::PURGE_MODES, TRUE)) {
 				throw new AssertionException(sprintf(
@@ -78,9 +90,25 @@ final class FixturesBundleExtension extends CompilerExtension
 				));
 			}
 
-			$scenarioConfig['object_loaders'] = array_map(static function ($loader) {
-				return $loader instanceof Statement ? $loader : new Statement($loader);
-			}, $scenarioConfig['object_loaders']);
+			$scenarioConfig['object_loaders'] = array_map([$this, 'normalizeStatement'], $scenarioConfig['object_loaders']);
+
+			foreach ($scenarioConfig['scenes'] as $sceneKey => $sceneConfig) {
+				$sceneConfig = $this->validateConfig([
+					'decorator' => NULL,
+					'fixtures' => [],
+					'object_loaders' => [],
+				], $sceneConfig);
+
+				Validators::assertField($sceneConfig, 'decorator', 'null|string|' . Statement::class);
+				Validators::assertField($sceneConfig, 'fixtures', 'list');
+				Validators::assertField($sceneConfig, 'fixtures', 'string[]');
+				Validators::assertField($sceneConfig, 'object_loaders', 'list');
+
+				$sceneConfig['decorator'] = $this->normalizeStatement($sceneConfig['decorator']);
+				$sceneConfig['object_loaders'] = array_map([$this, 'normalizeStatement'], $sceneConfig['object_loaders']);
+
+				$scenarioConfig['scenes'][$sceneKey] = (object) $sceneConfig;
+			}
 
 			$config['scenarios'][$k] = (object) $scenarioConfig;
 		}
@@ -122,31 +150,85 @@ final class FixturesBundleExtension extends CompilerExtension
 		}
 
 		$this->setServiceArgument($builder->getDefinition('fixtures_bundle.alice.bundle_map'), $bundleFixtureDirs, 0);
-	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function beforeCompile(): void
-	{
-		$builder = $this->getContainerBuilder();
 		$scenarios = [];
 
 		foreach ($this->validConfig->scenarios as $name => $scenario) {
-			$scenarios[] = new Statement(Scenario::class, [
-				$name,
-				array_map(static function (string $path) {
-					$path = addslashes($path);
+			$scenes = [];
 
-					return new PhpLiteral("'$path'");
-				}, $scenario->fixtures),
-				$scenario->purge_mode,
-				$scenario->object_loaders,
-			]);
+			if (!empty($scenario->fixtures)) {
+				$scenes[] = $builder->addDefinition($this->prefix('scenario.' . $name . '.scene._default'))
+					->setType(SceneInterface::class)
+					->setFactory(Scene::class, [
+						$builder->getDefinition('68publishers_fixtures_bundle.file_resolver'),
+						'default',
+						$this->exportFixtureFiles($scenario->fixtures),
+						$scenario->object_loaders,
+					])
+					->setAutowired(FALSE);
+			}
+
+			foreach ($scenario->scenes as $sceneName => $scene) {
+				$sceneFactory = new Statement(Scene::class, [
+					$builder->getDefinition('68publishers_fixtures_bundle.file_resolver'),
+					$sceneName,
+					$this->exportFixtureFiles($scene->fixtures),
+					$scene->object_loaders,
+				]);
+
+				if (($decorator = $scene->decorator) instanceof Statement) {
+					$decorator->arguments['scene'] = $sceneFactory;
+					$sceneFactory = $decorator;
+				}
+
+				$scenes[] = $builder->addDefinition($this->prefix('scenario.' . $name . '.scene.' . $sceneName))
+					->setType(SceneInterface::class)
+					->setFactory($sceneFactory)
+					->setAutowired(FALSE);
+			}
+
+			$scenarios[] = $builder->addDefinition($this->prefix('scenario.' . $name))
+				->setType(ScenarioInterface::class)
+				->setFactory(Scenario::class, [
+					$name,
+					$scenario->purge_mode,
+					$scenes,
+				])
+				->setAutowired(FALSE);
 		}
 
 		$this->addServiceArguments($builder->getDefinition('68publishers_fixtures_bundle.scenario_provider.default'), NULL, $scenarios);
 		$this->setServiceArgument($builder->getDefinition('68publishers_fixtures_bundle.file_resolver.default'), $this->validConfig->fixture_dirs, 2);
 		$this->setServiceArgument($builder->getDefinition('68publishers_fixtures_bundle.file_resolver.relative'), $this->validConfig->fixture_dirs, 3);
+	}
+
+	/**
+	 * @internal
+	 *
+	 * @param mixed $statement
+	 *
+	 * @return \Nette\DI\Definitions\Statement|null
+	 */
+	public function normalizeStatement($statement): ?Statement
+	{
+		if (NULL === $statement) {
+			return NULL;
+		}
+
+		return $statement instanceof Statement ? $statement : new Statement($statement);
+	}
+
+	/**
+	 * @param array $fixtures
+	 *
+	 * @return array
+	 */
+	private function exportFixtureFiles(array $fixtures): array
+	{
+		return array_map(static function (string $path) {
+			$path = addslashes($path);
+
+			return new PhpLiteral("'$path'");
+		}, $fixtures);
 	}
 }

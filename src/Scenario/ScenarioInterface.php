@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\Scenario;
 
+use IteratorAggregate;
+use Psr\Log\LoggerInterface;
+use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
 
-interface ScenarioInterface
+interface ScenarioInterface extends IteratorAggregate
 {
 	/**
 	 * @return string
 	 */
 	public function getName(): string;
-
-	/**
-	 * @return string[]
-	 */
-	public function getFixtures(): array;
 
 	/**
 	 * @return \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode|NULL
@@ -31,7 +29,11 @@ interface ScenarioInterface
 	public function setPurgeMode(?NamedPurgeMode $purgeMode): void;
 
 	/**
-	 * @return \SixtyEightPublishers\FixturesBundle\Loader\ObjectLoader\ObjectLoaderInterface[]
+	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverInterface $driver
+	 * @param \Psr\Log\LoggerInterface                                                             $logger
+	 * @param array                                                                                $parameters
+	 *
+	 * @return void
 	 */
-	public function getObjectLoaders(): array;
+	public function run(DriverInterface $driver, LoggerInterface $logger, array $parameters = []): void;
 }

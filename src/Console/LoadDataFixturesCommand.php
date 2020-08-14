@@ -14,7 +14,6 @@ use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use SixtyEightPublishers\FixturesBundle\Loader\LoaderInterface;
 use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Logger\LoggerDecorator;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode;
@@ -23,9 +22,6 @@ use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverPr
 
 final class LoadDataFixturesCommand extends Command
 {
-	/** @var \SixtyEightPublishers\FixturesBundle\Loader\LoaderInterface  */
-	private $loader;
-
 	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface  */
 	private $scenarioProvider;
 
@@ -38,22 +34,33 @@ final class LoadDataFixturesCommand extends Command
 	/** @var NULL|\Psr\Log\LoggerInterface  */
 	private $logger;
 
+	/** @var array  */
+	private $parameters = [];
+
 	/**
-	 * @param \SixtyEightPublishers\FixturesBundle\Loader\LoaderInterface                                  $loader
 	 * @param \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface                      $scenarioProvider
 	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProviderInterface $driverProvider
 	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode     $defaultPurgeMode
 	 * @param \Psr\Log\LoggerInterface|NULL                                                                $logger
 	 */
-	public function __construct(LoaderInterface $loader, ScenarioProviderInterface $scenarioProvider, DriverProviderInterface $driverProvider, NamedPurgeMode $defaultPurgeMode, LoggerInterface $logger = NULL)
+	public function __construct(ScenarioProviderInterface $scenarioProvider, DriverProviderInterface $driverProvider, NamedPurgeMode $defaultPurgeMode, LoggerInterface $logger = NULL)
 	{
 		parent::__construct();
 
-		$this->loader = $loader;
 		$this->scenarioProvider = $scenarioProvider;
 		$this->driverProvider = $driverProvider;
 		$this->defaultPurgeMode = $defaultPurgeMode;
 		$this->logger = $logger;
+	}
+
+	/**
+	 * @param array $parameters
+	 *
+	 * @return void
+	 */
+	public function setParameters(array $parameters): void
+	{
+		$this->parameters = $parameters;
 	}
 
 	/**
@@ -118,7 +125,7 @@ final class LoadDataFixturesCommand extends Command
 			$this->logger->setLogger(new ConsoleLogger($output));
 		}
 
-		$this->loader->load($this->driverProvider->getDriver($driver), $scenario);
+		$scenario->run($this->driverProvider->getDriver($driver), $this->logger ?? new ConsoleLogger($output), $this->parameters);
 
 		return 0;
 	}
