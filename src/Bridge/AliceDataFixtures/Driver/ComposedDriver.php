@@ -83,4 +83,12 @@ final class ComposedDriver implements DriverInterface
 	{
 		return $this->persister->getStorageDriver();
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function clear(): void
+	{
+		$this->persister->clear();
+	}
 }

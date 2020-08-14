@@ -9,9 +9,14 @@ use Fidry\AliceDataFixtures\Persistence\PersisterInterface as FidryPersisterInte
 interface PersisterInterface extends FidryPersisterInterface
 {
 	/**
-	 * Returns storage driver/adapter e.g. EntityManager
+	 * Returns a storage driver/adapter e.g. EntityManager
 	 *
 	 * @return mixed
 	 */
 	public function getStorageDriver();
+
+	/**
+	 * Clear the driver's/adapter's state - remove already processed references to avoid a memory leaks
+	 */
+	public function clear(): void;
 }
