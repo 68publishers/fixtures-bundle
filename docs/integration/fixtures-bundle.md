@@ -32,6 +32,102 @@ Each scenario can define its own purge mode that will override a default purge m
 				- dummy-users.neon
 ```
 
+## Object loaders
+
+In most cases, you need some existing entities from the database for associations when your scenario is in a purge mode `no_purge`.
+For this cases are here an object loaders:
+
+```neon
+68publishers.fixtures_bundle:
+	scenarios:
+		dummy-events:
+			purge_mode: no_purge
+			fixtures:
+				- dummy-events.neon
+			object_loaders:
+				# preload 50 places from database, objects are available in the fixtures under ids `place_1`, `place_2`, ..., `place_50`:
+				- SixtyEightPublishers\FixturesBundle\ObjectLoader\FindBy(
+					SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\SequenceIdGenerator(places_*),
+					App\Entity\Place
+					[],
+					null,
+					50
+				)
+```
+
+Here is a list of predefined loaders (it copies a basic methods from Doctrine's `ObjectRepository`):
+
+- `SixtyEightPublishers\FixturesBundle\ObjectLoader\Find`
+- `SixtyEightPublishers\FixturesBundle\ObjectLoader\FindAll`
+- `SixtyEightPublishers\FixturesBundle\ObjectLoader\FindBy`
+- `SixtyEightPublishers\FixturesBundle\ObjectLoader\FindOneBy`
+
+And this is a list of predefined ID generators:
+
+- `SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\SequenceIdGenerator`
+- `SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\ListIdGenerator`
+- `SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\ValueIdGenerator` - this generator is useful with loaders `Find` and `FindOneBy` only
+
+Of course you can define a custom object loader by implementing an interface `SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectLoaderInterface`.
+
+## Scenes
+
+Internally each scenario consists of scenes. This configurations are both internally similar:
+
+```neon
+68publishers.fixtures_bundle:
+	scenarios:
+		default:
+			purge_mode: no_purge
+			fixtures:
+				- my/fixture-1.neon
+				- my/fixture-2.neon
+			object_loaders:
+				- App\Fixtures\MyObjectLoader
+```
+
+```neon
+68publishers.fixtures_bundle:
+	scenarios:
+		default:
+			purge_mode: no_purge
+			scenes:
+				default:
+					fixtures:
+						- my/fixture-1.neon
+						- my/fixture-2.neon
+					object_loaders:
+						- App\Fixtures\MyObjectLoader
+```
+
+So the first configuration is just shorter way to define the `default` scene.
+Each scene is run separately so scenes can't share objects between themselves. The storage (Doctrine's `ObjectManager`) is cleared after each scene so all entities are detached from EM when a scenario successfully finished.
+
+### Batched scenes
+
+This concept based on scenes provides you a way how to import a lot of objects in batches without memory leaks. Here is an example of a scenario that contains some basic scene and some batched scene:
+
+```neon
+68publishers.fixtures_bundle:
+	scenarios:
+		default:
+			purge_mode: no_purge
+			# the `default` scene is defined in shorter way
+			fixtures:
+				- base/users.neon
+				- base/articles.neon
+			scenes:
+				product:
+					decorator: SixtyEightPublishers\FixturesBundle\Scenario\Scene\BatchedScene(100) # a fixture `product/products.neon` will be loaded 100 times
+					fixtures:
+						- product/products.neon
+					object_loaders:
+						# users were created in the `default` scene but they are not accessible in this scene so we must load it:
+						- SixtyEightPublishers\FixturesBundle\ObjectLoader\FindAll(SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\SequenceIdGenerator(user_*), App\Entity\User)
+```
+
+An option `decorator` defines decorator class that wraps the original `Scene` object. The original object is passed into the decorator via the constructor's argument with the name `$scene`.
+
 ## Usage
 
 Fixtures can be simply loaded with the following command:
