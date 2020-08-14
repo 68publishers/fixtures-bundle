@@ -10,6 +10,9 @@ final class SequenceIdGenerator implements IdGeneratorInterface
 	private $mask;
 
 	/** @var int  */
+	private $start;
+
+	/** @var int  */
 	private $currentId;
 
 	/**
@@ -23,7 +26,7 @@ final class SequenceIdGenerator implements IdGeneratorInterface
 		}
 
 		$this->mask = $mask;
-		$this->currentId = $start;
+		$this->start = $this->currentId = $start;
 	}
 
 	/**
@@ -36,5 +39,13 @@ final class SequenceIdGenerator implements IdGeneratorInterface
 		$this->currentId++;
 
 		return $id;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function reset(): void
+	{
+		$this->currentId = $this->start;
 	}
 }
