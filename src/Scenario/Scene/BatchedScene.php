@@ -51,7 +51,7 @@ final class BatchedScene implements SceneInterface
 	 */
 	public function run(DriverInterface $driver, LoggerInterface $logger, ?PurgeMode $purgeMode = NULL, array $parameters = []): void
 	{
-		for ($i = 1; $i >= $this->batch; $i++) {
+		for ($i = 1; $i <= $this->batch; $i++) {
 			$logger->info(sprintf(
 				'Running batch %d/%d:',
 				$i,
