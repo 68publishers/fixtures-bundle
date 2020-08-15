@@ -33,6 +33,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 		return Expect::structure([
 			'default_purge_mode' => Expect::anyOf(...PurgeModeFactory::PURGE_MODES)->default(PurgeModeFactory::PURGE_MODE_DELETE)->dynamic(),
 			'default_driver' => Expect::string(DriverInterface::DOCTRINE_ORM_DRIVER),
+			'excluded' => Expect::arrayOf('string')->default([]),
 			'db_drivers' => Expect::structure([
 				DriverInterface::DOCTRINE_ORM_DRIVER => Expect::bool(FALSE),
 				DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER => Expect::bool(FALSE),
@@ -54,6 +55,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 		$config = $this->validateConfig([
 			'default_purge_mode' => PurgeModeFactory::PURGE_MODE_DELETE, # 'delete', 'truncate', 'no_purge'
 			'default_driver' => DriverInterface::DOCTRINE_ORM_DRIVER,
+			'excluded' => [],
 			'db_drivers' => [
 				DriverInterface::DOCTRINE_ORM_DRIVER => FALSE,
 				DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER => FALSE,
@@ -75,6 +77,7 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 		}
 
 		Validators::assertField($config, 'default_driver', 'string');
+		Validators::assertField($config, 'excluded', 'string[]');
 		Validators::assertField($config, 'db_drivers', 'array');
 		Validators::assertField($config['db_drivers'], DriverInterface::DOCTRINE_ORM_DRIVER, 'bool');
 		Validators::assertField($config['db_drivers'], DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER, 'bool');
@@ -151,8 +154,16 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 
 		$this->setServiceArgument($builder->getDefinition('fidry_alice_data_fixtures.default_purge_mode'), $this->validConfig->default_purge_mode, 0);
 
-		foreach ($this->getEnabledDrivers() as $alias) {
+		foreach ($this->getEnabledDrivers() as $driverName => $alias) {
 			$this->setFixturesProcessors('fidry_alice_data_fixtures.' . $alias . '.persister_loader');
+
+			if (DriverInterface::DOCTRINE_ORM_DRIVER === $driverName) {
+				$this->setServiceArgument(
+					$builder->getDefinition('fidry_alice_data_fixtures.persistence.doctrine.purger.purger_factory'),
+					$this->validConfig->excluded,
+					2
+				);
+			}
 		}
 
 		$this->addServiceArguments(
