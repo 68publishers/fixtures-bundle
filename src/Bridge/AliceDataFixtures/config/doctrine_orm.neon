@@ -43,7 +43,11 @@ services:
 	fidry_alice_data_fixtures.persistence.doctrine.purger.purger_factory:
 		autowired: no
 		type: Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface
-		factory: Fidry\AliceDataFixtures\Bridge\Doctrine\Purger\Purger(@Doctrine\ORM\EntityManagerInterface)
+		factory: SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Purger\Purger(
+			@Doctrine\ORM\EntityManagerInterface,
+			null,
+			[] # an argument is injected by the compiler extension
+		)
 
 	# Persisters
 	fidry_alice_data_fixtures.persistence.persister.doctrine:
