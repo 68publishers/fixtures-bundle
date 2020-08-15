@@ -30,6 +30,7 @@ extensions:
 fidry.alice_data_fixtures:
 	default_purge_mode: delete # 'delete', 'truncate' or 'no_purge'
 	default_driver: doctrine_orm # 'doctrine_orm', 'doctrine_mongodb_odm' or 'doctrine_phpcr_odm'
+	excluded: [] #  table/entity names that will not be purged
 	db_drivers:
 		doctrine_orm: no
 		doctrine_mongodb_odm: no
@@ -54,6 +55,19 @@ $driver->load($loader->loadFiles([
     __DIR__ . '/users.neon',
     __DIR__ . '/articles.neon',
 ]));
+```
+
+## Excluded tables or entities
+
+An option `excluded` is a list of tables that will be omitted during database purging. You can define an entity class names instead of table names:
+
+```neon
+fidry.alice_data_fixtures:
+	excluded:
+		# table name:
+		- user
+		# or entity class name:
+		- App\Entity\User
 ```
 
 ## Processors
