@@ -31,9 +31,9 @@ final class FileResolver implements FileResolverInterface, FileExporterInterface
 	{
 		$this->locator = $locator;
 		$this->bundleMap = $bundleMap;
-		$this->fixtureDirs = array_map(static function (string $path) {
+		$this->fixtureDirs = array_filter(array_map(static function (string $path) {
 			return realpath($path);
-		}, $fixtureDirs);
+		}, $fixtureDirs));
 	}
 
 	/**

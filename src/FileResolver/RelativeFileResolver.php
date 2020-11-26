@@ -35,9 +35,9 @@ final class RelativeFileResolver implements FileResolverInterface, FileExporterI
 		$this->fileExporter = $fileExporter;
 		$this->bundleMap = $bundleMap;
 
-		$this->fixtureDirs = array_map(static function (string $path) {
+		$this->fixtureDirs = array_filter(array_map(static function (string $path) {
 			return realpath($path);
-		}, $fixtureDirs);
+		}, $fixtureDirs));
 
 		usort($this->fixtureDirs, static function ($a, $b) {
 			return strlen($b) <=> strlen($a);
