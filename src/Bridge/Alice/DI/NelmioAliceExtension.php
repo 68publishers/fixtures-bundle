@@ -34,7 +34,7 @@ final class NelmioAliceExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'locale' => Expect::string('en_US'),
-			'seed' => Expect::int(1)->min(1.0)->nullable(),
+			'seed' => Expect::anyOf(Expect::null(), Expect::int()->min(1.0))->default(1),
 			'loading_limit' => Expect::int(5),
 			'functions_blacklist' => Expect::array(['current']),
 			'max_unique_values_retry' => Expect::int(150),
