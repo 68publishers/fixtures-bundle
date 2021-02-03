@@ -38,13 +38,21 @@ final class FixturesBundleExtension extends CompilerExtension
 
 				# default scene:
 				'fixtures' => Expect::listOf('string')->default([]),
-				'object_loaders' => Expect::array()->before([$this, 'normalizeStatement']),
+				'object_loaders' => Expect::list()->before(function (array $loaders) {
+					return array_map(function ($loader) {
+						return $this->normalizeStatement($loader);
+					}, $loaders);
+				}),
 
 				# another scenes:
 				'scenes' => Expect::arrayOf(Expect::structure([
 					'decorator' => Expect::string()->nullable()->dynamic()->before([$this, 'normalizeStatement']),
 					'fixtures' => Expect::listOf('string'),
-					'object_loaders' => Expect::array()->before([$this, 'normalizeStatement']),
+					'object_loaders' => Expect::list()->before(function (array $loaders) {
+						return array_map(function ($loader) {
+							return $this->normalizeStatement($loader);
+						}, $loaders);
+					}),
 				])),
 			])),
 		]);
