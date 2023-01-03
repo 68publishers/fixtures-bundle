@@ -1,3 +1,5 @@
+> :warning: Warning! This package does not have active support, it exists only for the historical needs of the author.
+
 # Fixtures Bundle
 
 A [Nette](https://nette.org) bundle to manage fixtures with an integration of packages [nelmio/alice](https://github.com/nelmio/alice) and [theofidry/AliceDataFixtures](https://github.com/theofidry/AliceDataFixtures).
