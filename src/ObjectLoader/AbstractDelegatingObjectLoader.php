@@ -9,7 +9,7 @@ use InvalidArgumentException;
 abstract class AbstractDelegatingObjectLoader implements ObjectLoaderInterface
 {
 	private const NAMESPACES = [
-		'Doctrine\Common\Persistence\ObjectManager' => __NAMESPACE__ . '\\ObjectManager',
+		'Doctrine\\Persistence\\ObjectManager' => __NAMESPACE__ . '\\ObjectManager',
 	];
 
 	/** @var \SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface  */

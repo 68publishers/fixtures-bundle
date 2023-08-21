@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use Nelmio\Alice\IsAServiceTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Driver\AbstractMySQLDriver;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Fidry\AliceDataFixtures\Persistence\PurgeMode;
 use Fidry\AliceDataFixtures\Persistence\PurgerInterface;
 use Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface;
@@ -23,7 +23,7 @@ class Purger implements PurgerInterface, PurgerFactoryInterface
 {
 	use IsAServiceTrait;
 
-	/** @var \Doctrine\Common\Persistence\ObjectManager  */
+	/** @var \Doctrine\Persistence\ObjectManager  */
 	protected $manager;
 
 	/** @var \Fidry\AliceDataFixtures\Persistence\PurgeMode  */
@@ -36,7 +36,7 @@ class Purger implements PurgerInterface, PurgerFactoryInterface
 	private $purger;
 
 	/**
-	 * @param \Doctrine\Common\Persistence\ObjectManager          $manager
+	 * @param \Doctrine\Persistence\ObjectManager          $manager
 	 * @param \Fidry\AliceDataFixtures\Persistence\PurgeMode|NULL $purgeMode
 	 * @param array                                               $excluded
 	 */

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectManager;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface;
 
 final class Find extends ObjectManagerLoader

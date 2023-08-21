@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectManager;
 
 use InvalidArgumentException;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use SixtyEightPublishers\FixturesBundle\ObjectLoader\ObjectLoaderInterface;
 use SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface;
 
@@ -28,7 +28,7 @@ abstract class ObjectManagerLoader implements ObjectLoaderInterface
 	}
 
 	/**
-	 * @param \Doctrine\Common\Persistence\ObjectManager $manager
+	 * @param \Doctrine\Persistence\ObjectManager $manager
 	 *
 	 * @return array
 	 */

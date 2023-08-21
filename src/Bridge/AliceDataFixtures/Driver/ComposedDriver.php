@@ -63,17 +63,17 @@ final class ComposedDriver implements DriverInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public function persist($object)
+	public function persist($object): void
 	{
-		return $this->persister->persist($object);
+		$this->persister->persist($object);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function flush()
+	public function flush(): void
 	{
-		return $this->persister->flush();
+		$this->persister->flush();
 	}
 
 	/**

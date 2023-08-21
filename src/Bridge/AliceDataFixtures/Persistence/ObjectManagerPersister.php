@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence;
 
 use Nelmio\Alice\IsAServiceTrait;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Fidry\AliceDataFixtures\Bridge\Doctrine\Persister\ObjectManagerPersister as FidryObjectManagerPersister;
 
 final class ObjectManagerPersister extends FidryObjectManagerPersister implements PersisterInterface
 {
 	use IsAServiceTrait;
 
-	/** @var \Doctrine\Common\Persistence\ObjectManager  */
+	/** @var \Doctrine\Persistence\ObjectManager  */
 	private $manager;
 
 	/**
-	 * @param \Doctrine\Common\Persistence\ObjectManager $manager
+	 * @param \Doctrine\Persistence\ObjectManager $manager
 	 */
 	public function __construct(ObjectManager $manager)
 	{
@@ -28,7 +28,7 @@ final class ObjectManagerPersister extends FidryObjectManagerPersister implement
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @return Doctrine\Common\Persistence\ObjectManager
+	 * @return Doctrine\Persistence\ObjectManager
 	 */
 	public function getStorageDriver(): ObjectManager
 	{

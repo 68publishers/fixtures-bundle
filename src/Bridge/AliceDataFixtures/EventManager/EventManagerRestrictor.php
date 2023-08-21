@@ -34,7 +34,7 @@ final class EventManagerRestrictor implements EventManagerRestrictorInterface
 	 */
 	public function restrict(): void
 	{
-		$listeners = $this->eventManager->getListeners();
+		$listeners = $this->eventManager->getAllListeners();
 
 		foreach ($listeners as $eventName => $eventListeners) {
 			foreach ($eventListeners as $eventListener) {
