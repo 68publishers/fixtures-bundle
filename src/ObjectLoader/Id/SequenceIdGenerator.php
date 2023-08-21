@@ -34,7 +34,7 @@ final class SequenceIdGenerator implements IdGeneratorInterface
 	 */
 	public function generate(): string
 	{
-		$id = str_replace('*', $this->currentId, $this->mask);
+		$id = str_replace('*', (string) $this->currentId, $this->mask);
 
 		$this->currentId++;
 
