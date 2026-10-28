@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Travis CI configuration and the unused dev dependency `nette/application`.
 
 ### Fixed
+- Fixtures found in a directory are sorted by path, the order of a directory listing depends on the filesystem (it differed on Linux and macOS).
 - `Purger` used `Connection::exec()`, which was removed in DBAL 4. `Connection::executeStatement()` is used instead.
 - `Purger` did not disable foreign key checks on MySQL when the DBAL driver was wrapped by a middleware (e.g. logging). MySQL is now detected by the database platform.
 - `Purger` failed with a `NULL` purge mode.
