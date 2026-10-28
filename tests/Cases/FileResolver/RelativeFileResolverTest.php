@@ -91,18 +91,21 @@ final class RelativeFileResolverTest extends TestCase
 
 	public function testExport(): void
 	{
-		Assert::equal(
-			$this->fileResolver->export(),
-			[
-				'foo/empty_fixture_3.json',
-				'foo/empty_fixture_4.yaml',
-				'empty_fixture_2.php',
-				'empty_fixture_1.yaml',
-				'@foo_bundle/empty_fixture_1.yaml',
-				'@bar_bundle/dummy/empty_fixture_2.yaml',
-				'@bar_bundle/dummy/empty_fixture_1.yaml',
-			]
-		);
+		# the relative paths follow the order of the absolute paths, compared as a set
+		$expected = [
+			'foo/empty_fixture_3.json',
+			'foo/empty_fixture_4.yaml',
+			'empty_fixture_2.php',
+			'empty_fixture_1.yaml',
+			'@foo_bundle/empty_fixture_1.yaml',
+			'@bar_bundle/dummy/empty_fixture_2.yaml',
+			'@bar_bundle/dummy/empty_fixture_1.yaml',
+		];
+		$exported = $this->fileResolver->export();
+		sort($expected);
+		sort($exported);
+
+		Assert::same($expected, $exported);
 	}
 }
 
