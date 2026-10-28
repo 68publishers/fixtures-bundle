@@ -39,7 +39,7 @@ final class PreloadedUniqueValueResolver implements ChainableValueResolverInterf
 	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Generator\Resolver\Preloader\UniqueValuePreloaderInterface $uniqueValuePreloader
 	 * @param \Nelmio\Alice\Generator\ValueResolverInterface|NULL                                                          $resolver
 	 */
-	public function __construct(UniqueValuesPool $pool, UniqueValuePreloaderInterface $uniqueValuePreloader, ValueResolverInterface $resolver = NULL)
+	public function __construct(UniqueValuesPool $pool, UniqueValuePreloaderInterface $uniqueValuePreloader, ?ValueResolverInterface $resolver = NULL)
 	{
 		$this->pool = $pool;
 		$this->uniqueValuePreloader = $uniqueValuePreloader;

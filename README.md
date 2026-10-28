@@ -3,7 +3,13 @@
 # Fixtures Bundle
 
 A [Nette](https://nette.org) bundle to manage fixtures with an integration of packages [nelmio/alice](https://github.com/nelmio/alice) and [theofidry/AliceDataFixtures](https://github.com/theofidry/AliceDataFixtures).
-The bundle supports Nette in versions `2.4` and `3`!
+
+## Requirements
+
+- PHP 8.3 or higher
+- Nette DI 3.1+
+- `symfony/console` for the console commands (optional, the commands are registered only when it is installed)
+- `doctrine/orm` (2.10+ or 3), `doctrine/dbal` 3.3+ or 4 and `doctrine/data-fixtures` 1.5.1+ or 2 for the Doctrine ORM driver
 
 ## Installation
 
@@ -24,7 +30,7 @@ Continue to the integration guide [here](docs/integration/alice.md).
 
 A package AliceDataFixtures provides a persistent layer for data fixtures. The only supported ORM/ODM is Doctrine:
 
-- Doctrine ORM 2.5+
+- Doctrine ORM 2.10+ and 3 (with DBAL 3.3+ or 4)
 - Doctrine ODM 1.2+
 - Doctrine PHPCR 1.4+
 
@@ -38,12 +44,19 @@ The Fixtures Bundle wraps functionality from both integrations and allows you to
 
 Continue to the integration guide [here](docs/integration/fixtures-bundle.md).
 
+## Upgrade from 0.3
+
+- Minimal PHP version is 8.3.
+- Nette 2.4 is no longer supported, the bundle requires `nette/di` 3.1.3 or higher.
+- `doctrine/dbal` < 3.3 and `doctrine/data-fixtures` < 1.5.1 are no longer supported (composer conflicts).
+- The abstract method `SixtyEightPublishers\FixturesBundle\Bridge\Nette\CompilerExtension::getNette24Config()` has been removed, remove its implementation from your extensions if you extend the class.
+
 ## Contributing
 
 Before committing any changes, don't forget to run
 
 ```bash
-$ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run
+$ vendor/bin/php-cs-fixer fix -v --dry-run
 ```
 
 and

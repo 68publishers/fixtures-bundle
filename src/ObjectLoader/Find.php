@@ -9,7 +9,7 @@ final class Find extends AbstractDelegatingObjectLoader
 	/**
 	 * @param \SixtyEightPublishers\FixturesBundle\ObjectLoader\Id\IdGeneratorInterface $idGenerator
 	 * @param string                                                                    $className
-	 * @param $id
+	 * @param                                                                           $id
 	 */
 	public function __construct(Id\IdGeneratorInterface $idGenerator, string $className, $id)
 	{

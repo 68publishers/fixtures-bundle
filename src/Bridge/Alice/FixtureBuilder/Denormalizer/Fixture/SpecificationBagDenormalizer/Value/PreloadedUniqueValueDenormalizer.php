@@ -34,7 +34,7 @@ final class PreloadedUniqueValueDenormalizer implements ValueDenormalizerInterfa
 	/**
 	 * {@inheritDoc}
 	 */
-	public function denormalize(FixtureInterface $scope, FlagBag $flags = NULL, $value)
+	public function denormalize(FixtureInterface $scope, ?FlagBag $flags, $value)
 	{
 		$value = $this->denormalizer->denormalize($scope, $flags, $value);
 		$flag = $this->getPreloadFlag($flags);
@@ -69,7 +69,7 @@ final class PreloadedUniqueValueDenormalizer implements ValueDenormalizerInterfa
 	 * @return \SixtyEightPublishers\FixturesBundle\Bridge\Alice\Definition\Flag\PreloadFlag|NULL
 	 * @throws \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException
 	 */
-	private function getPreloadFlag(FlagBag $flags = NULL): ?PreloadFlag
+	private function getPreloadFlag(?FlagBag $flags = NULL): ?PreloadFlag
 	{
 		if (NULL === $flags) {
 			return NULL;

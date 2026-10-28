@@ -130,6 +130,8 @@ An option `decorator` defines decorator class that wraps the original `Scene` ob
 
 ## Usage
 
+The console commands are registered only when the package `symfony/console` is installed.
+
 Fixtures can be simply loaded with the following command:
 
 ```bash

@@ -54,7 +54,7 @@ final class EventManagerLoader implements LoaderInterface, PersisterAwareInterfa
 	/**
 	 * {@inheritdoc}
 	 */
-	public function load(array $fixturesFiles, array $parameters = [], array $objects = [], PurgeMode $purgeMode = NULL): array
+	public function load(array $fixturesFiles, array $parameters = [], array $objects = [], ?PurgeMode $purgeMode = NULL): array
 	{
 		$restrictor = $this->eventManagerRestrictorFactory->create($this->eventManager);
 

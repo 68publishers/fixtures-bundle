@@ -124,6 +124,11 @@ final class FileResolver implements FileResolverInterface, FileExporterInterface
 	 */
 	private function getFilesFromDirectories(string ...$directories): array
 	{
-		return array_keys(iterator_to_array(Finder::findFiles('*.yaml', '*.yml', '*.php', '*.json', '*.neon')->from(...$directories)));
+		$files = array_keys(iterator_to_array(Finder::findFiles('*.yaml', '*.yml', '*.php', '*.json', '*.neon')->from(...$directories)));
+
+		# the order of a directory listing depends on the filesystem
+		sort($files);
+
+		return $files;
 	}
 }

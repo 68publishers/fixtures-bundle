@@ -81,18 +81,19 @@ final class FileResolverTest extends TestCase
 
 	public function testExport(): void
 	{
-		Assert::equal(
-			$this->fileResolver->export(),
-			[
-				realpath(__DIR__ . '/../../resources/fixtures/foo/empty_fixture_3.json'),
-				realpath(__DIR__ . '/../../resources/fixtures/foo/empty_fixture_4.yaml'),
-				realpath(__DIR__ . '/../../resources/fixtures/empty_fixture_2.php'),
-				realpath(__DIR__ . '/../../resources/fixtures/empty_fixture_1.yaml'),
-				realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle/empty_fixture_1.yaml'),
-				realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle/dummy/empty_fixture_2.yaml'),
-				realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle/dummy/empty_fixture_1.yaml'),
-			]
-		);
+		# the files are sorted by path, the order of a directory listing depends on the filesystem
+		$expected = [
+			realpath(__DIR__ . '/../../resources/fixtures/foo/empty_fixture_3.json'),
+			realpath(__DIR__ . '/../../resources/fixtures/foo/empty_fixture_4.yaml'),
+			realpath(__DIR__ . '/../../resources/fixtures/empty_fixture_2.php'),
+			realpath(__DIR__ . '/../../resources/fixtures/empty_fixture_1.yaml'),
+			realpath(__DIR__ . '/../../resources/bundle_locator/foo_bundle/empty_fixture_1.yaml'),
+			realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle/dummy/empty_fixture_2.yaml'),
+			realpath(__DIR__ . '/../../resources/bundle_locator/bar_bundle/dummy/empty_fixture_1.yaml'),
+		];
+		sort($expected);
+
+		Assert::same($expected, $this->fileResolver->export());
 	}
 }
 

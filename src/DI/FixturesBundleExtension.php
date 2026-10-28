@@ -7,10 +7,9 @@ namespace SixtyEightPublishers\FixturesBundle\DI;
 use Nette\DI\Helpers;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
-use Nette\Utils\Validators;
-use Nette\PhpGenerator\PhpLiteral;
+use Nette\PhpGenerator\Literal;
 use Nette\DI\Definitions\Statement;
-use Nette\Utils\AssertionException;
+use Symfony\Component\Console\Command\Command;
 use SixtyEightPublishers\FixturesBundle\Scenario\Scenario;
 use SixtyEightPublishers\FixturesBundle\Scenario\Scene\Scene;
 use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface;
@@ -60,68 +59,13 @@ final class FixturesBundleExtension extends CompilerExtension
 
 	/**
 	 * {@inheritDoc}
-	 * @throws \Nette\Utils\AssertionException
 	 */
-	protected function getNette24Config(): object
+	protected function getConfigFiles(): iterable
 	{
-		$config = Helpers::expand($this->validateConfig([
-			'fixture_dirs' => ['%appDir%/fixtures', '%appDir%/../fixtures'],
-			'scenarios' => [],
-		]), $this->getContainerBuilder()->parameters);
-
-		Validators::assertField($config, 'fixture_dirs', 'string[]');
-
-		$config['fixture_dirs'] = array_filter(array_map(static function (string $path) {
-			return realpath($path);
-		}, $config['fixture_dirs']));
-
-		Validators::assertField($config, 'scenarios', 'array[]');
-
-		foreach ($config['scenarios'] as $k => $scenarioConfig) {
-			$scenarioConfig = $this->validateConfig([
-				'purge_mode' => NULL,
-				'fixtures' => [],
-				'object_loaders' => [],
-				'scenes' => [],
-			], $scenarioConfig);
-
-			Validators::assertField($scenarioConfig, 'purge_mode', 'string|null');
-			Validators::assertField($scenarioConfig, 'fixtures', 'list');
-			Validators::assertField($scenarioConfig, 'fixtures', 'string[]');
-			Validators::assertField($scenarioConfig, 'object_loaders', 'list');
-			Validators::assertField($scenarioConfig, 'scenes', 'array[]');
-
-			if (NULL !== $scenarioConfig['purge_mode'] && !in_array($scenarioConfig['purge_mode'], PurgeModeFactory::PURGE_MODES, TRUE)) {
-				throw new AssertionException(sprintf(
-					'Invalid purge mode %s. Choose either "delete", "truncate" or "no_purge".',
-					$scenarioConfig['purge_mode']
-				));
-			}
-
-			$scenarioConfig['object_loaders'] = array_map([$this, 'normalizeStatement'], $scenarioConfig['object_loaders']);
-
-			foreach ($scenarioConfig['scenes'] as $sceneKey => $sceneConfig) {
-				$sceneConfig = $this->validateConfig([
-					'decorator' => NULL,
-					'fixtures' => [],
-					'object_loaders' => [],
-				], $sceneConfig);
-
-				Validators::assertField($sceneConfig, 'decorator', 'null|string|' . Statement::class);
-				Validators::assertField($sceneConfig, 'fixtures', 'list');
-				Validators::assertField($sceneConfig, 'fixtures', 'string[]');
-				Validators::assertField($sceneConfig, 'object_loaders', 'list');
-
-				$sceneConfig['decorator'] = $this->normalizeStatement($sceneConfig['decorator']);
-				$sceneConfig['object_loaders'] = array_map([$this, 'normalizeStatement'], $sceneConfig['object_loaders']);
-
-				$scenarioConfig['scenes'][$sceneKey] = (object) $sceneConfig;
-			}
-
-			$config['scenarios'][$k] = (object) $scenarioConfig;
-		}
-
-		return (object) $config;
+		# symfony/console is optional
+		return array_filter((array) parent::getConfigFiles(), static function (string $file): bool {
+			return 'console.neon' !== basename($file) || class_exists(Command::class);
+		});
 	}
 
 	/**
@@ -234,9 +178,7 @@ final class FixturesBundleExtension extends CompilerExtension
 	private function exportFixtureFiles(array $fixtures): array
 	{
 		return array_map(static function (string $path) {
-			$path = addslashes($path);
-
-			return new PhpLiteral("'$path'");
+			return new Literal(var_export($path, TRUE));
 		}, $fixtures);
 	}
 }
