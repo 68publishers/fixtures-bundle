@@ -6,9 +6,9 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Purger;
 
 use InvalidArgumentException;
 use Nelmio\Alice\IsAServiceTrait;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\DBAL\Driver\AbstractMySQLDriver;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Fidry\AliceDataFixtures\Persistence\PurgeMode;
 use Fidry\AliceDataFixtures\Persistence\PurgerInterface;
 use Fidry\AliceDataFixtures\Persistence\PurgerFactoryInterface;
@@ -36,11 +36,11 @@ class Purger implements PurgerInterface, PurgerFactoryInterface
 	private $purger;
 
 	/**
-	 * @param \Doctrine\Persistence\ObjectManager          $manager
+	 * @param \Doctrine\Persistence\ObjectManager                 $manager
 	 * @param \Fidry\AliceDataFixtures\Persistence\PurgeMode|NULL $purgeMode
 	 * @param array                                               $excluded
 	 */
-	public function __construct(ObjectManager $manager, PurgeMode $purgeMode = NULL, array $excluded = [])
+	public function __construct(ObjectManager $manager, ?PurgeMode $purgeMode = NULL, array $excluded = [])
 	{
 		$this->manager = $manager;
 		$this->purgeMode = $purgeMode;
@@ -54,7 +54,7 @@ class Purger implements PurgerInterface, PurgerFactoryInterface
 	 *
 	 * {@inheritDoc}
 	 */
-	public function create(PurgeMode $mode, PurgerInterface $purger = NULL): PurgerInterface
+	public function create(PurgeMode $mode, ?PurgerInterface $purger = NULL): PurgerInterface
 	{
 		return new static($this->manager, $mode, $this->excluded);
 	}
@@ -70,22 +70,22 @@ class Purger implements PurgerInterface, PurgerFactoryInterface
 		// PostgreSQL. This ideally should be done in the Purger of doctrine/data-fixtures but meanwhile we are doing
 		// it here.
 		// See the progress in https://github.com/doctrine/data-fixtures/pull/272
+		# detect MySQL by the platform, the driver may be wrapped by DBAL middlewares
+		$connection = $this->purger instanceof DoctrineOrmPurger ? $this->purger->getObjectManager()->getConnection() : NULL;
 		$disableFkChecks = (
-			$this->purger instanceof DoctrineOrmPurger
-			&& in_array($this->purgeMode->getValue(), [PurgeMode::createDeleteMode()->getValue(), PurgeMode::createTruncateMode()->getValue()], TRUE)
-			&& $this->purger->getObjectManager()->getConnection()->getDriver() instanceof AbstractMySQLDriver
+			NULL !== $connection
+			&& $connection->getDatabasePlatform() instanceof AbstractMySQLPlatform
+			&& (NULL === $this->purgeMode || in_array($this->purgeMode->getValue(), [PurgeMode::createDeleteMode()->getValue(), PurgeMode::createTruncateMode()->getValue()], TRUE))
 		);
 
 		if ($disableFkChecks) {
-			$connection = $this->purger->getObjectManager()->getConnection();
-
-			$connection->exec('SET FOREIGN_KEY_CHECKS = 0;');
+			$connection->executeStatement('SET FOREIGN_KEY_CHECKS = 0;');
 		}
 
 		$this->purger->purge();
 
-		if ($disableFkChecks && isset($connection)) {
-			$connection->exec('SET FOREIGN_KEY_CHECKS = 1;');
+		if ($disableFkChecks) {
+			$connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1;');
 		}
 	}
 

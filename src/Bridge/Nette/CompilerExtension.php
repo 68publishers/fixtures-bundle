@@ -9,17 +9,10 @@ use Nette\Utils\Finder;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\DI\CompilerExtension as NetteCompilerExtension;
 
-require_once 'nette.di.compatibility.php';
-
 abstract class CompilerExtension extends NetteCompilerExtension
 {
 	/** @var object|NULL */
 	protected $validConfig;
-
-	/**
-	 * @return object
-	 */
-	abstract protected function getNette24Config(): object;
 
 	/**
 	 * Use instead of ::loadConfiguration()
@@ -36,11 +29,7 @@ abstract class CompilerExtension extends NetteCompilerExtension
 	 */
 	public function loadConfiguration(): void
 	{
-		if (interface_exists('Nette\\Schema\\Schema')) {
-			$this->validConfig = $this->config;
-		} else {
-			$this->validConfig = $this->getNette24Config();
-		}
+		$this->validConfig = $this->config;
 
 		$this->doLoadConfiguration();
 		$this->loadNeonConfiguration();
@@ -63,16 +52,8 @@ abstract class CompilerExtension extends NetteCompilerExtension
 	 */
 	protected function loadNeonConfiguration(): void
 	{
-		$compiler = $this->compiler;
-
 		foreach ($this->getConfigFiles() as $filename) {
-			$services = $this->loadFromFile($filename)['services'];
-
-			if ((new \ReflectionClass($compiler))->hasMethod('loadDefinitionsFromConfig')) {
-				$this->compiler->loadDefinitionsFromConfig($services);
-			} else {
-				$this->compiler::loadDefinitions($this->getContainerBuilder(), $services);
-			}
+			$this->compiler->loadDefinitionsFromConfig($this->loadFromFile($filename)['services']);
 		}
 	}
 

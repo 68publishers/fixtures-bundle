@@ -7,9 +7,7 @@ namespace SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\DI;
 use Generator;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
-use Nette\Utils\Validators;
 use Psr\Log\LoggerInterface;
-use Nette\Utils\AssertionException;
 use Nette\DI\MissingServiceException;
 use Fidry\AliceDataFixtures\ProcessorInterface;
 use SixtyEightPublishers\FixturesBundle\Bridge\Nette\CompilerExtension;
@@ -44,54 +42,6 @@ final class FidryAliceDataFixturesExtension extends CompilerExtension
 				'excluded' => Expect::arrayOf('string')->default([]),
 			]),
 		]);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @throws \Nette\Utils\AssertionException
-	 */
-	protected function getNette24Config(): object
-	{
-		$config = $this->validateConfig([
-			'default_purge_mode' => PurgeModeFactory::PURGE_MODE_DELETE, # 'delete', 'truncate', 'no_purge'
-			'default_driver' => DriverInterface::DOCTRINE_ORM_DRIVER,
-			'excluded' => [],
-			'db_drivers' => [
-				DriverInterface::DOCTRINE_ORM_DRIVER => FALSE,
-				DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER => FALSE,
-				DriverInterface::DOCTRINE_PHPCR_ODM_DRIVER => FALSE,
-			],
-			'event_listeners' => [
-				'allow_all' => TRUE,
-				'excluded' => [],
-			],
-		]);
-
-		Validators::assertField($config, 'default_purge_mode', 'string');
-
-		if (!in_array($config['default_purge_mode'], PurgeModeFactory::PURGE_MODES, TRUE)) {
-			throw new AssertionException(sprintf(
-				'Invalid purge mode %s. Choose either "delete", "truncate" or "no_purge".',
-				$config['default_purge_mode']
-			));
-		}
-
-		Validators::assertField($config, 'default_driver', 'string');
-		Validators::assertField($config, 'excluded', 'string[]');
-		Validators::assertField($config, 'db_drivers', 'array');
-		Validators::assertField($config['db_drivers'], DriverInterface::DOCTRINE_ORM_DRIVER, 'bool');
-		Validators::assertField($config['db_drivers'], DriverInterface::DOCTRINE_MONGODB_ODM_DRIVER, 'bool');
-		Validators::assertField($config['db_drivers'], DriverInterface::DOCTRINE_PHPCR_ODM_DRIVER, 'bool');
-
-		$config['db_drivers'] = (object) $config['db_drivers'];
-
-		Validators::assertField($config, 'event_listeners', 'array');
-		Validators::assertField($config['event_listeners'], 'allow_all', 'bool');
-		Validators::assertField($config['event_listeners'], 'excluded', 'string[]');
-
-		$config['event_listeners'] = (object) $config['event_listeners'];
-
-		return (object) $config;
 	}
 
 	/**

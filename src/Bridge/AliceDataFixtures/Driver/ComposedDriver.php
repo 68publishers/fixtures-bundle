@@ -49,7 +49,7 @@ final class ComposedDriver implements DriverInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public function load(array $fixturesFiles, array $parameters = [], array $objects = [], PurgeMode $purgeMode = NULL): array
+	public function load(array $fixturesFiles, array $parameters = [], array $objects = [], ?PurgeMode $purgeMode = NULL): array
 	{
 		$this->context->bindContext(LoadContext::class, $this->getName());
 

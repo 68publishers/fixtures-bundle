@@ -43,7 +43,7 @@ final class LoadDataFixturesCommand extends Command
 	 * @param \SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\NamedPurgeMode     $defaultPurgeMode
 	 * @param \Psr\Log\LoggerInterface|NULL                                                                $logger
 	 */
-	public function __construct(ScenarioProviderInterface $scenarioProvider, DriverProviderInterface $driverProvider, NamedPurgeMode $defaultPurgeMode, LoggerInterface $logger = NULL)
+	public function __construct(ScenarioProviderInterface $scenarioProvider, DriverProviderInterface $driverProvider, NamedPurgeMode $defaultPurgeMode, ?LoggerInterface $logger = NULL)
 	{
 		parent::__construct();
 

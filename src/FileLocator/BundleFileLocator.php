@@ -28,7 +28,7 @@ final class BundleFileLocator implements FileLocatorInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public function locate(string $name, string $currentPath = NULL): string
+	public function locate(string $name, ?string $currentPath = NULL): string
 	{
 		if ($this->map->isBundlePath($name)) {
 			return $this->locateBundleFile($name);

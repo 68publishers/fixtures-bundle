@@ -79,7 +79,7 @@ final class ListDataFixturesCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$scenario = $input->getArgument('scenario');
-		$format = $input->getOption('format');
+		$format = $input->getOption('format') ?? self::FORMAT_TABLE;
 
 		# a simple check of a format's value
 		$this->resolveFormat($format, [

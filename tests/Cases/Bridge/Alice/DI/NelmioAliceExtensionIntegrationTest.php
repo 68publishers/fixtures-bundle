@@ -43,7 +43,6 @@ final class NelmioAliceExtensionIntegrationTest extends TestCase
 		Assert::type(RecursiveParameterResolver::class, $resolver);
 
 		$limitReflection = (new \ReflectionClass(RecursiveParameterResolver::class))->getProperty('limit');
-		$limitReflection->setAccessible(TRUE);
 
 		Assert::equal(50, $limitReflection->getValue($resolver));
 	}
@@ -56,7 +55,6 @@ final class NelmioAliceExtensionIntegrationTest extends TestCase
 		Assert::type(UniqueValueResolver::class, $resolver);
 
 		$limitReflection = (new \ReflectionClass(UniqueValueResolver::class))->getProperty('limit');
-		$limitReflection->setAccessible(TRUE);
 
 		Assert::equal(15, $limitReflection->getValue($resolver));
 	}
