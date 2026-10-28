@@ -10,6 +10,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
   tests:
     name: Unit Tests [PHP ${{ matrix.php-versions }}, ${{ matrix.dependencies }}]
@@ -25,6 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2

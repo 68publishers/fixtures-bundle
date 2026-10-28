@@ -7,6 +7,7 @@ namespace SixtyEightPublishers\FixturesBundle\Tests\Cases\Bridge\AliceDataFixtur
 use Mockery;
 use Tester\Assert;
 use Tester\TestCase;
+use RuntimeException;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +40,16 @@ final class PurgerTest extends TestCase
 		}
 	}
 
+	public function testForeignKeyChecksAreRestoredWhenPurgeFails(): void
+	{
+		$statements = [];
+		$connection = $this->createConnection(new MySQLPlatform(), $statements);
+		$purger = $this->createPurger($connection, PurgeMode::createDeleteMode(), new RuntimeException('Purge failed.'));
+
+		Assert::exception(static fn () => $purger->purge(), RuntimeException::class, 'Purge failed.');
+		Assert::same(['SET FOREIGN_KEY_CHECKS = 0;', 'SET FOREIGN_KEY_CHECKS = 1;'], $statements);
+	}
+
 	public function testForeignKeyChecksAreNotTouchedOnOtherPlatforms(): void
 	{
 		$statements = [];
@@ -64,11 +75,17 @@ final class PurgerTest extends TestCase
 		return $connection;
 	}
 
-	private function createPurger(Connection $connection, ?PurgeMode $purgeMode): Purger
+	private function createPurger(Connection $connection, ?PurgeMode $purgeMode, ?RuntimeException $metadataError = NULL): Purger
 	{
 		# no entities, the real ORMPurger only reads the metadata and the platform
 		$metadataFactory = Mockery::mock(ClassMetadataFactory::class);
-		$metadataFactory->shouldReceive('getAllMetadata')->once()->andReturn([]);
+		$getAllMetadata = $metadataFactory->shouldReceive('getAllMetadata')->once();
+
+		if (NULL === $metadataError) {
+			$getAllMetadata->andReturn([]);
+		} else {
+			$getAllMetadata->andThrow($metadataError);
+		}
 
 		$em = Mockery::mock(EntityManagerInterface::class);
 		$em->shouldReceive('getConnection')->andReturn($connection);

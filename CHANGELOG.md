@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Support for `doctrine/dbal` v4, `doctrine/orm` v3, `doctrine/data-fixtures` v2, `nette/php-generator` v4 and Symfony v8.
 - Suggested packages `doctrine/orm` and `doctrine/data-fixtures`.
-- GitHub Actions workflows (coding style, tests on PHP 8.3, 8.4 and 8.5 with lowest and highest dependencies).
+- GitHub Actions workflows (coding style, tests on PHP 8.3, 8.4 and 8.5 with highest dependencies and on PHP 8.3 with lowest dependencies).
 
 ### Changed
 - Minimal PHP version is 8.3.
@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Purger` used `Connection::exec()`, which was removed in DBAL 4. `Connection::executeStatement()` is used instead.
 - `Purger` did not disable foreign key checks on MySQL when the DBAL driver was wrapped by a middleware (e.g. logging). MySQL is now detected by the database platform.
 - `Purger` failed with a `NULL` purge mode.
+- `Purger` left foreign key checks disabled on MySQL when the purge failed.
 - `fixtures:list -f` (the option `--format` without a value) failed with a `TypeError`. The table format is used.
 
 ## [0.3.1] - 2024-08-06

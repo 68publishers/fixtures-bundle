@@ -78,13 +78,17 @@ class Purger implements PurgerInterface, PurgerFactoryInterface
 			&& (NULL === $this->purgeMode || in_array($this->purgeMode->getValue(), [PurgeMode::createDeleteMode()->getValue(), PurgeMode::createTruncateMode()->getValue()], TRUE))
 		);
 
-		if ($disableFkChecks) {
-			$connection->executeStatement('SET FOREIGN_KEY_CHECKS = 0;');
+		if (!$disableFkChecks) {
+			$this->purger->purge();
+
+			return;
 		}
 
-		$this->purger->purge();
+		$connection->executeStatement('SET FOREIGN_KEY_CHECKS = 0;');
 
-		if ($disableFkChecks) {
+		try {
+			$this->purger->purge();
+		} finally {
 			$connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1;');
 		}
 	}
