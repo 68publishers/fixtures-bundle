@@ -10,6 +10,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Fidry\AliceDataFixtures\FileResolverInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,6 +18,7 @@ use SixtyEightPublishers\FixturesBundle\FileExporterInterface;
 use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioInterface;
 use SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface;
 
+#[AsCommand(name: 'fixtures:list', description: 'Show a list of available fixtures and scenarios.')]
 final class ListDataFixturesCommand extends Command
 {
 	private const   FORMAT_TABLE = 'table',
@@ -55,8 +57,7 @@ final class ListDataFixturesCommand extends Command
 	 */
 	protected function configure(): void
 	{
-		$this->setName('fixtures:list')
-			->setDescription('Show a list of available fixtures and scenarios.')
+		$this
 			->addArgument(
 				'scenario',
 				InputArgument::OPTIONAL,
