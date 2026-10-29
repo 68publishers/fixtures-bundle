@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-29
+### Fixed
+- The console commands `fixtures:load` and `fixtures:list` are named by the attribute `#[AsCommand]` instead of `configure()`. Lazy command loaders (e.g. `contributte/console` 0.10+, `symfony/console` 7 without the static `$defaultName`) need the name before the command is created.
+
 ## [0.4.0] - 2026-10-28
 ### Added
 - Support for `doctrine/dbal` v4, `doctrine/orm` v3, `doctrine/data-fixtures` v2, `nette/php-generator` v4 and Symfony v8.
@@ -108,7 +112,8 @@ First release.
 - Alice `^3.7`
 - AliceDataFixtures `^1.1`
 
-[Unreleased]: https://github.com/68publishers/fixtures-bundle/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/68publishers/fixtures-bundle/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/68publishers/fixtures-bundle/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/68publishers/fixtures-bundle/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/68publishers/fixtures-bundle/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/68publishers/fixtures-bundle/compare/v0.2.0...v0.3.0

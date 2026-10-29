@@ -8,6 +8,7 @@ use RuntimeException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Logger\ConsoleLogger;
@@ -20,6 +21,7 @@ use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\Nam
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Persistence\PurgeModeFactory;
 use SixtyEightPublishers\FixturesBundle\Bridge\AliceDataFixtures\Driver\DriverProviderInterface;
 
+#[AsCommand(name: 'fixtures:load', description: 'Load data fixtures to your database.')]
 final class LoadDataFixturesCommand extends Command
 {
 	/** @var \SixtyEightPublishers\FixturesBundle\Scenario\ScenarioProviderInterface  */
@@ -68,8 +70,7 @@ final class LoadDataFixturesCommand extends Command
 	 */
 	protected function configure(): void
 	{
-		$this->setName('fixtures:load')
-			->setDescription('Load data fixtures to your database.')
+		$this
 			->addArgument(
 				'scenario',
 				InputArgument::OPTIONAL,
