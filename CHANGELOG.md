@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [0.4.1] - 2026-10-29
+### Changed
+- `symfony/console` older than 5.4 is declared as a conflict. Versions before 5.3 don't read `#[AsCommand]`, the commands would have no name.
+
 ### Fixed
 - The console commands `fixtures:load` and `fixtures:list` are named by the attribute `#[AsCommand]` instead of `configure()`. Lazy command loaders (e.g. `contributte/console` 0.10+, `symfony/console` 7 without the static `$defaultName`) need the name before the command is created.
 

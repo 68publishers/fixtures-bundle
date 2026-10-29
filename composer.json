@@ -33,7 +33,8 @@
 	"conflict": {
 		"doctrine/data-fixtures": "<1.5.1",
 		"doctrine/dbal": "<3.3",
-		"doctrine/persistence": "<1.3"
+		"doctrine/persistence": "<1.3",
+		"symfony/console": "<5.4"
 	},
 	"suggest": {
 		"symfony/console": "For fixtures commands",
