@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-06
+### Removed
+- The dependency on `nette/finder`, the package is abandoned. `Nette\Utils\Finder` is part of `nette/utils` 4.
+- Support for `nette/utils` 3 (BC break), the minimal version is `^4.0`.
+
 ## [0.4.1] - 2026-10-29
 ### Changed
 - `symfony/console` older than 5.4 is declared as a conflict. Versions before 5.3 don't read `#[AsCommand]`, the commands would have no name.
@@ -115,7 +120,8 @@ First release.
 - Alice `^3.7`
 - AliceDataFixtures `^1.1`
 
-[Unreleased]: https://github.com/68publishers/fixtures-bundle/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/68publishers/fixtures-bundle/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/68publishers/fixtures-bundle/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/68publishers/fixtures-bundle/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/68publishers/fixtures-bundle/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/68publishers/fixtures-bundle/compare/v0.3.0...v0.3.1
